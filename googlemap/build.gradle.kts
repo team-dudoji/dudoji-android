@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.dudoji.android"
+    namespace = "com.example.googlemap"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.dudoji.android"
+        applicationId = "com.example.googlemap"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -38,6 +38,7 @@ android {
 }
 
 dependencies {
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
