@@ -31,7 +31,7 @@ class MapActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_map)
 
         val requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -104,6 +104,6 @@ class MapActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     }
 
     override fun onMapReady(p0: GoogleMap?) {
-        TODO("Not yet implemented")
+        googleMap = p0
     }
 }
