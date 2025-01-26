@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +9,15 @@ android {
     namespace = "com.dudoji.android"
     compileSdk = 35
 
+    // api key load
+    fun getApiKey(propertyKey: String): String{
+        return gradleLocalProperties(rootDir, providers).getProperty(propertyKey, "")
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.dudoji.android"
         minSdk = 24
@@ -15,6 +26,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${getApiKey("GOOGLE_MAPS_API_KEY")}\"")
+        addManifestPlaceholders(mapOf("GOOGLE_MAPS_API_KEY" to "\${GOOGLE_MAPS_API_KEY}"))
 
         multiDexEnabled = true
     }
