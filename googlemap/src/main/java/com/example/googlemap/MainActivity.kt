@@ -24,7 +24,6 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnSuccessListener
-import java.sql.Connection
 
 class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback{
