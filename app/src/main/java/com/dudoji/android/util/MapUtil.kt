@@ -33,6 +33,8 @@ GoogleApiClient.OnConnectionFailedListener{
         this.activity = activity
     }
 
+    // Permission Request for Location
+    // Initialize Google Map Api
     fun requestLocationPermission() {
         val requestPermissionLauncher = activity.registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -54,12 +56,16 @@ GoogleApiClient.OnConnectionFailedListener{
         }
     }
 
+    // Prepare Map
+    // Initialize Google Map Api
     fun prepareMap() {
         (activity.supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment)!!.getMapAsync(
             activity as OnMapReadyCallback?
         )
     }
 
+    // Setup Location Services
+    // Initialize Google Map Api
     fun setupLocationServices() {
         providerClient = LocationServices.getFusedLocationProviderClient(activity)
         apiClient = GoogleApiClient.Builder(activity)
@@ -69,6 +75,7 @@ GoogleApiClient.OnConnectionFailedListener{
             .build()
     }
 
+    // Move Map to Current Location
     fun moveMapToCurrentLocation(googleMap: GoogleMap?){
         if(ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION)
             === PackageManager.PERMISSION_GRANTED){
@@ -88,6 +95,7 @@ GoogleApiClient.OnConnectionFailedListener{
         }
     }
 
+    // Move Map with latitude and longitude
     fun moveMap(latitude: Double, longitude: Double, googleMap: GoogleMap?){
         val latLng = LatLng(latitude, longitude)
         val position: CameraPosition = CameraPosition.Builder()
@@ -102,6 +110,7 @@ GoogleApiClient.OnConnectionFailedListener{
         googleMap?.addMarker(markerOption)
     }
 
+    // Set Google Map by MapActivity
     fun setGoogleMap(map: GoogleMap?) {
         this.googleMap = map
     }
