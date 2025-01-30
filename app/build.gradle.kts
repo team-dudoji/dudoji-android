@@ -28,7 +28,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${getApiKey("GOOGLE_MAPS_API_KEY")}\"")
-        addManifestPlaceholders(mapOf("GOOGLE_MAPS_API_KEY" to "\${GOOGLE_MAPS_API_KEY}"))
+        addManifestPlaceholders(mapOf("GOOGLE_MAPS_API_KEY" to getApiKey("GOOGLE_MAPS_API_KEY")))
 
         multiDexEnabled = true
     }

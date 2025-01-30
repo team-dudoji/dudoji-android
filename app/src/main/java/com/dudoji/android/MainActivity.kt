@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         setButtonMapping()
     }
 
+    // Button Mapping for (MainActivity to MapActivity Button)
     fun setButtonMapping() {
         var toMapButton = findViewById<Button>(R.id.toMapButton)
 
