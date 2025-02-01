@@ -7,10 +7,13 @@ const val MAP_SECTION_SIZE = 128
 
 class Bitmap {
     val bitMap : ByteArray
+    val size : Int
+        get() = bitMap.size * 8
 
     @OptIn(ExperimentalEncodingApi::class)
     constructor(bitmap: String){
-        bitMap = Base64.decode(bitmap)
+        val paddedBitmap = bitmap.padEnd((bitmap.length + 3) / 4 * 4, '=')
+        bitMap = Base64.decode(paddedBitmap)
     }
 
     operator fun get(index: Int): SubBitArray {
