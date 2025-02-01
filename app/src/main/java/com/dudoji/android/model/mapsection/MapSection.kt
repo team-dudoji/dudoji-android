@@ -15,7 +15,7 @@ open class MapSection {
         var y : Int = 0
         var bitmap : Bitmap? = null
 
-        fun setX(x : Int, y: Int) : Builder {
+        fun setXY(x : Int, y: Int) : Builder {
             this.x = x
             this.y = y
             return this
