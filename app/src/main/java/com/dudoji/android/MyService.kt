@@ -18,9 +18,11 @@ class MyService : Service() {
     override fun onCreate() {
         super.onCreate()
         job = CoroutineScope(Dispatchers.Default).launch {
-            repeat(100) { i ->
-                Log.d(TAG, "count: $i")
+            var count = 0
+            while(true) {
+                Log.d(TAG, "count: $count")
                 delay(1000)
+                ++count
             }
         }
     }
@@ -31,7 +33,7 @@ class MyService : Service() {
     }
 
 
-    override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
+    override fun onBind(intent: Intent): IBinder? {
+        return null 
     }
 }
