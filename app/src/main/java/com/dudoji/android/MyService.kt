@@ -29,9 +29,5 @@ class MyService : Service() {
         job?.cancel()
         super.onDestroy()
     }
-
-
-    override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
-    }
+    
 }
