@@ -33,6 +33,30 @@ class   MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        // Edge-to-edge 설정
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+        // MapActivity 이동 버튼 설정
+        setButtonMapping()
+        setButtonLogging()
+
+
+    }
+
+    // MapActivity로 이동하는 버튼 매핑
+    private fun setButtonMapping() {
+        val toMapButton = findViewById<Button>(R.id.toMapButton)
+        toMapButton.setOnClickListener {
+            startActivity(Intent(this@MainActivity, MapActivity::class.java))
+        }
+    }
+
+    // 위치 정보 관련 뷰 설정
+    private fun setButtonLogging() {
         //시작 종료 버튼
         btnStart = findViewById(R.id.btn_start)
         btnStop = findViewById(R.id.btn_stop)
@@ -49,29 +73,10 @@ class   MainActivity : AppCompatActivity() {
             Toast.makeText(this, "로그 종료", Toast.LENGTH_SHORT).show()
         }
 
-        // Edge-to-edge 설정
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-        // MapActivity 이동 버튼 설정
-        setButtonMapping()
-
-        // 위치 정보 관련 뷰 설정
         val locationText: TextView = findViewById(R.id.locationText)
         val locationButton: Button = findViewById(R.id.locationButton)
         locationButton.setOnClickListener {
             getLocation(locationText)
-        }
-    }
-
-    // MapActivity로 이동하는 버튼 매핑
-    private fun setButtonMapping() {
-        val toMapButton = findViewById<Button>(R.id.toMapButton)
-        toMapButton.setOnClickListener {
-            startActivity(Intent(this@MainActivity, MapActivity::class.java))
         }
     }
 
