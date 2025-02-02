@@ -64,13 +64,11 @@ class   MainActivity : AppCompatActivity() {
         btnStart.setOnClickListener {
             val serviceIntent = Intent(this, MyService::class.java)
             startService(serviceIntent)
-            Toast.makeText(this, "로그 시작", Toast.LENGTH_SHORT).show()
         }
 
         btnStop.setOnClickListener {
             val serviceIntent = Intent(this, MyService::class.java)
             stopService(serviceIntent)
-            Toast.makeText(this, "로그 종료", Toast.LENGTH_SHORT).show()
         }
 
         val locationText: TextView = findViewById(R.id.locationText)
