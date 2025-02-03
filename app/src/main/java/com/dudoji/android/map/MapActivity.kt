@@ -22,7 +22,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapUtil.prepareMap()
     }
 
-    override fun onMapReady(p0: GoogleMap?) {
+    override fun onMapReady(p0: GoogleMap) {
         googleMap = p0
         mapUtil.setGoogleMap(p0)
     }
