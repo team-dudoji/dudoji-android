@@ -13,6 +13,10 @@ open class MapSection {
         this.y = builder.y
     }
 
+    open fun getExploredRate() : Float {
+        return 1.0f
+    }
+
     class Builder {
         var x : Int = 0
         var y : Int = 0

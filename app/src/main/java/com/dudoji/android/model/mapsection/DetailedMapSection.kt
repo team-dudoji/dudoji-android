@@ -5,4 +5,8 @@ class DetailedMapSection : MapSection {
     constructor(builder: Builder) : super(builder) {
         bitmap = builder.bitmap!!
     }
+
+    override fun getExploredRate() : Float {
+        return bitmap.getFilledRate()
+    }
 }
