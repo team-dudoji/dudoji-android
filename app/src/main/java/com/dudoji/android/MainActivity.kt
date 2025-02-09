@@ -62,12 +62,12 @@ class   MainActivity : AppCompatActivity() {
         btnStop = findViewById(R.id.btn_stop)
 
         btnStart.setOnClickListener {
-            val serviceIntent = Intent(this, MyService::class.java)
+            val serviceIntent = Intent(this, LogCountService::class.java)
             startService(serviceIntent)
         }
 
         btnStop.setOnClickListener {
-            val serviceIntent = Intent(this, MyService::class.java)
+            val serviceIntent = Intent(this, LogCountService::class.java)
             stopService(serviceIntent)
         }
 
