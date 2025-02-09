@@ -1,6 +1,6 @@
 package com.dudoji.android.model.mapsection
 
-import kotlin.io.encoding.Base64
+import com.dudoji.android.util.base64.Base64Decoder
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 const val MAP_SECTION_SIZE = 128
@@ -12,8 +12,7 @@ class Bitmap {
 
     @OptIn(ExperimentalEncodingApi::class)
     constructor(bitmap: String){
-        val paddedBitmap = bitmap.padEnd((bitmap.length + 3) / 4 * 4, '=')
-        bitMap = Base64.decode(paddedBitmap)
+        bitMap = Base64Decoder().decode(bitmap)
     }
 
     operator fun get(index: Int): SubBitArray {
