@@ -4,6 +4,9 @@ open class MapSection {
     val x : Int
     val y : Int
 
+    companion object {
+        const val MAPSECTION_LATLNG_SIZE = 0.0115
+    }
 
     constructor(builder: Builder) {
         this.x = builder.x
