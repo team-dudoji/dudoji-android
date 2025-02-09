@@ -6,6 +6,8 @@ open class MapSection {
 
     companion object {
         const val MAPSECTION_LATLNG_SIZE = 0.0115
+        const val BASE_LAT = 35.230853
+        const val BASE_LNG = 129.082255
     }
 
     constructor(builder: Builder) {
