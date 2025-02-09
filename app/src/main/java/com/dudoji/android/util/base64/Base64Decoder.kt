@@ -15,7 +15,8 @@ class Base64Decoder {
         while (start < encoded.length) {
             val end = minOf(start + chunkSize, encoded.length)
             val chunk = encoded.substring(start, end)
-            val decodedChunk = Base64.decode(chunk)
+            val paddedChunk = chunk.padEnd((chunk.length + 3) / 4 * 4, '=')
+            val decodedChunk = Base64.decode(paddedChunk)
             output.addAll(decodedChunk.toList())
             start = end
         }
