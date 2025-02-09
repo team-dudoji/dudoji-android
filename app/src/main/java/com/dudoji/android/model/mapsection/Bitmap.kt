@@ -22,6 +22,14 @@ class Bitmap {
             (index + 1) * (MAP_SECTION_SIZE / 8))
     }
 
+    // Returns the percentage of filled bits in the bitmap
+    fun getFilledRate(): Float {
+        val totalBits = size
+        val filledBits = bitMap.sumOf { byte -> Integer.bitCount(byte.toInt() and 0xFF) }
+
+        return (filledBits.toFloat() / totalBits) * 100f
+    }
+
     class SubBitArray(val byteArray: ByteArray, val start: Int, val end: Int) {
         val size: Int
             get() = (end - start) * 8
