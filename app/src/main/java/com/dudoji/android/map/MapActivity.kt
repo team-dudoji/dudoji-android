@@ -13,6 +13,9 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlayOptions
 
+const val MIN_ZOOM = 10f
+const val MAX_ZOOM = 20f
+
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     var googleMap: GoogleMap? = null
@@ -35,7 +38,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(p0: GoogleMap?) {
         googleMap = p0
         mapUtil.setGoogleMap(p0)
-
+        p0?.setMinZoomPreference(MIN_ZOOM)  // set zoom level bounds
+        p0?.setMaxZoomPreference(MAX_ZOOM)
         // apply tile overlay to google map
         setTileMaskTileMaker(
             MapSectionMaskTileMaker(MapSectionProcessor(MapSectionParser().testParseMapSections(resources)))
