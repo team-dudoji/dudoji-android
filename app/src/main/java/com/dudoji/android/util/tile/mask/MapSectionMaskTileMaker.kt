@@ -9,7 +9,7 @@ import com.dudoji.android.util.tile.TilePositionUtil
 
 class MapSectionMaskTileMaker(private val mapSectionProcessor: MapSectionProcessor): IMaskTileMaker {
 
-    override fun createMaskTile(x : Int, y : Int, zoom : Int): Bitmap {
+    override suspend fun createMaskTile(x : Int, y : Int, zoom : Int): Bitmap {
         val minLatLng = TilePositionUtil.tilePositionToLatLng(x, y, zoom)
         val tileSize = TilePositionUtil.getTileSize(zoom)
         val fragmentSize = tileSize / TILE_SIZE

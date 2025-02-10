@@ -8,7 +8,7 @@ import com.dudoji.android.util.tile.TILE_SIZE
 
 // for Test MaskTileMaker (50% transparency mask)
 class OpaqueMaskTileMaker : IMaskTileMaker {
-    override fun createMaskTile(x : Int, y : Int, zoom : Int) : Bitmap {
+    override suspend fun createMaskTile(x : Int, y : Int, zoom : Int) : Bitmap {
         var bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888)
         var canvas = Canvas(bitmap)
         var paint = Paint()
