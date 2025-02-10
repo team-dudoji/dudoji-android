@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -14,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.dudoji.android.login.LoginActivity
 import com.dudoji.android.map.MapActivity
 import com.dudoji.android.util.RequestPermissionsUtil
 import com.google.android.gms.location.LocationServices
@@ -42,6 +41,9 @@ class MainActivity : AppCompatActivity() {
         // MapActivity 이동 버튼 설정
         setButtonMapping()
 
+        // LoginActivity 이동 버튼 설정
+        setButtonLogin()
+
         // 위치 정보 관련 뷰 설정
         val locationText: TextView = findViewById(R.id.locationText)
         val locationButton: Button = findViewById(R.id.locationButton)
@@ -57,6 +59,16 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this@MainActivity, MapActivity::class.java))
         }
     }
+
+    // LoginActivity로 이동하는 버튼 매핑
+    private fun setButtonLogin() {
+        val toMapButton = findViewById<Button>(R.id.toLoginButton)
+        toMapButton.setOnClickListener {
+            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+        }
+    }
+
+
 
     //위도, 경도, 주소값을 가져옴
     @SuppressLint("MissingPermission")

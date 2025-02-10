@@ -23,7 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnSuccessListener
 
 class MapUtil : GoogleApiClient.ConnectionCallbacks,
-GoogleApiClient.OnConnectionFailedListener{
+    GoogleApiClient.OnConnectionFailedListener{
     var activity: AppCompatActivity
     lateinit var providerClient: FusedLocationProviderClient
     lateinit var apiClient: GoogleApiClient
@@ -59,9 +59,8 @@ GoogleApiClient.OnConnectionFailedListener{
     // Prepare Map
     // Initialize Google Map Api
     fun prepareMap() {
-        (activity.supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment)!!.getMapAsync(
-            activity as OnMapReadyCallback?
-        )
+        val mapFragment = activity.supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
+        mapFragment.getMapAsync(activity as OnMapReadyCallback) // Remove nullability
     }
 
     // Setup Location Services

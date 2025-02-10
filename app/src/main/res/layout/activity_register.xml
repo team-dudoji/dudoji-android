@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4D381F"
+    tools:context=".login.RegisterActivity">
+
+
+    <LinearLayout
+        android:layout_width="341dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="40dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|left"
+                    android:layout_marginBottom="34dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="아이디"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/editTextId_Reg"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:minHeight="56dp"
+                    android:paddingVertical="12dp"
+                    android:paddingLeft="8dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:ems="10"
+                    android:layout_gravity="bottom"
+                    android:hint="6~15자 영문/숫자 조합으로 입력"
+                    android:inputType="text"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#8DFFFFFF" />
+
+                <Button
+                    android:id="@+id/btnCheckId_Reg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:minWidth="80dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="중복확인"
+                    android:textColor="#1C26FF"
+                    android:padding="8dp"
+                    android:textSize="14sp"/>
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|left"
+                    android:layout_marginBottom="34dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="비밀번호"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/editTextPass_Reg"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:minHeight="56dp"
+                    android:paddingVertical="12dp"
+                    android:paddingLeft="8dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:ems="10"
+                    android:layout_gravity="bottom"
+                    android:hint="8~15자의 영문/숫자 조합으로 입력"
+                    android:inputType="textPassword"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#8DFFFFFF" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|left"
+                    android:layout_marginBottom="34dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="비밀번호 확인"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/editTextRePass_Reg"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:minHeight="56dp"
+                    android:paddingVertical="12dp"
+                    android:paddingLeft="8dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:ems="10"
+                    android:layout_gravity="bottom"
+                    android:hint="비밀번호 다시 입력"
+                    android:inputType="textPassword"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#8DFFFFFF" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|left"
+                    android:layout_marginBottom="34dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="닉네임"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/editTextNick_Reg"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:minHeight="56dp"
+                    android:paddingVertical="12dp"
+                    android:paddingLeft="8dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:ems="10"
+                    android:layout_gravity="bottom"
+                    android:hint="8자이하로 입력"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#8DFFFFFF" />
+
+                <Button
+                    android:id="@+id/btnCheckNick_Reg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:minWidth="80dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="중복확인"
+                    android:textColor="#1C26FF"
+                    android:padding="8dp"
+                    android:textSize="14sp"/>
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|left"
+                    android:layout_marginBottom="34dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="휴대폰"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/editTextPhone_Reg"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:minHeight="56dp"
+                    android:paddingVertical="12dp"
+                    android:paddingLeft="8dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:ems="10"
+                    android:layout_gravity="bottom"
+                    android:hint="-제외 휴대폰 번호"
+                    android:inputType="number"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#8DFFFFFF" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnRegister_Reg"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#FFFFFF"
+        android:text="완료"
+        android:textColor="#0E5BDF"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
