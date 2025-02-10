@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -18,9 +16,12 @@ import com.dudoji.android.map.MapActivity
 import com.dudoji.android.util.RequestPermissionsUtil
 import com.google.android.gms.location.LocationServices
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 
-class MainActivity : AppCompatActivity() {
+class   MainActivity : AppCompatActivity() {
+
+    private lateinit var btnStart: Button
+    private lateinit var btnStop: Button
 
     override fun onStart() {
         super.onStart()
@@ -41,13 +42,9 @@ class MainActivity : AppCompatActivity() {
 
         // MapActivity 이동 버튼 설정
         setButtonMapping()
+        setButtonLogging()
 
-        // 위치 정보 관련 뷰 설정
-        val locationText: TextView = findViewById(R.id.locationText)
-        val locationButton: Button = findViewById(R.id.locationButton)
-        locationButton.setOnClickListener {
-            getLocation(locationText)
-        }
+
     }
 
     // MapActivity로 이동하는 버튼 매핑
@@ -57,6 +54,31 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this@MainActivity, MapActivity::class.java))
         }
     }
+
+    // 위치 정보 관련 뷰 설정
+    private fun setButtonLogging() {
+        //시작 종료 버튼
+        btnStart = findViewById(R.id.btn_start)
+        btnStop = findViewById(R.id.btn_stop)
+
+        btnStart.setOnClickListener {
+            val serviceIntent = Intent(this, LogCountService::class.java)
+            startService(serviceIntent)
+        }
+
+        btnStop.setOnClickListener {
+            val serviceIntent = Intent(this, LogCountService::class.java)
+            stopService(serviceIntent)
+        }
+
+        val locationText: TextView = findViewById(R.id.locationText)
+        val locationButton: Button = findViewById(R.id.locationButton)
+        locationButton.setOnClickListener {
+            getLocation(locationText)
+        }
+    }
+
+
 
     //위도, 경도, 주소값을 가져옴
     @SuppressLint("MissingPermission")
