@@ -4,5 +4,5 @@ import android.graphics.Bitmap
 
 // for MaskTile Provider
 interface IMaskTileMaker {
-    fun createMaskTile(): Bitmap
+    fun createMaskTile(x : Int, y : Int, zoom : Int): Bitmap
 }
