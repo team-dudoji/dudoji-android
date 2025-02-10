@@ -3,6 +3,8 @@ package com.dudoji.android.util.tile
 // for google tile system's positioning (by x, y, zoom)
 class TilePositionUtil {
     companion object {
+        val tileSizeCache: MutableMap<Int, Double> = mutableMapOf()
+
         // Convert Google Map Tile Position to LatLng
         // (x, y), (x+1, y+1) rectangle is tile area
         fun tilePositionToLatLng(x: Int, y: Int, zoom: Int): Pair<Double, Double> {
@@ -15,7 +17,11 @@ class TilePositionUtil {
 
         // Get Tile Size by zoom level
         fun getTileSize(zoom: Int): Double {
-            return Math.abs(1 / Math.pow(2.0, zoom.toDouble()) * 360 - 180)
+            return tileSizeCache.getOrElse(zoom) {
+                val tileSize = Math.abs(1 / Math.pow(2.0, zoom.toDouble()) * 360 - 180)
+                tileSizeCache[zoom] = tileSize
+                return tileSize
+            }
         }
     }
 }
