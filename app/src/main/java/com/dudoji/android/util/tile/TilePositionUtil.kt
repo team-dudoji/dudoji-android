@@ -15,7 +15,7 @@ class TilePositionUtil {
 
         // Get Tile Size by zoom level
         fun getTileSize(zoom: Int): Double {
-            return Math.pow(2.0, zoom.toDouble())
+            return Math.abs(1 / Math.pow(2.0, zoom.toDouble()) * 360 - 180)
         }
     }
 }
