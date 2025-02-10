@@ -3,9 +3,12 @@ package com.dudoji.android.map
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
+import com.dudoji.android.model.mapsection.MapSectionProcessor
 import com.dudoji.android.util.MapUtil
+import com.dudoji.android.util.mapsection.MapSectionParser
 import com.dudoji.android.util.tile.MaskTileProvider
-import com.dudoji.android.util.tile.mask.OpaqueMaskTileMaker
+import com.dudoji.android.util.tile.mask.IMaskTileMaker
+import com.dudoji.android.util.tile.mask.MapSectionMaskTileMaker
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlayOptions
@@ -14,11 +17,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     var googleMap: GoogleMap? = null
     var mapUtil: MapUtil = MapUtil(this)
-    private var tileOverlayOptions : TileOverlayOptions =  TileOverlayOptions().tileProvider(MaskTileProvider(
-        OpaqueMaskTileMaker()))
 
-    fun setTileMaskTileMaker(maskTileMaker: OpaqueMaskTileMaker) {
-        this.tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
+    fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
+        val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
         googleMap?.addTileOverlay(tileOverlayOptions)
     }
 
@@ -36,6 +37,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapUtil.setGoogleMap(p0)
 
         // apply tile overlay to google map
-        googleMap?.addTileOverlay(tileOverlayOptions)
+        setTileMaskTileMaker(
+            MapSectionMaskTileMaker(MapSectionProcessor(MapSectionParser().testParseMapSections(resources)))
+        )
     }
 }
