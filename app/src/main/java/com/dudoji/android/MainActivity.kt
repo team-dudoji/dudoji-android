@@ -1,26 +1,25 @@
 package com.dudoji.android
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.map.MapActivity
 import com.dudoji.android.util.RequestPermissionsUtil
-import com.google.android.gms.location.LocationServices
-import java.io.IOException
-import java.util.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var bottomNav: BottomNavigationView
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent) // 새 Intent를 업데이트합니다.
+        setupBottomNavigation() // 네비게이션 상태를 다시 설정합니다.
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -32,6 +31,9 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        bottomNav = findViewById(R.id.navigationView)
+        setupBottomNavigation()
+
         // Edge-to-edge 설정
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -39,59 +41,23 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // MapActivity 이동 버튼 설정
-        setButtonMapping()
-
-        // 위치 정보 관련 뷰 설정
-        val locationText: TextView = findViewById(R.id.locationText)
-        val locationButton: Button = findViewById(R.id.locationButton)
-        locationButton.setOnClickListener {
-            getLocation(locationText)
-        }
     }
 
-    // MapActivity로 이동하는 버튼 매핑
-    private fun setButtonMapping() {
-        val toMapButton = findViewById<Button>(R.id.toMapButton)
-        toMapButton.setOnClickListener {
-            startActivity(Intent(this@MainActivity, MapActivity::class.java))
-        }
-    }
-
-    //위도, 경도, 주소값을 가져옴
-    @SuppressLint("MissingPermission")
-    private fun getLocation(textView: TextView) {
-        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationProviderClient.lastLocation
-            .addOnSuccessListener { location ->
-                location?.let {
-                    val latitude = it.latitude
-                    val longitude = it.longitude
-
-                    val address = getAddress(latitude, longitude)?.firstOrNull()
-
-                    textView.text = """
-                    위도: ${"%.6f".format(latitude)}
-                    경도: ${"%.6f".format(longitude)}
-                    
-                    주소: ${address?.getAddressLine(0) ?: "주소를 확인할 수 없음"}
-                """.trimIndent()
-                } ?: run {
-                    textView.text = "위치 정보를 가져올 수 없습니다"
+    private fun setupBottomNavigation() {
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.homeFragment -> {
+                    // 홈 화면 유지
+                    true
                 }
+                R.id.mapFragment -> {
+                    startActivity(Intent(this, MapActivity::class.java))
+                    true
+                }
+                else -> false
             }
-            .addOnFailureListener { e ->
-                textView.text = "에러: ${e.localizedMessage}"
-            }
-    }
-
-    //주소 가져와버렸
-    private fun getAddress(lat: Double, lng: Double): List<Address>? {
-        return try {
-            Geocoder(this, Locale.KOREA).getFromLocation(lat, lng, 1)
-        } catch (e: IOException) {
-            Toast.makeText(this, "주소를 가져 올 수 없습니다", Toast.LENGTH_SHORT).show()
-            null
         }
     }
+
+
 }
