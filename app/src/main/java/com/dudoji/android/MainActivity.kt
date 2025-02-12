@@ -1,7 +1,12 @@
 package com.dudoji.android
 
 import android.content.Intent
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,8 +15,14 @@ import com.dudoji.android.databinding.ActivityMainBinding
 import com.dudoji.android.map.MapActivity
 import com.dudoji.android.util.RequestPermissionsUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.gms.location.LocationServices
+import java.io.IOException
+import java.util.Locale
 
-class MainActivity : AppCompatActivity() {
+class   MainActivity : AppCompatActivity() {
+
+    private lateinit var btnStart: Button
+    private lateinit var btnStop: Button
 
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
