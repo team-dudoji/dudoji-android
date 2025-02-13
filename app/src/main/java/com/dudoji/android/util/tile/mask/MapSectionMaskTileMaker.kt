@@ -58,7 +58,11 @@ class MapSectionMaskTileMaker(private val mapSectionProcessor: MapSectionProcess
                     )
                 }
             }
+
+            Log.w("MaskTileMaker", "x: $x, y: $y, zoom: $zoom, size: ${TilePositionUtil.getTileSize(zoom)}")
+            Log.w("MaskTileMaker", "before calculating $count")
             deferredList.awaitAll()
+            Log.w("MaskTileMaker", "after calculating $count")
         }
         return bitmap
     }
