@@ -1,8 +1,6 @@
 package com.dudoji.android.map
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.MainActivity
 import com.dudoji.android.R
 import com.dudoji.android.model.mapsection.MapSectionManager
@@ -15,11 +13,21 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.gms.maps.model.TileOverlayOptions
+import com.dudoji.android.NavigatableActivity
 
 const val MIN_ZOOM = 10f
 const val MAX_ZOOM = 20f
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
+
+    override val navigationItems = mapOf(
+        R.id.mapFragment to null, // 기본 맵 화면
+        R.id.homeFragment to MainActivity::class.java
+    )
+
+    override val defaultSelectedItemId = R.id.mapFragment
+
+    private lateinit var bottomNav: BottomNavigationView
 
     var googleMap: GoogleMap? = null
     var mapUtil: MapUtil = MapUtil(this)
@@ -38,9 +46,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapUtil.prepareMap()
 
         bottomNav = findViewById(R.id.navigationView)
-        setupBottomNavigation()
 
         bottomNav.selectedItemId = R.id.mapFragment
+
+        setupBottomNavigation(findViewById(R.id.navigationView))
     }
 
     override fun onMapReady(p0: GoogleMap?) {
@@ -54,21 +63,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
-    //맵에서 메인 엑티비티 가기
-    private fun setupBottomNavigation() {
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.mapFragment -> {
-                    // 맵 화면 유지
-                    true
-                }
-                R.id.homeFragment -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    true
-                }
-                else -> false
-            }
-        }
+    override fun onResume() {
+        super.onResume()
+        val bottomNav = findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.navigationView)
+        bottomNav.selectedItemId = defaultSelectedItemId
     }
 
 
