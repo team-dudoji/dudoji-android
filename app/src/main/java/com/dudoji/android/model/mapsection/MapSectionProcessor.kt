@@ -1,5 +1,9 @@
 package com.dudoji.android.model.mapsection
 
+import android.util.Log
+
+// Control Map Sections Collection
+@Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
 class MapSectionProcessor(private val mapSections: List<MapSection>) {
 
     companion object {
@@ -34,15 +38,17 @@ class MapSectionProcessor(private val mapSections: List<MapSection>) {
         var totalExplorationRate = 0.0f
         var numOfMapSections = (maxDudojiX - minDudojiX + 1) * (maxDudojiY - minDudojiY + 1)
 
-        for (dudojiX in minDudojiX until maxDudojiX) {
-            for (dudojiY in minDudojiY until maxDudojiY) {
+        for (dudojiX in minDudojiX until maxDudojiX+1) {
+            for (dudojiY in minDudojiY until maxDudojiY+1) {
                 val mapSection = getMapSection(dudojiX, dudojiY)
                 if (mapSection != null) {
+                    Log.w("getBit", "dudiji x: $dudojiX, dudiji y: $dudojiY, rate: ${mapSection.getExploredRate()}")
                     totalExplorationRate += mapSection.getExploredRate() / numOfMapSections
                 }
             }
         }
-        return totalExplorationRate > EXPLORED_RATE_THRESHOLD
+        Log.w("getBit", "total rate: $totalExplorationRate")
+        return totalExplorationRate >= EXPLORED_RATE_THRESHOLD
     }
 
     // get map section by dudojiX and dudojiY
