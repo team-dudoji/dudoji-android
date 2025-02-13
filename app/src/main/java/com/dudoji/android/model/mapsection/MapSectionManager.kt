@@ -4,8 +4,8 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.util.Log
 import com.dudoji.android.util.mapsection.BitmapUtil
+import com.dudoji.android.util.mapsection.BitmapUtil.Companion.combineBitmapInGrid
 import com.dudoji.android.util.tile.TILE_SIZE
 
 data class TileCoordinate(val x: Int, val y: Int, val zoom: Int)
@@ -43,8 +43,30 @@ class MapSectionManager(mapSections: List<MapSection>) {
     }
 
     fun getBitmapWithCombine(coordinate: TileCoordinate): Bitmap { // on zoom level < BASIC_ZOOM_LEVEL
-        //TODO: Implement getBitmapWithCombine
-        return fullBitmap
+        val diffOfZoomLevel = BASIC_ZOOM_LEVEL - coordinate.zoom
+        val numOfTile = 1 shl diffOfZoomLevel
+        var baseBitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(baseBitmap)
+
+        for (xOfTile in 0 until numOfTile) {
+            for (yOfTile in 0 until numOfTile) {
+                val childCoordinate = TileCoordinate(
+                    xOfTile + numOfTile * coordinate.x,
+                    yOfTile + numOfTile * coordinate.y,
+                    15)
+                val childMapSection = mapSections[childCoordinate]
+                if (childMapSection == null) {
+                    canvas.combineBitmapInGrid(fullBitmap, numOfTile, xOfTile, yOfTile)
+                } else {
+                    if (childMapSection is DetailedMapSection) {
+                        canvas.combineBitmapInGrid(childMapSection.GetBitmap(), numOfTile, xOfTile, yOfTile)
+                    } else {
+                        canvas.combineBitmapInGrid(emptyBitmap, numOfTile, xOfTile, yOfTile)
+                    }
+                }
+            }
+        }
+        return baseBitmap
     }
 
     fun getBitmapWithCrop(coordinate: TileCoordinate): Bitmap { // on zoom level > BASIC_ZOOM_LEVEL
@@ -63,7 +85,6 @@ class MapSectionManager(mapSections: List<MapSection>) {
         val parentMapSection = mapSections[parentTileCoordinate]
 
         if (parentMapSection == null) { // Bitmap is not found
-            Log.w("MapSectionManager", "getBitmapWithCrop: ${coordinate.x}, ${coordinate.y}, ${coordinate.zoom} is not found")
             return fullBitmap
         } else { // Bitmap is found
             if (parentMapSection is DetailedMapSection) {
