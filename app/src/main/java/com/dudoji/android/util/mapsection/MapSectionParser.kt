@@ -1,15 +1,17 @@
 package com.dudoji.android.util.mapsection
 
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.Color
 import com.dudoji.android.R
-import com.dudoji.android.model.mapsection.Bitmap
 import com.dudoji.android.model.mapsection.MapSection
+import com.dudoji.android.util.base64.Base64Decoder
+import com.dudoji.android.util.tile.TILE_SIZE
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class MapSectionParser {
-
     // static functions in kotlin
     companion object {
         // convert map section json string to base point lng, lat and map sections object
@@ -40,10 +42,38 @@ class MapSectionParser {
 
             if (!isExplored) {
                 val bitmap = mapSectionJsonObject.getString("mapData")
-                builder.setBitmap(Bitmap(bitmap))
+                builder.setBitmap(createBitmapFromBase64String(bitmap))
             }
 
             return builder.build()
+        }
+
+        fun createBitmapFromBase64String(bitmapString: String): Bitmap {
+            val byteArray = Base64Decoder.decode(bitmapString)
+            val bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888)
+
+            val pixels = IntArray(TILE_SIZE * TILE_SIZE)
+
+            for (y in 0 until TILE_SIZE) {
+                for (x in 0 until TILE_SIZE) {
+                    val byteIndex = (y * TILE_SIZE + x) / 8
+                    val bitIndex = 7 - (x % 8)
+
+                    if (byteIndex >= byteArray.size) {
+                        val isFilled = false
+                        pixels[y * TILE_SIZE + x] = if (isFilled) Color.BLACK else Color.TRANSPARENT
+                    } else {
+                        val isFilled = (byteArray[byteIndex].toInt() shr bitIndex) and 1 == 1
+                        pixels[y * TILE_SIZE + x] = if (isFilled) Color.BLACK else Color.TRANSPARENT
+                    }
+
+
+                }
+            }
+
+            bitmap.setPixels(pixels, 0, TILE_SIZE, 0, 0, TILE_SIZE, TILE_SIZE)
+
+            return bitmap
         }
     }
 
