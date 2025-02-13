@@ -6,7 +6,10 @@ class DetailedMapSection : MapSection {
         bitmap = builder.bitmap!!
     }
 
+    @Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
     override fun getExploredRate() : Float {
         return bitmap.getFilledRate()
+//        return bitmap.getFilledRate()
+        return 0.0f
     }
 }

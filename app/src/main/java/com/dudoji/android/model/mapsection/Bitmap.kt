@@ -6,6 +6,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 const val MAP_SECTION_SIZE = 256
 const val BASIC_ZOOM_LEVEL = 15
 
+@Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
 class Bitmap {
     val bitMap : ByteArray
     val size : Int
