@@ -2,6 +2,8 @@ package com.dudoji.android.util.tile
 
 import kotlin.math.ln
 
+const val EARTH_RADIUS = 6378137.0
+
 // for google tile system's positioning (by x, y, zoom)
 class TileCoordinateUtil {
     companion object {
@@ -34,6 +36,10 @@ class TileCoordinateUtil {
             val x = xOfPixel % TILE_SIZE
             val y = yOfPixel % TILE_SIZE
             return Pair(x, y)
+        }
+
+        fun meterToPixelRate(lat: Double, zoomLevel: Int): Double {
+            return (TILE_SIZE * (1 shl zoomLevel)) / (Math.cos(Math.toRadians(lat)) * 2.0 * Math.PI * EARTH_RADIUS);
         }
     }
 }
