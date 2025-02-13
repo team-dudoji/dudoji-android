@@ -20,5 +20,17 @@ class BitmapUtil {
             )
             return bitmap
         }
+
+        // Combine a subBitmap to baseBitmap in grid(numOfTile x numOfTile) at (xOfTile, yOfTile)
+        fun Canvas.combineBitmapInGrid(subBitmap: Bitmap,  numOfTile: Int, xOfTile: Int, yOfTile: Int) {
+            val fragmentBitmapWidth = width / numOfTile
+            val fragmentBitmapHeight = height / numOfTile
+            drawBitmap(
+                subBitmap,
+                Rect(0, 0, subBitmap.width, subBitmap.height),
+                Rect(xOfTile * fragmentBitmapWidth, yOfTile * fragmentBitmapHeight, (xOfTile + 1) * fragmentBitmapWidth, (yOfTile + 1) * fragmentBitmapHeight),
+                null
+            )
+        }
     }
 }
