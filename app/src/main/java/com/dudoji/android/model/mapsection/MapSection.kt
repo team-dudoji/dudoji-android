@@ -1,12 +1,17 @@
 package com.dudoji.android.model.mapsection
 
+const val COORDINATE_CHANGE_WARNING_TEXT = "Changed To Different Coordinate System"
+
 open class MapSection {
     val x : Int
     val y : Int
 
     companion object {
+        @Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
         const val MAPSECTION_LATLNG_SIZE = 0.0115
+        @Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
         const val BASE_LAT = 35.230853
+        @Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
         const val BASE_LNG = 129.082255
     }
 
