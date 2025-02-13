@@ -14,7 +14,7 @@ class Bitmap {
 
     @OptIn(ExperimentalEncodingApi::class)
     constructor(bitmap: String){
-        bitMap = Base64Decoder().decode(bitmap)
+        bitMap = Base64Decoder.decode(bitmap)
     }
 
     operator fun get(index: Int): SubBitArray {
