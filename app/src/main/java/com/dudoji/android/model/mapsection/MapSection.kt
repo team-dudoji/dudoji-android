@@ -1,5 +1,7 @@
 package com.dudoji.android.model.mapsection
 
+import android.graphics.Bitmap
+
 const val COORDINATE_CHANGE_WARNING_TEXT = "Changed To Different Coordinate System"
 
 open class MapSection {
@@ -20,6 +22,7 @@ open class MapSection {
         this.y = builder.y
     }
 
+    @Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
     open fun getExploredRate() : Float {
         return 1.0f
     }
