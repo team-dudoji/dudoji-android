@@ -3,8 +3,10 @@ package com.dudoji.android.model.mapsection
 import com.dudoji.android.util.base64.Base64Decoder
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-const val MAP_SECTION_SIZE = 128
+const val MAP_SECTION_SIZE = 256
+const val BASIC_ZOOM_LEVEL = 15
 
+@Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
 class Bitmap {
     val bitMap : ByteArray
     val size : Int
@@ -12,7 +14,7 @@ class Bitmap {
 
     @OptIn(ExperimentalEncodingApi::class)
     constructor(bitmap: String){
-        bitMap = Base64Decoder().decode(bitmap)
+        bitMap = Base64Decoder.decode(bitmap)
     }
 
     operator fun get(index: Int): SubBitArray {
@@ -20,6 +22,14 @@ class Bitmap {
             bitMap,
             index * (MAP_SECTION_SIZE / 8),
             (index + 1) * (MAP_SECTION_SIZE / 8))
+    }
+
+    // Returns the percentage of filled bits in the bitmap
+    fun getFilledRate(): Float {
+        val totalBits = size
+        val filledBits = bitMap.sumOf { byte -> Integer.bitCount(byte.toInt() and 0xFF) }
+
+        return (filledBits.toFloat() / totalBits) * 100f
     }
 
     class SubBitArray(val byteArray: ByteArray, val start: Int, val end: Int) {

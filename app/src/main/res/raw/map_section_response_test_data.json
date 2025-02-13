@@ -5,13 +5,33 @@
   },
   "mapSections": [
     {
-      "x": 0,
-      "y": 0,
+      "x": 28133,
+      "y": 12953,
       "explored": true
     },
     {
-      "x": 1,
-      "y": 0,
+      "x": 28134,
+      "y": 12953,
+      "explored": true
+    },
+    {
+      "x": 28133,
+      "y": 12954,
+      "explored": true
+    },
+    {
+      "x": 28134,
+      "y": 12954,
+      "explored": true
+    },
+    {
+      "x": 28132,
+      "y": 12952,
+      "explored": true
+    },
+    {
+      "x": 28131,
+      "y": 12951,
       "explored": false,
       "mapData": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAEBAQEBAQEBAQEBAQEBAQAAAAAAwMBggMFh0GGD9I9wqX5bxP6vxZy1XgUb9Fu6Lt5ONz7L3bLR2fuWrM/TtZrD4gt7yvlA5htV76RE9lJk9OUlIKSt0B5gD2jBrzFg5l56FjsAF2Hw5A3f15MmnOlgkIn2k47R5crzK8wB4gWhmXYuEmVmD9D9wAAAABJRU5ErkJAAAA"
     }
