@@ -3,7 +3,7 @@ package com.dudoji.android.map
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
-import com.dudoji.android.model.mapsection.MapSectionProcessor
+import com.dudoji.android.model.mapsection.MapSectionManager
 import com.dudoji.android.util.MapUtil
 import com.dudoji.android.util.mapsection.MapSectionParser
 import com.dudoji.android.util.tile.MaskTileProvider
@@ -42,7 +42,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         p0?.setMaxZoomPreference(MAX_ZOOM)
         // apply tile overlay to google map
         setTileMaskTileMaker(
-            MapSectionMaskTileMaker(MapSectionProcessor(MapSectionParser().testParseMapSections(resources)))
+            MapSectionMaskTileMaker(MapSectionManager(MapSectionParser().testParseMapSections(resources)))
         )
     }
 }
