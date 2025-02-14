@@ -9,6 +9,7 @@ import com.dudoji.android.util.mapsection.MapSectionParser
 import com.dudoji.android.util.tile.MaskTileProvider
 import com.dudoji.android.util.tile.mask.IMaskTileMaker
 import com.dudoji.android.util.tile.mask.MapSectionMaskTileMaker
+import com.dudoji.android.util.tile.mask.PositionsMaskTileMaker
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlayOptions
@@ -20,6 +21,17 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     var googleMap: GoogleMap? = null
     var mapUtil: MapUtil = MapUtil(this)
+    val tileMaker: PositionsMaskTileMaker<MapSectionMaskTileMaker>
+
+    init {
+        tileMaker = PositionsMaskTileMaker(
+            MapSectionMaskTileMaker(
+                MapSectionManager(
+                    MapSectionParser().testParseMapSections(resources)
+                )
+            )
+        )
+    }
 
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
@@ -41,8 +53,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         p0?.setMinZoomPreference(MIN_ZOOM)  // set zoom level bounds
         p0?.setMaxZoomPreference(MAX_ZOOM)
         // apply tile overlay to google map
-        setTileMaskTileMaker(
-            MapSectionMaskTileMaker(MapSectionManager(MapSectionParser().testParseMapSections(resources)))
-        )
+        setTileMaskTileMaker(tileMaker)
     }
 }
