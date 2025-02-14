@@ -54,11 +54,6 @@ class   MainActivity : NavigatableActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        val bottomNav = findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.navigationView)
-        bottomNav.selectedItemId = defaultSelectedItemId
-    }
 
 
 }
