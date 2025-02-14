@@ -25,4 +25,15 @@ abstract class NavigatableActivity : AppCompatActivity() {
             true // 항상 이벤트 소비
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        updateBottomNavigationSelection()
+    }
+
+    private fun updateBottomNavigationSelection() {
+        findViewById<BottomNavigationView>(R.id.navigationView)?.apply {
+            selectedItemId = defaultSelectedItemId
+        }
+    }
 }
