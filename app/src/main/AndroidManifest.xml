@@ -21,7 +21,7 @@
         tools:targetApi="31">
       
         <service
-            android:name=".LogCountService"
+            android:name=".location.LocationService"
             android:foregroundServiceType="mediaPlayback"
             android:exported="false" />
 
@@ -46,6 +46,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".map.MapActivity" />
+        <activity android:name=".location.LocationActivity"/>
     </application>
 
 </manifest>
