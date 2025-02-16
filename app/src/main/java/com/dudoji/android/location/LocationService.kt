@@ -7,17 +7,13 @@ import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.os.Looper
 import androidx.core.app.NotificationCompat
+import com.dudoji.android.util.PermissionUtil
 import com.google.android.gms.location.*
-import android.Manifest
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
 
 class LocationService : Service() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
-    private var isLocationUpdatesStarted = false
 
     override fun onCreate() {
         super.onCreate()
@@ -28,13 +24,8 @@ class LocationService : Service() {
     private fun startForegroundService() {
         val channelId = "location_service_channel"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Location Service Channel",
-                NotificationManager.IMPORTANCE_LOW
-            )
-            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
-                .createNotificationChannel(channel)
+            val channel = NotificationChannel(channelId, "Location Service Channel", NotificationManager.IMPORTANCE_LOW)
+            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(channel)
         }
 
         val notification: Notification = NotificationCompat.Builder(this, channelId)
@@ -46,44 +37,15 @@ class LocationService : Service() {
     }
 
     private fun startLocationUpdates() {
-        if (checkPermission() && !isLocationUpdatesStarted) {
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-            val locationRequest = LocationRequest.create().apply {
-                interval = 5000
-                fastestInterval = 3000
-                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            }
+        if (!PermissionUtil.hasLocationPermission(this)) return
 
-            locationCallback = object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    locationResult.lastLocation?.let {
-                        LocationRepository.addLocation(it)
-                    }
-                }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                locationResult.lastLocation?.let { LocationRepository.addLocation(it) }
             }
-
-            fusedLocationClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                Looper.getMainLooper()
-            )
-            isLocationUpdatesStarted = true
-        } else {
-           // stopSelf()
         }
     }
 
-    private fun checkPermission(): Boolean {
-        return ActivityCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
     override fun onBind(intent: Intent?): IBinder? = null
-
-    override fun onDestroy() {
-        super.onDestroy()
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
 }
