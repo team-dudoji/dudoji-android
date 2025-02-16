@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import java.util.*
 
 object LocationRepository {
-    private const val MAX_LOG_SIZE = 20 //20개로 설정했으니 여기도 해줌
+    const val MAX_LOG_SIZE = 20 //20개로 설정했으니 여기도 해줌
     private val locationQueue: Queue<String> = LinkedList()
     private val liveLocationData = MutableLiveData<String>()
 
