@@ -56,6 +56,11 @@ class TileCoordinateUtil {
             return Pair(x, y)
         }
 
+        fun yOfWorldToLat(yOfWorld: Double): Double {
+            val lat = 180 / Math.PI * (2 * Math.atan(Math.exp(yOfWorld / TILE_SIZE * 2 * Math.PI)) - Math.PI / 2)
+            return lat
+        }
+
         // world → pixel
         fun worldToPixel(xOfWorld: Double, yOfWorld: Double, zoomLevel: Int): Pair<Int, Int> {
             val x: Int = (xOfWorld * (1 shl zoomLevel)).toInt()
