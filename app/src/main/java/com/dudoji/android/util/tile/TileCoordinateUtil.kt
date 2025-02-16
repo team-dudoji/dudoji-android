@@ -82,6 +82,12 @@ class TileCoordinateUtil {
             return Pair(x, y)
         }
 
+        fun pixelToPixelInTile(xOfPixel: Int, yOfPixel: Int, tileCoordinate: TileCoordinate): Pair<Int, Int> {
+            val x = xOfPixel - tileCoordinate.x * TILE_SIZE
+            val y = yOfPixel - tileCoordinate.y * TILE_SIZE
+            return Pair(x, y)
+        }
+
         fun meterToPixelRate(lat: Double, zoomLevel: Int): Double {
             return (TILE_SIZE * (1 shl zoomLevel)) / (Math.cos(Math.toRadians(lat)) * 2.0 * Math.PI * EARTH_RADIUS);
         }
