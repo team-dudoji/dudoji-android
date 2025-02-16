@@ -1,9 +1,7 @@
 package com.dudoji.android.location
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -11,11 +9,12 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import com.dudoji.android.MainActivity
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
+import com.dudoji.android.location.LocationRepository.MAX_LOG_SIZE
 import com.dudoji.android.map.MapActivity
+import com.dudoji.android.util.PermissionUtil
 import com.google.android.gms.location.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.LinkedList
@@ -37,39 +36,48 @@ class LocationActivity : NavigatableActivity() {
     private lateinit var locationTextView: TextView
     private lateinit var bottomNav: BottomNavigationView
     private val handler = Handler(Looper.getMainLooper())
-    private val updateInterval = 3000L // 3초마다 찍기
+    private val updateInterval = 3000L // 3초마다 갱신
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location)
 
-        // 서비스 시작
-        Intent(this, LocationService::class.java).also {
+        initViews()
+        startService()
+        setupLiveDataObserver()
+        setupLocationComponents()
+    }
+
+    private fun initViews() {
+        locationTextView = findViewById(R.id.locationTextView)
+        bottomNav = findViewById(R.id.navigationView)
+        setupBottomNavigation(bottomNav)
+    }
+
+    private fun startService() {
+        Intent(this, LocationService::class.java).also { intent ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(it)
+                startForegroundService(intent)
             } else {
-                startService(it)
+                startService(intent)
             }
         }
+    }
 
-        // 라이브데이터 관찰 설정
+    private fun setupLiveDataObserver() {
         LocationRepository.getLiveLocations().observe(this) { logs ->
             locationTextView.text = logs
         }
+    }
 
-        locationTextView = findViewById(R.id.locationTextView)
-        bottomNav = findViewById(R.id.navigationView)
-
-        setupBottomNavigation(bottomNav)
-
+    private fun setupLocationComponents() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
         startLocationUpdates()
     }
 
     private fun startLocationUpdates() {
-        if (!hasLocationPermission()) {
-            requestLocationPermission()
+        if (!PermissionUtil.hasLocationPermission(this)) {
+            PermissionUtil.requestLocationPermission(this, LOCATION_PERMISSION_REQUEST_CODE)
             return
         }
 
@@ -91,81 +99,47 @@ class LocationActivity : NavigatableActivity() {
             showPermissionDeniedToast()
         }
 
-        handler.postDelayed(object : Runnable {
-            override fun run() {
-                if (hasLocationPermission()) {
-                    try {
-                        fusedLocationClient.lastLocation?.addOnSuccessListener { location ->
-                            location?.let { updateLocationLog(it) }
-                        }
-                    } catch (e: SecurityException) {
-                        showPermissionDeniedToast()
-                    }
-                } else {
-                    requestLocationPermission()
-                }
-                handler.postDelayed(this, updateInterval)
-            }
-        }, updateInterval)
+        handler.postDelayed({ checkLastLocation() }, updateInterval)
     }
 
-    private fun requestLocationPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            LOCATION_PERMISSION_REQUEST_CODE
-        )
+    private fun checkLastLocation() {
+        if (!PermissionUtil.hasLocationPermission(this)) {
+            PermissionUtil.requestLocationPermission(this, LOCATION_PERMISSION_REQUEST_CODE)
+            return
+        }
+
+        try {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                location?.let { updateLocationLog(it) }
+            }.addOnFailureListener {
+                Toast.makeText(this, "위치 불러오기 실패", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: SecurityException) {
+            showPermissionDeniedToast()
+        }
+
+        handler.postDelayed({ checkLastLocation() }, updateInterval)
     }
+
 
     private fun showPermissionDeniedToast() {
-        Toast.makeText(
-            this,
-            "Location permission denied",
-            Toast.LENGTH_SHORT
-        ).show()
+        Toast.makeText(this, "위치 불러오기 거부", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startLocationUpdates()
-            } else {
-                showPermissionDeniedToast()
-            }
-        }
+        PermissionUtil.handlePermissionResult(
+            requestCode, LOCATION_PERMISSION_REQUEST_CODE, grantResults,
+            { startLocationUpdates() }, { showPermissionDeniedToast() }
+        )
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateLocationLog(location: Location) {
         val log = "Lat: ${location.latitude}, Lng: ${location.longitude}"
-
-        if (locationQueue.size >= 20) {
-            locationQueue.poll() // 가장 오래된 놈 제거
-        }
-
+        if (locationQueue.size >= MAX_LOG_SIZE) locationQueue.poll()
         locationQueue.add(log)
-
-        // 화면 업뎃
         locationTextView.text = locationQueue.joinToString("\n")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (isFinishing) {
-            stopService(Intent(this, LocationService::class.java))
-        }
-    }
-
-    // 위치 권한 확인
-    private fun hasLocationPermission(): Boolean {
-        return ActivityCompat.checkSelfPermission(
-            this, Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
     companion object {
