@@ -4,6 +4,9 @@ import android.graphics.Bitmap
 
 const val COORDINATE_CHANGE_WARNING_TEXT = "Changed To Different Coordinate System"
 
+const val MAP_SECTION_SIZE = 256
+const val BASIC_ZOOM_LEVEL = 15
+
 open class MapSection {
     val x : Int
     val y : Int
