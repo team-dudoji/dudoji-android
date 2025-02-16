@@ -4,7 +4,8 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.util.Log
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
 import com.dudoji.android.model.mapsection.TileCoordinate
 import com.dudoji.android.util.tile.TileCoordinateUtil
@@ -38,27 +39,26 @@ class PositionsMaskTileMaker<MaskTileMaker: IMaskTileMaker>(private val maskTile
     }
 
     private fun applyPositions(canvas: Canvas, tileCoordinate: TileCoordinate) {
-        Log.w("PositionsMaskTileMaker", "applyPositions: $tileCoordinate")
         val coordinates = TileCoordinateUtil.getCloseBasicTileCoordinates(tileCoordinate)
         for (coordinate in coordinates) {
             for (position in worldPositions[coordinate] ?: continue) {
-                canvas.applyPosition(position.xOfWold, position.yOfWorld, BASIC_ZOOM_LEVEL, position.radius)
+                canvas.applyPosition(tileCoordinate, position.xOfWold, position.yOfWorld, position.radius)
             }
         }
     }
 
-    private fun Canvas.applyPosition(lat: Double, lng: Double, zoom: Int, radius: Int) {
-        val worldCoordinate: Pair<Double, Double> = TileCoordinateUtil.latLngToWorld(lat, lng)
-        val pixelCoordinate = TileCoordinateUtil.worldToPixel(worldCoordinate.first, worldCoordinate.second, zoom)
-        val pixelInCoordinate = TileCoordinateUtil.pixelToPixelInTile(pixelCoordinate.first, pixelCoordinate.second)
+    private fun Canvas.applyPosition(tileCoordinate: TileCoordinate, xOfWold: Double, yOfWorld: Double, radius: Int) {
+        val pixelCoordinate = TileCoordinateUtil.worldToPixel(xOfWold, yOfWorld, tileCoordinate.zoom)
+        val pixelInTile = TileCoordinateUtil.pixelToPixelInTile(pixelCoordinate.first, pixelCoordinate.second, tileCoordinate)
         val paint = Paint()
         paint.color = Color.TRANSPARENT
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
         paint.style = Paint.Style.FILL
 
         drawCircle(
-            100F,
-            100F,
-            (TileCoordinateUtil.meterToPixelRate(lat, zoom) * radius).toFloat(),
+            pixelInTile.first.toFloat(),
+            pixelInTile.second.toFloat(),
+            (TileCoordinateUtil.meterToPixelRate(TileCoordinateUtil.yOfWorldToLat(yOfWorld), tileCoordinate.zoom) * radius).toFloat(),
             paint)
     }
 }
