@@ -16,6 +16,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        viewBinding = true //뷰 바인딩
     }
 
     defaultConfig {
