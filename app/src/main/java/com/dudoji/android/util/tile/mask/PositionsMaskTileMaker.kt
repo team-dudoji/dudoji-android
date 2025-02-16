@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.util.Log
 import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
 import com.dudoji.android.model.mapsection.TileCoordinate
 import com.dudoji.android.util.tile.TileCoordinateUtil
@@ -37,9 +38,12 @@ class PositionsMaskTileMaker<MaskTileMaker: IMaskTileMaker>(private val maskTile
     }
 
     private fun applyPositions(canvas: Canvas, tileCoordinate: TileCoordinate) {
-        val positions = worldPositions[tileCoordinate] ?: return
-        for (position in positions) {
-            canvas.applyPosition(position.xOfWold, position.yOfWorld, BASIC_ZOOM_LEVEL, position.radius)
+        Log.w("PositionsMaskTileMaker", "applyPositions: $tileCoordinate")
+        val coordinates = TileCoordinateUtil.getCloseBasicTileCoordinates(tileCoordinate)
+        for (coordinate in coordinates) {
+            for (position in worldPositions[coordinate] ?: continue) {
+                canvas.applyPosition(position.xOfWold, position.yOfWorld, BASIC_ZOOM_LEVEL, position.radius)
+            }
         }
     }
 
