@@ -39,7 +39,7 @@ class PositionsMaskTileMaker<MaskTileMaker: IMaskTileMaker>(private val maskTile
     }
 
     private fun applyPositions(canvas: Canvas, tileCoordinate: TileCoordinate) {
-        val coordinates = TileCoordinateUtil.getCloseBasicTileCoordinates(tileCoordinate)
+        val coordinates = TileCoordinateUtil.getCloseBasicTileCoordinates(tileCoordinate, 4)
         for (coordinate in coordinates) {
             for (position in worldPositions[coordinate] ?: continue) {
                 canvas.applyPosition(tileCoordinate, position.xOfWold, position.yOfWorld, position.radius)

@@ -30,13 +30,13 @@ class TileCoordinateUtil {
             throw Exception("getBasicTileCoordinate Error")
         }
 
-        fun getCloseBasicTileCoordinates(tileCoordinate: TileCoordinate): List<TileCoordinate> {
+        fun getCloseBasicTileCoordinates(tileCoordinate: TileCoordinate, closeRange: Int = 1): List<TileCoordinate> {
             val basicTileCoordinate = getBasicTileCoordinate(tileCoordinate)
             val closeBasicTileCoordinates = mutableListOf<TileCoordinate>()
             val maxClose = (if (tileCoordinate.zoom >= BASIC_ZOOM_LEVEL) 1 else (1 shl (BASIC_ZOOM_LEVEL - tileCoordinate.zoom)))
 
-            for (i in -1 until maxClose + 1) {
-                for (j in -1 until maxClose + 1) {
+            for (i in -closeRange until maxClose + closeRange) {
+                for (j in  -closeRange until maxClose + closeRange) {
                     val x = basicTileCoordinate.x + i
                     val y = basicTileCoordinate.y + j
                     closeBasicTileCoordinates.add(TileCoordinate(x, y, BASIC_ZOOM_LEVEL))
