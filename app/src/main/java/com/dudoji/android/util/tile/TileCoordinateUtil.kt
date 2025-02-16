@@ -1,5 +1,7 @@
 package com.dudoji.android.util.tile
 
+import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
+import com.dudoji.android.model.mapsection.TileCoordinate
 import kotlin.math.ln
 
 const val EARTH_RADIUS = 6378137.0
@@ -7,6 +9,43 @@ const val EARTH_RADIUS = 6378137.0
 // for google tile system's positioning (by x, y, zoom)
 class TileCoordinateUtil {
     companion object {
+
+        // get basic tile coordinate (basic tile coordinate is the tile coordinate at BASIC_ZOOM_LEVEL)
+        fun getBasicTileCoordinate(tileCoordinate: TileCoordinate): TileCoordinate {
+            if (tileCoordinate.zoom == BASIC_ZOOM_LEVEL) {
+                return tileCoordinate
+            } else {
+                val diffOfZoomLevel = Math.abs(BASIC_ZOOM_LEVEL - tileCoordinate.zoom)
+                val numOfTile = 1 shl diffOfZoomLevel
+                if (tileCoordinate.zoom < BASIC_ZOOM_LEVEL) {
+                    val x = tileCoordinate.x * numOfTile
+                    val y = tileCoordinate.y * numOfTile
+                    return TileCoordinate(x, y, BASIC_ZOOM_LEVEL)
+                } else if (tileCoordinate.zoom > BASIC_ZOOM_LEVEL) {
+                    val x = tileCoordinate.x / numOfTile
+                    val y = tileCoordinate.y / numOfTile
+                    return TileCoordinate(x, y, BASIC_ZOOM_LEVEL)
+                }
+            }
+            throw Exception("getBasicTileCoordinate Error")
+        }
+
+        fun getCloseBasicTileCoordinates(tileCoordinate: TileCoordinate): List<TileCoordinate> {
+            val basicTileCoordinate = getBasicTileCoordinate(tileCoordinate)
+            val closeBasicTileCoordinates = mutableListOf<TileCoordinate>()
+            val maxClose = (if (tileCoordinate.zoom >= BASIC_ZOOM_LEVEL) 1 else (1 shl (BASIC_ZOOM_LEVEL - tileCoordinate.zoom)))
+
+            for (i in -1 until maxClose + 1) {
+                for (j in -1 until maxClose + 1) {
+                    val x = basicTileCoordinate.x + i
+                    val y = basicTileCoordinate.y + j
+                    closeBasicTileCoordinates.add(TileCoordinate(x, y, BASIC_ZOOM_LEVEL))
+                }
+            }
+
+            return closeBasicTileCoordinates
+        }
+
         // lat/lng → EPSG:3857 (world coordinate)
         fun latLngToWorld(lat: Double, lng: Double): Pair<Double, Double> {
             var siny = Math.sin((lat * Math.PI) / 180);
