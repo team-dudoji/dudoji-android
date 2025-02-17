@@ -1,9 +1,7 @@
 package com.dudoji.android.location
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,13 +11,13 @@ import android.widget.Toast
 import com.dudoji.android.MainActivity
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
-import com.dudoji.android.location.LocationRepository.MAX_LOG_SIZE
 import com.dudoji.android.map.MapActivity
+import com.dudoji.android.repository.MAX_LOG_SIZE
+import com.dudoji.android.repository.RevealCircleRepository
 import com.dudoji.android.util.NetWorkUtil
 import com.dudoji.android.util.PermissionUtil
 import com.google.android.gms.location.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.JsonObject
 import java.util.LinkedList
 import java.util.Queue
 
@@ -46,67 +44,58 @@ class LocationActivity : NavigatableActivity() {
         setContentView(R.layout.activity_location)
 
         initViews()
-        startService()
-        setupLiveDataObserver()
         setupLocationComponents()
         setLocationTestButton()
     }
 
-    private fun initViews() {
+    private fun initViews() { // 뷰를 초기화 한다.
         locationTextView = findViewById(R.id.locationTextView)
         bottomNav = findViewById(R.id.navigationView)
         setupBottomNavigation(bottomNav)
     }
 
-    private fun startService() {
-        Intent(this, LocationService::class.java).also { intent ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent)
-            } else {
-                startService(intent)
-            }
-        }
-    }
 
-    private fun setupLiveDataObserver() {
-        LocationRepository.getLiveLocations().observe(this) { logs ->
-            locationTextView.text = logs
-        }
-    }
-
-    private fun setupLocationComponents() {
+    private fun setupLocationComponents() { // location을 받아오는 client를 초기화한다.
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         startLocationUpdates()
     }
 
     private fun startLocationUpdates() {
+        // check permission
         if (!PermissionUtil.hasLocationPermission(this)) {
             PermissionUtil.requestLocationPermission(this, LOCATION_PERMISSION_REQUEST_CODE)
             return
         }
 
+        // location request create
         val locationRequest = LocationRequest.create().apply {
             interval = updateInterval
             fastestInterval = updateInterval
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
+        // location callback 정의
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                locationResult.lastLocation?.let { updateLocationLog(it) }
+                locationResult.lastLocation?.let {
+                    updateLocationLog(it)
+                    RevealCircleRepository.addLocation(it)
+                }
             }
         }
 
-        try {
+        try { // callback 등록
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         } catch (e: SecurityException) {
             showPermissionDeniedToast()
         }
 
+        // last location을 업데이트ㅍ
         handler.postDelayed({ checkLastLocation() }, updateInterval)
     }
 
     private fun checkLastLocation() {
+        // permission check
         if (!PermissionUtil.hasLocationPermission(this)) {
             PermissionUtil.requestLocationPermission(this, LOCATION_PERMISSION_REQUEST_CODE)
             return
@@ -129,9 +118,8 @@ class LocationActivity : NavigatableActivity() {
         val button = findViewById<Button>(R.id.sendButton)
         button.setOnClickListener({
             val jsonObject = NetWorkUtil().createRevealCirclesRequestJson()
-            val path = "api/user/reveal_circle/save"
+            val path = "api/user/reveal_circles/save"
             NetWorkUtil().sendJsonToServer(path, jsonObject)
-
         })
     }
 
