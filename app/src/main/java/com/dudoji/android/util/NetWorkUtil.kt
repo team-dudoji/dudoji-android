@@ -1,19 +1,20 @@
 package com.dudoji.android.util
 
-import com.dudoji.android.location.LocationRepository
-import okhttp3.*
+import android.util.Log
+import com.dudoji.android.repository.RevealCircleRepository
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
 class NetWorkUtil {
     private val client = OkHttpClient()
-    private val SERVER_URL = "https://localhost.com/"
+    private val SERVER_URL = "http://172.21.2.182:8000/"
 
     fun createRevealCirclesRequestJson(): JsonObject{
-        val revealCircles = LocationRepository.getLocations()
+        val revealCircles = RevealCircleRepository.getLocations()
 
         val revealCirclesJsonArray = JsonArray()
 
@@ -43,14 +44,14 @@ class NetWorkUtil {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException){
                 e.printStackTrace()
-                println("request fail: ${e.message}")
+                Log.e("NetworkUtil", "request fail: ${e.message}")
             }
 
             override fun onResponse(call: Call, response: Response) {
                 if(response.isSuccessful){
-                    println("call success: ${response.body?.string()}")
+                    Log.d("NetworkUtil", "call success: ${response.body?.string()}")
                 } else{
-                    println("call fail: ${response.code}")
+                    Log.e("NetworkUtil", "call fail: ${response.code}")
                 }
             }
         })
