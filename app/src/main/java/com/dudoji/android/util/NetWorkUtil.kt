@@ -11,7 +11,7 @@ import java.io.IOException
 
 class NetWorkUtil {
     private val client = OkHttpClient()
-    private val SERVER_URL = "http://172.21.2.182:8000/"
+    private val SERVER_URL = "http://localhost:8000/"
 
     fun createRevealCirclesRequestJson(): JsonObject{
         val revealCircles = RevealCircleRepository.getLocations()
