@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.dudoji.android.MainActivity
@@ -14,9 +15,11 @@ import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
 import com.dudoji.android.location.LocationRepository.MAX_LOG_SIZE
 import com.dudoji.android.map.MapActivity
+import com.dudoji.android.util.NetWorkUtil
 import com.dudoji.android.util.PermissionUtil
 import com.google.android.gms.location.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.JsonObject
 import java.util.LinkedList
 import java.util.Queue
 
@@ -46,6 +49,7 @@ class LocationActivity : NavigatableActivity() {
         startService()
         setupLiveDataObserver()
         setupLocationComponents()
+        setLocationTestButton()
     }
 
     private fun initViews() {
@@ -119,6 +123,16 @@ class LocationActivity : NavigatableActivity() {
         }
 
         handler.postDelayed({ checkLastLocation() }, updateInterval)
+    }
+
+    private fun setLocationTestButton(){
+        val button = findViewById<Button>(R.id.sendButton)
+        button.setOnClickListener({
+            val jsonObject = NetWorkUtil().createRevealCirclesRequestJson()
+            val path = "api/user/reveal_circle/save"
+            NetWorkUtil().sendJsonToServer(path, jsonObject)
+
+        })
     }
 
 
