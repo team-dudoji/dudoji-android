@@ -1,6 +1,7 @@
 package com.dudoji.android.map
 
 import android.os.Bundle
+import com.dudoji.android.location.LocationActivity
 import com.dudoji.android.MainActivity
 import com.dudoji.android.R
 import com.dudoji.android.model.mapsection.MapSectionManager
@@ -23,7 +24,8 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
 
     override val navigationItems = mapOf(
         R.id.mapFragment to null, // 기본 맵 화면
-        R.id.homeFragment to MainActivity::class.java
+        R.id.homeFragment to MainActivity::class.java,
+        R.id.locationFragment to LocationActivity::class.java
     )
 
     override val defaultSelectedItemId = R.id.mapFragment

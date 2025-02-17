@@ -1,23 +1,14 @@
 package com.dudoji.android
 
-import android.content.Intent
-import android.location.Address
-import android.location.Geocoder
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.databinding.ActivityMainBinding
+import com.dudoji.android.location.LocationActivity
 import com.dudoji.android.map.MapActivity
 import com.dudoji.android.util.RequestPermissionsUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.gms.location.LocationServices
-import java.io.IOException
-import java.util.Locale
 
 class   MainActivity : NavigatableActivity() {
 
@@ -27,7 +18,8 @@ class   MainActivity : NavigatableActivity() {
 
     override val navigationItems = mapOf(
         R.id.homeFragment to null, // 홈 메인
-        R.id.mapFragment to MapActivity::class.java
+        R.id.mapFragment to MapActivity::class.java,
+        R.id.locationFragment to LocationActivity::class.java
     )
 
     override val defaultSelectedItemId = R.id.homeFragment
