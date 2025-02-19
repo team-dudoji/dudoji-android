@@ -5,12 +5,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.databinding.ActivityMainBinding
-import com.dudoji.android.location.LocationActivity
 import com.dudoji.android.map.MapActivity
 import com.dudoji.android.util.RequestPermissionsUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class   MainActivity : NavigatableActivity() {
+class MainActivity : NavigatableActivity() {
 
 
     private lateinit var bottomNav: BottomNavigationView
@@ -19,7 +18,7 @@ class   MainActivity : NavigatableActivity() {
     override val navigationItems = mapOf(
         R.id.homeFragment to null, // 홈 메인
         R.id.mapFragment to MapActivity::class.java,
-        R.id.locationFragment to LocationActivity::class.java
+//        R.id.locationFragment to LocationActivity::class.java
     )
 
     override val defaultSelectedItemId = R.id.homeFragment
