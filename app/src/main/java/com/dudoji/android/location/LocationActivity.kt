@@ -12,6 +12,7 @@ import com.dudoji.android.MainActivity
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
 import com.dudoji.android.map.MapActivity
+import com.dudoji.android.repository.LOCATION_SYSTEM_CHANGE_WARNING_TEXT
 import com.dudoji.android.repository.MAX_LOG_SIZE
 import com.dudoji.android.repository.RevealCircleRepository
 import com.dudoji.android.util.NetWorkUtil
@@ -21,6 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.LinkedList
 import java.util.Queue
 
+@Deprecated(LOCATION_SYSTEM_CHANGE_WARNING_TEXT)
 class LocationActivity : NavigatableActivity() {
 
     override val defaultSelectedItemId = R.id.locationFragment
@@ -53,7 +55,6 @@ class LocationActivity : NavigatableActivity() {
         bottomNav = findViewById(R.id.navigationView)
         setupBottomNavigation(bottomNav)
     }
-
 
     private fun setupLocationComponents() { // location을 받아오는 client를 초기화한다.
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
