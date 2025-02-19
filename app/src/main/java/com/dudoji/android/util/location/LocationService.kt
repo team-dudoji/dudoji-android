@@ -20,17 +20,17 @@ class LocationService {
     private val updateInterval = 3000L // 3초마다 갱신
 
     constructor() { // 생성자 // 초기화
-        // Location을 받아오는 로직을 불러오기 위해서 초기화하는 로직들 다 함수로 등록
+        // TODO Location을 받아오는 로직을 불러오기 위해서 초기화하는 로직들 다 함수로 등록
         setupLocationComponents()
     }
 
     fun setLocationCallback(callback: LocationCallback) {
-        // Location을 받아오는 callback을 설정한다.
+        // TODO Location을 받아오는 callback을 설정한다.
         // startLocationUpdates()를 변형해서 구현
     }
 
     fun getLastLatLng(): Pair<Double, Double> {
-        // 마지막 location을 pair로 리턴한다.
+        // TODO 마지막 location을 pair로 리턴한다.
          return Pair(0.0, 0.0)
     }
 

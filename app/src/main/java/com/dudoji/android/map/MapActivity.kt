@@ -51,6 +51,19 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
         bottomNav.selectedItemId = R.id.mapFragment
 
         setupBottomNavigation(findViewById(R.id.navigationView))
+
+        // TODO - Location Service를 초기화 변수로 저장해놓음
+        // 그리고 CallBack 등록
+        // 아래 형식으로 인자에 넣어주면 될듯 //
+//        호출해야하는함수(object : LocationCallback() {
+//            override fun onLocationResult(locationResult: LocationResult) {
+//                locationResult.lastLocation?.let {
+//                    updateLocationLog(it) // TODO 안에 로직도 수정, RevealCircleRepository에 등록
+                                            // TODO Google Map에 위치 수정
+//                    RevealCircleRepository.addLocation(it)
+//                }
+//            }
+//        })
     }
 
     override fun onMapReady(p0: GoogleMap?) {
