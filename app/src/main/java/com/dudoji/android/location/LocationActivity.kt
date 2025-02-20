@@ -3,8 +3,6 @@ package com.dudoji.android.location
 import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -17,6 +15,7 @@ import com.dudoji.android.repository.MAX_LOG_SIZE
 import com.dudoji.android.repository.RevealCircleRepository
 import com.dudoji.android.util.NetWorkUtil
 import com.dudoji.android.util.PermissionUtil
+import com.dudoji.android.util.location.LocationService
 import com.google.android.gms.location.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.LinkedList
@@ -33,20 +32,18 @@ class LocationActivity : NavigatableActivity() {
         R.id.locationFragment to null
     )
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationCallback: LocationCallback
+    private lateinit var locationService: LocationService// 로케이션 서비스 변수 추가
     private val locationQueue: Queue<String> = LinkedList()
     private lateinit var locationTextView: TextView
     private lateinit var bottomNav: BottomNavigationView
-    private val handler = Handler(Looper.getMainLooper())
-    private val updateInterval = 3000L // 3초마다 갱신
+    //서비스로 옮긴 변수들은 제거
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location)
 
         initViews()
-        setupLocationComponents()
+        initLocationService()
         setLocationTestButton()
     }
 
@@ -56,64 +53,30 @@ class LocationActivity : NavigatableActivity() {
         setupBottomNavigation(bottomNav)
     }
 
-    private fun setupLocationComponents() { // location을 받아오는 client를 초기화한다.
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        startLocationUpdates()
+    // LocationService 인스턴스 생성 및 권한 체크
+    private fun initLocationService() {
+        // LocationService 인스턴스 생성
+        locationService = LocationService(this)
+        // 위치 권한 체크 후 LocationService의 setLocationCallback 호출
+        if (PermissionUtil.hasLocationPermission(this)) {
+            startLocationUpdatesWithCallback()
+        } else {
+            PermissionUtil.requestLocationPermission(this, LOCATION_PERMISSION_REQUEST_CODE)
+        }
+
     }
 
-    private fun startLocationUpdates() {
-        // check permission
-        if (!PermissionUtil.hasLocationPermission(this)) {
-            PermissionUtil.requestLocationPermission(this, LOCATION_PERMISSION_REQUEST_CODE)
-            return
-        }
-
-        // location request create
-        val locationRequest = LocationRequest.create().apply {
-            interval = updateInterval
-            fastestInterval = updateInterval
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
-
-        // location callback 정의
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                locationResult.lastLocation?.let {
-                    updateLocationLog(it)
-                    RevealCircleRepository.addLocation(it)
+    //위치 업데이트 함수
+    private fun startLocationUpdatesWithCallback() {
+        locationService.setLocationCallback(object  : LocationCallback(){//setLocationCallback 호출하여 위치 업데이트 콜백
+            override fun onLocationResult(locationResult: LocationResult?) {
+                locationResult?.lastLocation?.let { location -> updateLocationLog(location)// 마지막 위치 확인 및 로그 업뎃
+                    RevealCircleRepository.addLocation(location)//위치 저장소 업뎃
                 }
             }
-        }
-
-        try { // callback 등록
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
-        } catch (e: SecurityException) {
-            showPermissionDeniedToast()
-        }
-
-        // last location을 업데이트ㅍ
-        handler.postDelayed({ checkLastLocation() }, updateInterval)
+        })
     }
 
-    private fun checkLastLocation() {
-        // permission check
-        if (!PermissionUtil.hasLocationPermission(this)) {
-            PermissionUtil.requestLocationPermission(this, LOCATION_PERMISSION_REQUEST_CODE)
-            return
-        }
-
-        try {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                location?.let { updateLocationLog(it) }
-            }.addOnFailureListener {
-                Toast.makeText(this, "위치 불러오기 실패", Toast.LENGTH_SHORT).show()
-            }
-        } catch (e: SecurityException) {
-            showPermissionDeniedToast()
-        }
-
-        handler.postDelayed({ checkLastLocation() }, updateInterval)
-    }
 
     private fun setLocationTestButton(){
         val button = findViewById<Button>(R.id.sendButton)
@@ -133,7 +96,7 @@ class LocationActivity : NavigatableActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         PermissionUtil.handlePermissionResult(
             requestCode, LOCATION_PERMISSION_REQUEST_CODE, grantResults,
-            { startLocationUpdates() }, { showPermissionDeniedToast() }
+            { startLocationUpdatesWithCallback() }, { showPermissionDeniedToast() } //새로운 위치 업뎃 함수
         )
     }
 
@@ -144,6 +107,7 @@ class LocationActivity : NavigatableActivity() {
         locationQueue.add(log)
         locationTextView.text = locationQueue.joinToString("\n")
     }
+
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
