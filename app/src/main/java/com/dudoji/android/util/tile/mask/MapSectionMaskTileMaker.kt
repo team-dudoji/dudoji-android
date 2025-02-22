@@ -1,8 +1,8 @@
 package com.dudoji.android.util.tile.mask
 
 import android.graphics.Bitmap
-import com.dudoji.android.model.mapsection.MapSectionManager
-import com.dudoji.android.model.mapsection.TileCoordinate
+import com.dudoji.android.model.MapSectionManager
+import com.dudoji.android.model.TileCoordinate
 
 
 class MapSectionMaskTileMaker(private val mapSectionManager: MapSectionManager): IMaskTileMaker {
