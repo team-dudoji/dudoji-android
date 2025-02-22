@@ -1,7 +1,7 @@
 package com.dudoji.android.repository
 
 import android.location.Location
-import com.dudoji.android.model.mapsection.RevealCircle
+import com.dudoji.android.model.RevealCircle
 import com.dudoji.android.util.listener.ListenerCaller
 import com.dudoji.android.util.location.IRevealCircleListener
 import java.util.*

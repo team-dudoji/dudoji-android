@@ -1,7 +1,7 @@
 package com.dudoji.android.util.tile
 
 import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
-import com.dudoji.android.model.mapsection.TileCoordinate
+import com.dudoji.android.model.TileCoordinate
 import kotlin.math.ln
 
 const val EARTH_RADIUS = 6378137.0

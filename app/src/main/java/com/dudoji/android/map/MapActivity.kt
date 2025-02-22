@@ -5,8 +5,7 @@ import android.os.Bundle
 import com.dudoji.android.MainActivity
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
-import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
-import com.dudoji.android.model.mapsection.MapSectionManager
+import com.dudoji.android.model.MapSectionManager
 import com.dudoji.android.util.MapUtil
 import com.dudoji.android.util.location.LocationService
 import com.dudoji.android.util.tile.MaskTileProvider
@@ -15,7 +14,6 @@ import com.dudoji.android.util.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.util.tile.mask.PositionsMaskTileMaker
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
@@ -90,7 +88,7 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
                 marker = googleMap?.addMarker(MarkerOptions().position(latLng).title("User"))
             }
             marker?.position = latLng
-            googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, BASIC_ZOOM_LEVEL.toFloat()))
+//            googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, BASIC_ZOOM_LEVEL.toFloat()))
         }
     }
 
