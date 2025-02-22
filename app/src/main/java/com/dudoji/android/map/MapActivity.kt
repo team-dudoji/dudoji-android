@@ -74,6 +74,7 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
         locationService.setLocationCallback(object: LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?){
                 locationResult?.lastLocation?.let{
+                    RevealCircleRepository.addLocation(it)
                     updateLocationOnMap(it)
                 }
             }
