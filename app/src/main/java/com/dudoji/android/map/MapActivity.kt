@@ -81,15 +81,13 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
 
     // Update location on map
     private fun updateLocationOnMap(location: Location){
-
         val lat = location.latitude
         val lng = location.longitude
 
         if (lat != 0.0 && lng != 0.0) {
             val latLng = LatLng(lat, lng) // LatLng 객체로 변환
-            googleMap?.clear()
             if (marker == null) {
-                marker = googleMap?.addMarker(MarkerOptions() .title("User"))
+                marker = googleMap?.addMarker(MarkerOptions().position(latLng).title("User"))
             }
             marker?.position = latLng
             googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, BASIC_ZOOM_LEVEL.toFloat()))
