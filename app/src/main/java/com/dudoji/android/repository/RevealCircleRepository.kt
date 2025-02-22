@@ -5,8 +5,6 @@ import java.util.*
 
 const val LOCATION_SYSTEM_CHANGE_WARNING_TEXT = "Changed To Different Location System"
 
-data class RevealCircle(val lat: Double, val lng: Double, val radius: Double)
-
 const val MAX_LOG_SIZE = 20 //20개로 설정했으니 여기도 해줌
 
 object RevealCircleRepository {
