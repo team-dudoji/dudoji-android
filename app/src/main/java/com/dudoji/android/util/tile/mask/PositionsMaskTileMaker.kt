@@ -7,23 +7,30 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
+import com.dudoji.android.model.mapsection.RevealCircle
 import com.dudoji.android.model.mapsection.TileCoordinate
+import com.dudoji.android.repository.RevealCircleRepository
+import com.dudoji.android.util.location.IRevealCircleListener
 import com.dudoji.android.util.tile.TileCoordinateUtil
 
 data class WorldPosition(val xOfWold: Double, val yOfWorld: Double, val radius: Int)
 
-class PositionsMaskTileMaker<MaskTileMaker: IMaskTileMaker>(private val maskTileMaker: MaskTileMaker): IMaskTileMaker {
+class PositionsMaskTileMaker<MaskTileMaker: IMaskTileMaker>(private val maskTileMaker: MaskTileMaker): IMaskTileMaker, IRevealCircleListener {
 
     val worldPositions: MutableMap<TileCoordinate, MutableList<WorldPosition>> = mutableMapOf()
     val positionsEdited: MutableMap<TileCoordinate, Boolean> = mutableMapOf()
 
-    fun addPosition(lat: Double, lng: Double, radius: Int) {
+    init {
+        RevealCircleRepository.revealCircleListenerCaller.addListener(this)
+    }
+
+    fun addPosition(lat: Double, lng: Double, radius: Double) {
         val worldCoordinate: Pair<Double, Double> = TileCoordinateUtil.latLngToWorld(lat, lng)
         val pixelCoordinate = TileCoordinateUtil.worldToPixel(worldCoordinate.first, worldCoordinate.second, BASIC_ZOOM_LEVEL)
         val tileCoordinate = TileCoordinateUtil.pixelToTile(pixelCoordinate.first, pixelCoordinate.second)
         val tile = TileCoordinate(tileCoordinate.first, tileCoordinate.second, BASIC_ZOOM_LEVEL)
         val positions = worldPositions[tile] ?: mutableListOf()
-        positions.add(WorldPosition(worldCoordinate.first, worldCoordinate.second, radius))
+        positions.add(WorldPosition(worldCoordinate.first, worldCoordinate.second, radius.toInt()))
         worldPositions[tile] = positions
         positionsEdited[tile] = true
     }
@@ -60,5 +67,9 @@ class PositionsMaskTileMaker<MaskTileMaker: IMaskTileMaker>(private val maskTile
             pixelInTile.second.toFloat(),
             (TileCoordinateUtil.meterToPixelRate(TileCoordinateUtil.yOfWorldToLat(yOfWorld), tileCoordinate.zoom) * radius).toFloat(),
             paint)
+    }
+
+    override fun onRevealCircleAdded(revealCircle: RevealCircle) {
+        addPosition(revealCircle.lat, revealCircle.lng, revealCircle.radius)
     }
 }
