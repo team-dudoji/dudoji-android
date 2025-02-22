@@ -43,11 +43,17 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
     var googleMap: GoogleMap? = null
     var mapUtil: MapUtil = MapUtil(this)
     var marker: Marker? = null
-    lateinit var tileOverlay: TileOverlay
+
+    val numOfTileOverlay = 2
+    var indexOfTileOverlay = 0
+    val tileOverlays: MutableList<TileOverlay> = mutableListOf()
+
 
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
-        tileOverlay = googleMap?.addTileOverlay(tileOverlayOptions)!!
+        for (i in 0 until numOfTileOverlay) {
+            tileOverlays.add(googleMap?.addTileOverlay(tileOverlayOptions)!!)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,9 +99,14 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
             }
 
             marker?.position = latLng
-            tileOverlay.clearTileCache()
+            updateMap()
 //            googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, BASIC_ZOOM_LEVEL.toFloat()))
         }
+    }
+
+    fun updateMap(){
+        tileOverlays[indexOfTileOverlay].clearTileCache()
+        indexOfTileOverlay = (indexOfTileOverlay + 1) % numOfTileOverlay
     }
 
     override fun onMapReady(p0: GoogleMap?) {
@@ -103,14 +114,12 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
         mapUtil.setGoogleMap(p0)
         p0?.setMinZoomPreference(MIN_ZOOM)  // set zoom level bounds
         p0?.setMaxZoomPreference(MAX_ZOOM)
-        
+
         // apply tile overlay to google map
-        setTileMaskTileMaker(PositionsMaskTileMaker(
-            MapSectionMaskTileMaker(
-                MapSectionManager(
-                    listOf()
-                )
+        setTileMaskTileMaker(PositionsMaskTileMaker(MapSectionMaskTileMaker(
+            MapSectionManager(
+                listOf()
             )
-        ))
+        )))
     }
 }
