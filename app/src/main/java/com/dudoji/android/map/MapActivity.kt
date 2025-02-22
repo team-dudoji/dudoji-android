@@ -6,6 +6,7 @@ import com.dudoji.android.MainActivity
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
 import com.dudoji.android.model.MapSectionManager
+import com.dudoji.android.repository.RevealCircleRepository
 import com.dudoji.android.util.MapUtil
 import com.dudoji.android.util.location.LocationService
 import com.dudoji.android.util.tile.MaskTileProvider
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.TileOverlay
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -41,10 +43,11 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
     var googleMap: GoogleMap? = null
     var mapUtil: MapUtil = MapUtil(this)
     var marker: Marker? = null
+    lateinit var tileOverlay: TileOverlay
 
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
-        googleMap?.addTileOverlay(tileOverlayOptions)
+        tileOverlay = googleMap?.addTileOverlay(tileOverlayOptions)!!
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +90,9 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
             if (marker == null) {
                 marker = googleMap?.addMarker(MarkerOptions().position(latLng).title("User"))
             }
+
             marker?.position = latLng
+            tileOverlay.clearTileCache()
 //            googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, BASIC_ZOOM_LEVEL.toFloat()))
         }
     }
