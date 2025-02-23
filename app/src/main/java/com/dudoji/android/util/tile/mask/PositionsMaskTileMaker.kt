@@ -6,9 +6,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
-import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
 import com.dudoji.android.model.RevealCircle
 import com.dudoji.android.model.TileCoordinate
+import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
 import com.dudoji.android.repository.RevealCircleRepository
 import com.dudoji.android.util.location.IRevealCircleListener
 import com.dudoji.android.util.tile.TileCoordinateUtil
@@ -65,7 +65,7 @@ class PositionsMaskTileMaker<MaskTileMaker: IMaskTileMaker>(private val maskTile
         drawCircle(
             pixelInTile.first.toFloat(),
             pixelInTile.second.toFloat(),
-            (TileCoordinateUtil.meterToPixelRate(TileCoordinateUtil.yOfWorldToLat(yOfWorld), tileCoordinate.zoom) * radius).toFloat(),
+            (TileCoordinateUtil.meterToPixel(radius.toDouble(), TileCoordinateUtil.yOfWorldToLat(yOfWorld), tileCoordinate.zoom) * radius).toFloat(),
             paint)
     }
 

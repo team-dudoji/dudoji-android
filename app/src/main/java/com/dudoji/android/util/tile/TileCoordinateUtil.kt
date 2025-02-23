@@ -1,7 +1,8 @@
 package com.dudoji.android.util.tile
 
-import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
 import com.dudoji.android.model.TileCoordinate
+import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
+import kotlin.math.cos
 import kotlin.math.ln
 
 const val EARTH_RADIUS = 6378137.0
@@ -88,8 +89,12 @@ class TileCoordinateUtil {
             return Pair(x, y)
         }
 
-        fun meterToPixelRate(lat: Double, zoomLevel: Int): Double {
-            return (TILE_SIZE * (1 shl zoomLevel)) / (Math.cos(Math.toRadians(lat)) * 2.0 * Math.PI * EARTH_RADIUS);
+        fun meterToPixel(length: Double, lat: Double, zoomLevel: Int): Double {
+            return length / (
+                    cos(
+                        Math.toRadians(lat) * 2.0 * Math.PI * EARTH_RADIUS / (256.0 * (1 shl zoomLevel))
+                    )
+                    )
         }
     }
 }
