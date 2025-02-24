@@ -6,9 +6,7 @@ import com.dudoji.android.util.listener.ListenerCaller
 import com.dudoji.android.util.location.IRevealCircleListener
 import java.util.*
 
-const val LOCATION_SYSTEM_CHANGE_WARNING_TEXT = "Changed To Different Location System"
-
-const val MAX_LOG_SIZE = 20 //20개로 설정했으니 여기도 해줌
+const val DEFAULT_REVEAL_CIRCLE_RADIUS = 100.0
 
 object RevealCircleRepository {
 
@@ -16,11 +14,8 @@ object RevealCircleRepository {
     val revealCircleListenerCaller: ListenerCaller<IRevealCircleListener, RevealCircle> = ListenerCaller()
 
     fun addLocation(location: Location) {
-        val revealCircle = RevealCircle(location.latitude, location.longitude, 100.0)
+        val revealCircle = RevealCircle(location.latitude, location.longitude, DEFAULT_REVEAL_CIRCLE_RADIUS)
         synchronized(this) {
-//            if (locationQueue.size >= MAX_LOG_SIZE) {
-//                locationQueue.poll()
-//            }
             revealCircleQueue.add(revealCircle)
             revealCircleListenerCaller.callListeners(revealCircle)
         }
