@@ -7,9 +7,9 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.util.Log
+import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.model.RevealCircle
 import com.dudoji.android.model.TileCoordinate
-import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
 import com.dudoji.android.repository.RevealCircleRepository
 import com.dudoji.android.util.location.IRevealCircleListener
 import com.dudoji.android.util.tile.TileCoordinateUtil
