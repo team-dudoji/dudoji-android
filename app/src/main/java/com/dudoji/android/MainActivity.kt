@@ -1,11 +1,14 @@
 package com.dudoji.android
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.databinding.ActivityMainBinding
 import com.dudoji.android.map.MapActivity
+import com.dudoji.android.network.NoNetworkActivity
+import com.dudoji.android.util.NetworkUtil
 import com.dudoji.android.util.RequestPermissionsUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -43,6 +46,8 @@ class MainActivity : NavigatableActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        NetworkUtil(this).checkNetworkAndNavigate()
     }
 
 

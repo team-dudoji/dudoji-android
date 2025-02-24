@@ -42,7 +42,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".map.MapActivity" />
-        <activity android:name=".location.LocationActivity"/>
+
+
+        <activity android:name=".network.NoNetworkActivity" />
+
+
     </application>
 
 </manifest>
