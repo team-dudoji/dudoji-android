@@ -7,6 +7,9 @@ import android.util.Log
 import com.dudoji.android.MainActivity
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
+import com.dudoji.android.config.MAX_ZOOM
+import com.dudoji.android.config.MIN_ZOOM
+import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.model.MapSectionManager
 import com.dudoji.android.repository.RevealCircleRepository
 import com.dudoji.android.util.MapUtil
@@ -27,10 +30,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.TileOverlay
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
-const val MIN_ZOOM = 10f
-const val MAX_ZOOM = 20f
-const val TILE_OVERLAY_LOADING_TIME = 700L // ms
 
 class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
 

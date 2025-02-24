@@ -4,14 +4,12 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
+import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.model.mapsection.DetailedMapSection
 import com.dudoji.android.model.mapsection.MapSection
 import com.dudoji.android.util.mapsection.BitmapUtil
 import com.dudoji.android.util.mapsection.BitmapUtil.Companion.combineBitmapInGrid
 import com.dudoji.android.util.tile.TILE_SIZE
-
-data class TileCoordinate(val x: Int, val y: Int, val zoom: Int)
 
 class MapSectionManager(mapSections: List<MapSection>) {
     private val mapSections: Map<TileCoordinate, MapSection>

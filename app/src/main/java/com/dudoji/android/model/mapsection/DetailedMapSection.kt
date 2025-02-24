@@ -12,11 +12,5 @@ class DetailedMapSection : MapSection {
     fun GetBitmap() : Bitmap {
         return bitmap
     }
-
-    @Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
-    override fun getExploredRate() : Float {
-//        return bitmap.getFilledRate()
-        return 0.0f
-    }
 }
 

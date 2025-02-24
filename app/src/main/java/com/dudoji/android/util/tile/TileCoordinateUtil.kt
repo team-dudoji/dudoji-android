@@ -1,7 +1,7 @@
 package com.dudoji.android.util.tile
 
+import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.model.TileCoordinate
-import com.dudoji.android.model.mapsection.BASIC_ZOOM_LEVEL
 import kotlin.math.cos
 import kotlin.math.ln
 

@@ -2,32 +2,13 @@ package com.dudoji.android.model.mapsection
 
 import android.graphics.Bitmap
 
-const val COORDINATE_CHANGE_WARNING_TEXT = "Changed To Different Coordinate System"
-
-const val MAP_SECTION_SIZE = 256
-const val BASIC_ZOOM_LEVEL = 15
-
 open class MapSection {
     val x : Int
     val y : Int
 
-    companion object {
-        @Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
-        const val MAPSECTION_LATLNG_SIZE = 0.0115
-        @Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
-        const val BASE_LAT = 35.230853
-        @Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
-        const val BASE_LNG = 129.082255
-    }
-
     constructor(builder: Builder) {
         this.x = builder.x
         this.y = builder.y
-    }
-
-    @Deprecated(COORDINATE_CHANGE_WARNING_TEXT)
-    open fun getExploredRate() : Float {
-        return 1.0f
     }
 
     class Builder {
