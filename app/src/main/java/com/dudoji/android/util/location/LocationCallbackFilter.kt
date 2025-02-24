@@ -4,7 +4,7 @@ import android.location.Location
 
 object LocationCallbackFilter {
 
-    val LOCATION_UPDATE_THRESHOLD = 5
+    const val LOCATION_UPDATE_THRESHOLD = 5 // meter
     val lastLocation: Location = Location("")
 
     fun isSameLocation(location: Location): Boolean {
