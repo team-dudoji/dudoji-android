@@ -1,27 +1,20 @@
 package com.dudoji.android
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.databinding.ActivityMainBinding
-import com.dudoji.android.map.MapActivity
 import com.dudoji.android.util.RequestPermissionsUtil
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.dudoji.android.util.login.kakao.KakaoLoginUtil
+import com.kakao.sdk.user.UserApiClient
 
-class MainActivity : NavigatableActivity() {
+class MainActivity : AppCompatActivity() {
 
-
-    private lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
-
-    override val navigationItems = mapOf(
-        R.id.homeFragment to null, // 홈 메인
-        R.id.mapFragment to MapActivity::class.java,
-//        R.id.locationFragment to LocationActivity::class.java
-    )
-
-    override val defaultSelectedItemId = R.id.homeFragment
+    private lateinit var kakaoLoginButton: Button
 
     override fun onStart() {
         super.onStart()
@@ -35,7 +28,6 @@ class MainActivity : NavigatableActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupBottomNavigation(binding.navigationView)
 
         // Edge-to-edge 설정
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -43,8 +35,21 @@ class MainActivity : NavigatableActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        setKakaoLoginButton()
+
+        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+//            tokenInfo.accessToken
+            if (error == null) { // is logined
+//                KakaoLoginUtil.onLoginSuccess(tokenInfo, this)
+            }
+        }
     }
 
-
-
+    fun setKakaoLoginButton(){
+        kakaoLoginButton = findViewById<Button>(R.id.kakao_login_button)
+        kakaoLoginButton.setOnClickListener(){
+            KakaoLoginUtil.loginWithKakao(this)
+        }
+    }
 }
