@@ -1,6 +1,7 @@
 package com.dudoji.android.util
 
 import android.util.Log
+import com.dudoji.android.BuildConfig
 import com.dudoji.android.repository.RevealCircleRepository
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -9,9 +10,9 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
-class NetWorkUtil {
-    private val client = OkHttpClient()
-    private val SERVER_URL = "http://localhost:8000/"
+object NetWorkUtil {
+    val client = OkHttpClient()
+    val SERVER_URL = "http://${BuildConfig.HOST_IP_ADDRESS}:8000"
 
     fun createRevealCirclesRequestJson(): JsonObject{
         val revealCircles = RevealCircleRepository.getLocations()
@@ -36,8 +37,10 @@ class NetWorkUtil {
         val body = jsonData.toString()
             .toRequestBody("application/json; charset=utf-8".toMediaType())
 
+
+
         val request = Request.Builder()
-            .url(SERVER_URL + path)
+            .url("$SERVER_URL/$path")
             .post(body)
             .build()
 
