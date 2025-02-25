@@ -31,14 +31,16 @@ object KakaoLoginUtil {
 
     fun onLoginSuccess(token: OAuthToken, context: Context) {
         Log.i(TAG, "로그인 성공 ${token.accessToken}")
-        // /auth/login/kakao/get_token
-
+        
         val url = HttpUrl.Builder()
             .scheme("http")
             .host(BuildConfig.HOST_IP_ADDRESS)
             .port(8000)
-            .addPathSegment("auth/login/kakao/get_token") // URL 경로 추가 (예: /search)
-            .addQueryParameter("token", token.accessToken) // ?query=kakao login
+            .addPathSegment("auth")
+            .addPathSegment("login")
+            .addPathSegment("kakao")
+            .addPathSegment("get_token")
+            .addQueryParameter("token", token.accessToken)
             .build()
 
         val request: Request = Request.Builder()
