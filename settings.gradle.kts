@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "dudoji-android"
 include(":app")
-include(":googlemap")
