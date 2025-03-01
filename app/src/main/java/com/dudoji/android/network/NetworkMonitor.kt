@@ -39,7 +39,6 @@ class NetworkMonitor(private val context: Context) : LifecycleObserver{//안드�
 
     //엑티비티가 pause 상태일 때 호출, 불필요한 리소스 사용 방지
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-
     //리시버 등록을 해제
     fun stopMonitoring(){
         networkChangeReciver?.let{
