@@ -44,7 +44,9 @@
         <activity android:name=".map.MapActivity" />
 
 
-        <activity android:name=".network.NoNetworkActivity" />
+        <activity
+            android:name=".network.NoNetworkActivity"
+            android:launchMode="singleTop" />
 
 
     </application>
