@@ -10,6 +10,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
+
 object NetWorkUtil {
     val client = OkHttpClient()
     val SERVER_URL = "http://${BuildConfig.HOST_IP_ADDRESS}:8000"
@@ -60,4 +61,5 @@ object NetWorkUtil {
         })
 
     }
+
 }

@@ -42,7 +42,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+      
         <activity android:name=".map.MapActivity" />
+      
+        <activity
+            android:name=".network.NoNetworkActivity"
+            android:launchMode="singleTop" />
+      
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -57,5 +63,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

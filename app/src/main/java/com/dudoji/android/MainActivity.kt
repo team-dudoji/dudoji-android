@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.databinding.ActivityMainBinding
+import com.dudoji.android.map.MapActivity
+import com.dudoji.android.util.NoNetWorkUtil
 import com.dudoji.android.util.RequestPermissionsUtil
 import com.dudoji.android.util.login.kakao.KakaoLoginUtil
 import com.kakao.sdk.user.UserApiClient
@@ -35,15 +37,11 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        NoNetWorkUtil(this).checkNetworkAndNavigate()
+    }
+
 
         setKakaoLoginButton()
-
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-//            tokenInfo.accessToken
-            if (error == null) { // is logined
-//                KakaoLoginUtil.onLoginSuccess(tokenInfo, this)
-            }
-        }
     }
 
     fun setKakaoLoginButton(){
