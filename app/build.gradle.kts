@@ -29,7 +29,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${getApiKey("GOOGLE_MAPS_API_KEY")}\"")
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"${getApiKey("KAKAO_NATIVE_APP_KEY")}\"")
+        buildConfigField("String", "HOST_IP_ADDRESS", "\"${getApiKey("HOST_IP_ADDRESS")}\"")
+
         addManifestPlaceholders(mapOf("GOOGLE_MAPS_API_KEY" to getApiKey("GOOGLE_MAPS_API_KEY")))
+        addManifestPlaceholders(mapOf("KAKAO_NATIVE_APP_KEY" to getApiKey("KAKAO_NATIVE_APP_KEY")))
 
         multiDexEnabled = true
     }
@@ -66,4 +70,6 @@ dependencies {
 
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.google.code.gson:gson:2.8.8")
+
+    implementation("com.kakao.sdk:v2-user:2.20.6")// 카카오 로그인 API 모듈
 }
