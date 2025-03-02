@@ -7,12 +7,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.databinding.ActivityMainBinding
 import com.dudoji.android.map.MapActivity
 import com.dudoji.android.util.RequestPermissionsUtil
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : NavigatableActivity() {
 
-
-    private lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
 
     override val navigationItems = mapOf(
