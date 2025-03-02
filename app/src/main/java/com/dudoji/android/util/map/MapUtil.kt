@@ -1,7 +1,7 @@
-package com.dudoji.android.util
+package com.dudoji.android.util.map
 
+import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,13 +12,9 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.OnSuccessListener
 
 class MapUtil : GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener{
@@ -44,10 +40,10 @@ GoogleApiClient.OnConnectionFailedListener{
             }
         }
 
-        if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
             !== PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
             )
         } else {
             apiClient.connect()
@@ -73,43 +69,13 @@ GoogleApiClient.OnConnectionFailedListener{
             .build()
     }
 
-    // Move Map to Current Location
-    fun moveMapToCurrentLocation(googleMap: GoogleMap?){
-        if(ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION)
-            === PackageManager.PERMISSION_GRANTED){
-            providerClient.lastLocation.addOnSuccessListener(
-                activity,
-                object : OnSuccessListener<Location>{
-                    override fun onSuccess(p0: Location?) {
-                        p0?.let{
-                            val latitude = p0.latitude
-                            val longitude = p0.longitude
-                            moveMap(latitude, longitude, googleMap)
-                        }
-                    }
-                }
-            )
-            apiClient.disconnect()
-        }
-    }
-
-    // Move Map with latitude and longitude
-    fun moveMap(latitude: Double, longitude: Double, googleMap: GoogleMap?){
-        val latLng = LatLng(latitude, longitude)
-        val position: CameraPosition = CameraPosition.Builder()
-            .target(latLng)
-            .zoom(16f)
-            .build()
-        googleMap!!.moveCamera(CameraUpdateFactory.newCameraPosition(position))
-    }
-
     // Set Google Map by MapActivity
     fun setGoogleMap(map: GoogleMap?) {
         this.googleMap = map
     }
 
     override fun onConnected(p0: Bundle?) {
-        moveMapToCurrentLocation(googleMap)
+
     }
 
     override fun onConnectionSuspended(p0: Int) {
