@@ -24,12 +24,8 @@ import com.dudoji.android.util.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.util.tile.mask.PositionsMaskTileMaker
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.TileOverlay
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -51,8 +47,6 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private var mapUtil: MapUtil = MapUtil(this)
     private lateinit var mapCameraPositionController : MapCameraPositionController
-
-    private var marker: Marker? = null
 
     private val numOfTileOverlay = 2
     private var indexOfTileOverlay = 0
@@ -108,14 +102,7 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
         val lng = location.longitude
 
         if (lat != 0.0 && lng != 0.0) {
-            val latLng = LatLng(lat, lng) // LatLng 객체로 변환
-            if (marker == null) {
-                marker = googleMap?.addMarker(MarkerOptions().position(latLng).title("User"))
-            }
-
-            marker?.position = latLng
             updateMap()
-            googleMap?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
         }
     }
 
@@ -135,7 +122,8 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
         mapUtil.setGoogleMap(p0)
         p0?.setMinZoomPreference(MIN_ZOOM)  // set zoom level bounds
         p0?.setMaxZoomPreference(MAX_ZOOM)
-        mapCameraPositionController = MapCameraPositionController(p0!!)
+
+        mapCameraPositionController = MapCameraPositionController(p0!!, myLocationButton)
 
         // apply tile overlay to google map
         setTileMaskTileMaker(PositionsMaskTileMaker(
@@ -145,6 +133,8 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
                 )
             )
         ))
+
+        startLocationUpdates()
     }
 
     fun setupMyLocationButton() {
@@ -152,13 +142,13 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
         myLocationButton.setOnClickListener {
             mapCameraPositionController.setAttach(true)
             myLocationButton.visibility = android.view.View.GONE
-            startLocationUpdates()
         }
     }
 
+    // location updating routine
     private fun startLocationUpdates() {
         lifecycleScope.launch {
-            while (mapCameraPositionController.isAttached)
+            while (true)
                 mapCameraPositionController.update()
         }
     }
