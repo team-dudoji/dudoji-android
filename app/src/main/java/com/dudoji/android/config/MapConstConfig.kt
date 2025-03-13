@@ -10,7 +10,7 @@ const val TILE_OVERLAY_LOADING_TIME = 700L // ms
 
 // for MapSection's Basic
 const val BASIC_ZOOM_LEVEL = 15
-
+const val DEFAULT_ZOOM_LEVEL = 17f
 
 // Google Map Config
 const val MIN_ZOOM = 10f
