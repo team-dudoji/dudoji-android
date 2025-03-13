@@ -7,11 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.databinding.ActivityMainBinding
-import com.dudoji.android.map.MapActivity
 import com.dudoji.android.util.NoNetWorkUtil
 import com.dudoji.android.util.RequestPermissionsUtil
 import com.dudoji.android.util.login.kakao.KakaoLoginUtil
-import com.kakao.sdk.user.UserApiClient
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,13 +36,11 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         NoNetWorkUtil(this).checkNetworkAndNavigate()
-    }
-
 
         setKakaoLoginButton()
     }
 
-    fun setKakaoLoginButton(){
+    fun setKakaoLoginButton() {
         kakaoLoginButton = findViewById<Button>(R.id.kakao_login_button)
         kakaoLoginButton.setOnClickListener(){
             KakaoLoginUtil.loginWithKakao(this)
