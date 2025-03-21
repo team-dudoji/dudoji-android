@@ -40,10 +40,10 @@ object KakaoLoginUtil {
             .addPathSegment("login")
             .addPathSegment("kakao")
             .addPathSegment("get_token")
-            .addQueryParameter("token", token.accessToken)
             .build()
 
         val request: Request = Request.Builder()
+            .addHeader("Authorization", token.accessToken)
             .url(url)
             .get()
             .build()
@@ -60,7 +60,6 @@ object KakaoLoginUtil {
                     Log.e("KakaoLoginUtil", "call fail: ${response.code}")
                 }
             }
-
         })
 
         val intent = Intent(context, MapActivity::class.java)
