@@ -45,6 +45,7 @@
       
         <activity android:name=".map.MapActivity" />
         <activity android:name=".mypage.MypageActivity" />
+        <activity android:name=".mypage.StaticActivity" />
       
         <activity
             android:name=".network.NoNetworkActivity"
