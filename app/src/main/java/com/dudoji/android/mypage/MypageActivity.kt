@@ -2,6 +2,7 @@ package com.dudoji.android.mypage
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import com.dudoji.android.map.MapActivity
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
@@ -14,6 +15,10 @@ class MypageActivity : NavigatableActivity() {
         R.id.mapFragment to MapActivity::class.java
     )
 
+
+
+    private lateinit var bottomNav: BottomNavigationView
+
     // 기본 선택 항목 설정
     override val defaultSelectedItemId = R.id.mypageFragment
 
@@ -21,22 +26,17 @@ class MypageActivity : NavigatableActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mypage)
 
-        val bottomNav = findViewById<BottomNavigationView>(R.id.navigationView)
+        bottomNav = findViewById(R.id.navigationView)
+        bottomNav.selectedItemId = R.id.mypageFragment
 
-        bottomNav.selectedItemId = defaultSelectedItemId
+        setupBottomNavigation(findViewById(R.id.navigationView))
 
-        bottomNav.setOnNavigationItemSelectedListener { menuItem ->
-            val targetActivity = navigationItems[menuItem.itemId]
-            if (targetActivity != null) {
-                bottomNav.selectedItemId = menuItem.itemId
 
-                if (targetActivity == MapActivity::class.java) {
-                    val intent = Intent(this, MapActivity::class.java)
-                    startActivity(intent)
-                }
-                return@setOnNavigationItemSelectedListener true
-            }
-            false
+        val statisticsView = findViewById<TextView>(R.id.statisticsView)
+        statisticsView.setOnClickListener {
+            // 클릭 시 StaticActivity로 이동
+            val intent = Intent(this, StaticActivity::class.java)
+            startActivity(intent)
         }
     }
 }
