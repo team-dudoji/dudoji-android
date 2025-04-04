@@ -34,9 +34,15 @@ class MypageActivity : NavigatableActivity() {
 
         val statisticsView = findViewById<TextView>(R.id.statisticsView)
         statisticsView.setOnClickListener {
-            // 클릭 시 StaticActivity로 이동
-            val intent = Intent(this, StaticActivity::class.java)
+            val intent = Intent(this, StatisticsActivity::class.java)
             startActivity(intent)
+        }
+
+        val achievementView = findViewById<TextView>(R.id.achievementView)
+        achievementView.setOnClickListener {
+            val intent = Intent(this, AchievementActivity::class.java)
+            startActivity(intent)
+
         }
     }
 }
