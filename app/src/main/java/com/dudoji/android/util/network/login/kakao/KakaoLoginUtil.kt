@@ -3,67 +3,42 @@ package com.dudoji.android.util.network.login.kakao
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.dudoji.android.BuildConfig
 import com.dudoji.android.map.MapActivity
-import com.dudoji.android.util.network.NetWorkUtil
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.HttpUrl
-import okhttp3.Request
-import okhttp3.Response
-import java.io.IOException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 object KakaoLoginUtil {
     val TAG = "KakaoLoginUtil"
+    private val userApiService = RetrofitClient.userApiService
 
     val callback: (OAuthToken?, Throwable?, Context) -> Unit = { token, error, context ->
         if (error != null) {
             Log.e(TAG, "카카오계정으로 로그인 실패", error)
         } else if (token != null) {
-            onLoginSuccess(token, context)
+            CoroutineScope(Dispatchers.Main).launch {
+                onLoginSuccess(token, context)
+            }
         }
     }
 
-    fun onLoginSuccess(token: OAuthToken, context: Context) {
+    suspend fun onLoginSuccess(token: OAuthToken, context: Context) {
         Log.i(TAG, "로그인 성공 ${token.accessToken}")
-        
-        val url = HttpUrl.Builder()
-            .scheme("http")
-            .host(BuildConfig.HOST_IP_ADDRESS)
-            .port(8000)
-            .addPathSegment("auth")
-            .addPathSegment("login")
-            .addPathSegment("kakao")
-            .addPathSegment("get_token")
-            .build()
 
-        val request: Request = Request.Builder()
-            .addHeader("Authorization", token.accessToken)
-            .url(url)
-            .get()
-            .build()
+        val response = userApiService.kakaoLogin(token.accessToken)
 
-        NetWorkUtil.client.newCall(request).enqueue(object: Callback{
-            override fun onFailure(call: Call, e: IOException) {
-                Log.e("KakaoLoginUtil", "request fail: ${e.message}")
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                if(response.isSuccessful){
-                    Log.d("KakaoLoginUtil", "call success: ${response.body?.string()}")
-                } else{
-                    Log.e("KakaoLoginUtil", "call fail: ${response.code}")
-                }
-            }
-        })
-
-        val intent = Intent(context, MapActivity::class.java)
-        context.startActivity(intent)
+        if (response.isSuccessful) {
+            Log.i(TAG, "카카오 로그인 성공")
+            val intent = Intent(context, MapActivity::class.java)
+            context.startActivity(intent)
+        } else {
+            Log.e(TAG, "카카오 로그인 실패 ${response.code()}")
+        }
     }
 
     fun loginWithKakao(context: Context) {
@@ -81,7 +56,9 @@ object KakaoLoginUtil {
                         callback(token, error, context)
                     }
                 } else if (token != null) {
-                    onLoginSuccess(token, context)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        onLoginSuccess(token, context)
+                    }
                 }
             }
         } else {
