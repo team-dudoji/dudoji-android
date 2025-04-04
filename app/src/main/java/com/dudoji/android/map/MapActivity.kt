@@ -13,6 +13,7 @@ import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.model.MapSectionManager
+import com.dudoji.android.mypage.MypageActivity
 import com.dudoji.android.repository.RevealCircleRepository
 import com.dudoji.android.util.location.LocationCallbackFilter
 import com.dudoji.android.util.location.LocationService
@@ -35,7 +36,7 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
 
     override val navigationItems = mapOf(
         R.id.mapFragment to null, // 기본 맵 화면
-        R.id.homeFragment to MainActivity::class.java,
+        R.id.mypageFragment to MypageActivity::class.java
     )
 
     override val defaultSelectedItemId = R.id.mapFragment
