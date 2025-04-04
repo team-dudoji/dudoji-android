@@ -1,4 +1,4 @@
-package com.dudoji.android.util.network.permission
+package com.dudoji.android.util.permission
 
 import android.Manifest
 import android.annotation.TargetApi
