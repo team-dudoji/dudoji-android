@@ -1,4 +1,4 @@
-package com.dudoji.android.util
+package com.dudoji.android.util.network
 
 import android.content.Context
 import android.content.Intent

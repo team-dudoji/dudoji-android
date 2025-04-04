@@ -1,8 +1,7 @@
-package com.dudoji.android.util
+package com.dudoji.android.util.network
 
 import android.util.Log
 import com.dudoji.android.config.SERVER_URL
-import com.dudoji.android.BuildConfig
 import com.dudoji.android.repository.RevealCircleRepository
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject

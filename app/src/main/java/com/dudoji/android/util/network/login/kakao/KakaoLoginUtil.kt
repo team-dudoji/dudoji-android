@@ -1,11 +1,11 @@
-package com.dudoji.android.util.login.kakao
+package com.dudoji.android.util.network.login.kakao
 
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.dudoji.android.BuildConfig
 import com.dudoji.android.map.MapActivity
-import com.dudoji.android.util.NetWorkUtil
+import com.dudoji.android.util.network.NetWorkUtil
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause

@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.databinding.ActivityMainBinding
-import com.dudoji.android.util.NoNetWorkUtil
-import com.dudoji.android.util.RequestPermissionsUtil
-import com.dudoji.android.util.login.kakao.KakaoLoginUtil
+import com.dudoji.android.util.network.NoNetWorkUtil
+import com.dudoji.android.util.network.login.kakao.KakaoLoginUtil
+import com.dudoji.android.util.network.permission.RequestPermissionsUtil
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         RequestPermissionsUtil(this).requestLocation() // 위치 권한 요청
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

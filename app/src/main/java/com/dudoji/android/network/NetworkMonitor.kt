@@ -8,7 +8,7 @@ import android.net.ConnectivityManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import com.dudoji.android.util.NoNetWorkUtil
+import com.dudoji.android.util.network.NoNetWorkUtil
 
 class NetworkMonitor(private val context: Context) : LifecycleObserver{//안드로이드 생명 주기 감지 옵저버 상속
 
