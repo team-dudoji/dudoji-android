@@ -1,10 +1,6 @@
 package com.dudoji.android.network.entity.revealcircle
 
-data class RevealCircle(
-    val lat: Double,
-    val lng: Double,
-    val radius: Double,
-)
+import com.dudoji.android.model.RevealCircle
 
 data class RevealCircleRequest(
     val revealCircles: List<RevealCircle>,
