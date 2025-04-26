@@ -30,7 +30,7 @@ class RequestPermissionsUtil(mContext: Context) {
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
-    // 위치정보 권한 요청
+    // 위치 정보 권한 요청
     fun requestLocation() {
         if (Build.VERSION.SDK_INT >= 29) {
             if (ActivityCompat.checkSelfPermission(

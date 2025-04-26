@@ -5,13 +5,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
-import com.dudoji.android.mypage.MypageActivity
 
-class StaticActivity : AppCompatActivity() {
+class StatisticsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_static)
+        setContentView(R.layout.activity_statistics)
 
         val backButton = findViewById<View>(R.id.back_button)
         backButton.setOnClickListener {

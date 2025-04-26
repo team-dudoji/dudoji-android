@@ -9,9 +9,8 @@ import android.os.Looper
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.*
 
-// Location을 지속적으로 받아오는 Class, 위치 추적 기능만 구현하므로 ui관련 변수 제거
-class LocationService { //위치 서비스 초기화 때문에 contxt를 private으로 저장
-
+// Location을 지속적으로 받아오는 Class
+class LocationService { // 위치 서비스 초기화 때문에 context를 private으로 저장
     companion object{
         const val LOCATION_CALLBACK_INTERVAL = 1000L
     }
@@ -28,8 +27,8 @@ class LocationService { //위치 서비스 초기화 때문에 contxt를 private
         setupLocationComponents()
     }
 
+    // location callback을 설정하는 메서드
     fun setLocationCallback(callback: LocationCallback) {
-        // startLocationUpdates()를 변형해서 구현
         locationCallback = callback //콜백을 변수에 저장
 
         val locationRequest = LocationRequest.create().apply { //LocationRequest 객체 생성, 설정 블록 적용
@@ -37,7 +36,6 @@ class LocationService { //위치 서비스 초기화 때문에 contxt를 private
             fastestInterval = LOCATION_CALLBACK_INTERVAL / 2 // 업데이트 주기가 너무 빠르지 않도록 갱신 속도의 절반을 최대 속도로 설정
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY// 고정밀 위치 정보 획득
         }
-
 
         //위치 권한 부여 여부 확인
         if(ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
