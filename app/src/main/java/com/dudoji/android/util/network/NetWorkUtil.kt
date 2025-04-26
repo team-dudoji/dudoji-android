@@ -1,8 +1,7 @@
-package com.dudoji.android.util
+package com.dudoji.android.util.network
 
 import android.util.Log
 import com.dudoji.android.config.SERVER_URL
-import com.dudoji.android.BuildConfig
 import com.dudoji.android.repository.RevealCircleRepository
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -12,6 +11,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
 
+@Deprecated("Use RetrofitClient instead")
 object NetWorkUtil {
     val client = OkHttpClient()
 
