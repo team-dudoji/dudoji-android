@@ -1,6 +1,7 @@
 package com.dudoji.android.repository
 
 import android.location.Location
+import android.util.Log
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
 import com.dudoji.android.model.RevealCircle
 import com.dudoji.android.network.entity.revealcircle.RevealCircleRequest
@@ -10,6 +11,7 @@ import java.util.*
 
 // This repository is responsible for managing the reveal circle data.
 object RevealCircleRepository {
+    private const val TAG = "RevealCircleRepository_Database"
     val mapApiService = RetrofitClient.mapApiService
 
     val revealCircleQueue: Queue<RevealCircle> = LinkedList()
@@ -34,6 +36,11 @@ object RevealCircleRepository {
         val revealCircles: RevealCircleRequest = RevealCircleRequest(
             revealCircles = getLocations()
         )
-        mapApiService.saveCircle(revealCircles)
+        val response = mapApiService.saveCircle(revealCircles)
+        if (response.isSuccessful) {
+            Log.d(TAG, "Saved reveal circles: ${revealCircles.revealCircles}")
+        } else {
+            Log.e(TAG, "Failed to save reveal circles: ${response.message()}")
+        }
     }
 }

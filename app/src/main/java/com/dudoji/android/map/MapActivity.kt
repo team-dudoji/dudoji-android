@@ -6,14 +6,13 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Button
 import androidx.lifecycle.lifecycleScope
-import com.dudoji.android.MainActivity
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
-import com.dudoji.android.model.MapSectionManager
 import com.dudoji.android.mypage.MypageActivity
+import com.dudoji.android.repository.MapSectionRepository
 import com.dudoji.android.repository.RevealCircleRepository
 import com.dudoji.android.util.location.LocationCallbackFilter
 import com.dudoji.android.util.location.LocationService
@@ -99,6 +98,8 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
 
     // Update location on map
     private fun updateLocationOnMap(location: Location){
+        if (tileOverlays.size == 0)
+            return
         val lat = location.latitude
         val lng = location.longitude
 
@@ -126,16 +127,16 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
 
         mapCameraPositionController = MapCameraPositionController(p0!!, myLocationButton)
 
-        // apply tile overlay to google map
-        setTileMaskTileMaker(PositionsMaskTileMaker(
-            MapSectionMaskTileMaker(
-                MapSectionManager(
-                    listOf()
+        lifecycleScope.launch {
+            // apply tile overlay to google map
+            setTileMaskTileMaker(PositionsMaskTileMaker(
+                MapSectionMaskTileMaker(
+//                    MapSectionManager(listOf())
+                    MapSectionRepository.getMapSectionManager()
                 )
-            )
-        ))
-
-        startLocationUpdates()
+            ))
+            startLocationUpdates()
+        }
     }
 
     fun setupMyLocationButton() {
@@ -151,6 +152,13 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
         lifecycleScope.launch {
             while (true)
                 mapCameraPositionController.update()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        lifecycleScope.launch {
+            RevealCircleRepository.saveRevealCircles()
         }
     }
 }
