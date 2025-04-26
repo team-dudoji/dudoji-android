@@ -14,12 +14,12 @@ import kotlinx.coroutines.launch
 
 
 object KakaoLoginUtil {
-    val TAG = "KakaoLoginUtil"
+    val TAG = "KakaoLoginUtilDEBUG"
     private val userApiService = RetrofitClient.userApiService
 
     val callback: (OAuthToken?, Throwable?, Context) -> Unit = { token, error, context ->
         if (error != null) {
-            Log.e(TAG, "카카오계정으로 로그인 실패", error)
+            Log.e(TAG, "Unsuccess to kakao login", error)
         } else if (token != null) {
             CoroutineScope(Dispatchers.Main).launch {
                 onLoginSuccess(token, context)
@@ -28,16 +28,15 @@ object KakaoLoginUtil {
     }
 
     suspend fun onLoginSuccess(token: OAuthToken, context: Context) {
-        Log.i(TAG, "로그인 성공 ${token.accessToken}")
-
+        Log.d(TAG, "Success to Kakao login")
         val response = userApiService.kakaoLogin(token.accessToken)
 
         if (response.isSuccessful) {
-            Log.i(TAG, "카카오 로그인 성공")
+            Log.d(TAG, "Success to dudoji login")
             val intent = Intent(context, MapActivity::class.java)
             context.startActivity(intent)
         } else {
-            Log.e(TAG, "카카오 로그인 실패 ${response.code()}")
+            Log.e(TAG, "Unsuccess to dudoji login ${response.code()}")
         }
     }
 
@@ -45,7 +44,7 @@ object KakaoLoginUtil {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
             UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
                 if (error != null) {
-                    Log.e(TAG, "kakao login is unsuccessful", error)
+                    Log.e(TAG, "Unsuccess to kakao login ", error)
 
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                         return@loginWithKakaoTalk
@@ -68,5 +67,4 @@ object KakaoLoginUtil {
             }
         }
     }
-
 }
