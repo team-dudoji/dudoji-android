@@ -1,4 +1,4 @@
-package com.dudoji.android.util.network.login.kakao
+package com.dudoji.android.oauth.kakao
 
 import android.content.Context
 import android.content.Intent
@@ -32,7 +32,12 @@ object KakaoLoginUtil {
         val response = userApiService.kakaoLogin(token.accessToken)
 
         if (response.isSuccessful) {
-            Log.d(TAG, "Success to dudoji login")
+            Log.d(TAG, "Success to dudoji login ${response.body()}")
+            val accessToken = response.body()?.token?.accessToken
+
+            val prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+            prefs.edit().putString("jwt", accessToken).apply()
+            RetrofitClient.init(context)
             val intent = Intent(context, MapActivity::class.java)
             context.startActivity(intent)
         } else {

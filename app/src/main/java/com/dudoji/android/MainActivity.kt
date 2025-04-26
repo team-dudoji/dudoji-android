@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.databinding.ActivityMainBinding
+import com.dudoji.android.oauth.kakao.KakaoLoginUtil
 import com.dudoji.android.util.network.NoNetWorkUtil
-import com.dudoji.android.util.network.login.kakao.KakaoLoginUtil
 import com.dudoji.android.util.permission.RequestPermissionsUtil
 
 class MainActivity : AppCompatActivity() {
