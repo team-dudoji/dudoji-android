@@ -11,6 +11,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
 
+@Deprecated("Use RetrofitClient instead")
 object NetWorkUtil {
     val client = OkHttpClient()
 

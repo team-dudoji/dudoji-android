@@ -8,17 +8,17 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.network.NoNetworkActivity
 
+// Util for checking network connectivity
 class NoNetWorkUtil(private val context: Context) {
-
-    //네트워크 확인 함수데스요
+    // Method to check network availability
     fun isNetworkAvailable(): Boolean{
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager //네트워크 관리 서비스를 가져워 ConnectivityManager 타입으로 캐스팅 해줌
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager // 네트워크 관리 서비스를 가져워 ConnectivityManager 타입으로 캐스팅 해줌
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){ //빌드 버전 확인
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
-            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) //와이파이 연결됨?
-                    || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) //셀룰러 데이터 연결됨?
+            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) // check wifi connectivity
+                    || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) // check cellular connectivity
         } else{ //안드로이드 6이하
             val activieNetworkInfo = connectivityManager.activeNetworkInfo
             activieNetworkInfo != null && activieNetworkInfo.isConnected
