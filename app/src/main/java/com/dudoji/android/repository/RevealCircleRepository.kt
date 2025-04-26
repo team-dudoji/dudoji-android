@@ -6,7 +6,7 @@ import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
 import com.dudoji.android.model.RevealCircle
 import com.dudoji.android.network.entity.revealcircle.RevealCircleRequest
 import com.dudoji.android.util.listener.ListenerCaller
-import com.dudoji.android.util.location.IRevealCircleListener
+import com.dudoji.android.map.location.IRevealCircleListener
 import java.util.*
 
 // This repository is responsible for managing the reveal circle data.

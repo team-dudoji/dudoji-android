@@ -1,9 +1,9 @@
 package com.dudoji.android.network
 
-import com.dudoji.android.R
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.NavigatableActivity
+import com.dudoji.android.R
 
 class NoNetworkActivity :  NavigatableActivity(){
 

@@ -11,13 +11,13 @@ import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
+import com.dudoji.android.map.location.LocationCallbackFilter
+import com.dudoji.android.map.location.LocationService
+import com.dudoji.android.map.util.MapCameraPositionController
+import com.dudoji.android.map.util.MapUtil
 import com.dudoji.android.mypage.MypageActivity
 import com.dudoji.android.repository.MapSectionRepository
 import com.dudoji.android.repository.RevealCircleRepository
-import com.dudoji.android.util.location.LocationCallbackFilter
-import com.dudoji.android.util.location.LocationService
-import com.dudoji.android.util.map.MapCameraPositionController
-import com.dudoji.android.util.map.MapUtil
 import com.dudoji.android.util.tile.MaskTileProvider
 import com.dudoji.android.util.tile.mask.IMaskTileMaker
 import com.dudoji.android.util.tile.mask.MapSectionMaskTileMaker

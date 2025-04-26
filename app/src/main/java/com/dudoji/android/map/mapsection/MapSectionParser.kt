@@ -1,15 +1,16 @@
-package com.dudoji.android.util.mapsection
+package com.dudoji.android.map.mapsection
 
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
 import com.dudoji.android.R
 import com.dudoji.android.model.mapsection.MapSection
-import com.dudoji.android.util.base64.Base64Decoder
 import com.dudoji.android.util.tile.TILE_SIZE
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 class MapSectionParser {
     // static functions in kotlin
@@ -48,8 +49,9 @@ class MapSectionParser {
             return builder.build()
         }
 
+        @OptIn(ExperimentalEncodingApi::class)
         fun createBitmapFromBase64String(bitmapString: String): Bitmap {
-            val byteArray = Base64Decoder.decode(bitmapString)
+            val byteArray = Base64.decode(bitmapString)
             val bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888)
 
             val pixels = IntArray(TILE_SIZE * TILE_SIZE)

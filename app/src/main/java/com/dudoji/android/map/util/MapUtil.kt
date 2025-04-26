@@ -1,4 +1,4 @@
-package com.dudoji.android.util.map
+package com.dudoji.android.map.util
 
 import android.Manifest
 import android.content.pm.PackageManager

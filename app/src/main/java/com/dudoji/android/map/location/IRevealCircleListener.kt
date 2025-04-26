@@ -1,4 +1,4 @@
-package com.dudoji.android.util.location
+package com.dudoji.android.map.location
 
 import com.dudoji.android.model.RevealCircle
 import com.dudoji.android.util.listener.IListener

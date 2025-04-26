@@ -1,4 +1,4 @@
-package com.dudoji.android.util.location
+package com.dudoji.android.map.location
 
 import android.location.Location
 import com.dudoji.android.config.LOCATION_UPDATE_THRESHOLD

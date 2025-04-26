@@ -4,7 +4,7 @@ import android.util.Log
 import com.dudoji.android.model.MapSectionManager
 import com.dudoji.android.model.mapsection.MapSection
 import com.dudoji.android.network.api.service.MapApiService
-import com.dudoji.android.util.mapsection.MapSectionParser
+import com.dudoji.android.map.mapsection.MapSectionParser
 
 // This repository is responsible for managing the map section data.
 object MapSectionRepository {

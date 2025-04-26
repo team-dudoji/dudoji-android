@@ -7,8 +7,8 @@ import android.graphics.Paint
 import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.model.mapsection.DetailedMapSection
 import com.dudoji.android.model.mapsection.MapSection
-import com.dudoji.android.util.mapsection.BitmapUtil
-import com.dudoji.android.util.mapsection.BitmapUtil.Companion.combineBitmapInGrid
+import com.dudoji.android.map.mapsection.BitmapUtil
+import com.dudoji.android.map.mapsection.BitmapUtil.Companion.combineBitmapInGrid
 import com.dudoji.android.util.tile.TILE_SIZE
 
 class MapSectionManager(mapSections: List<MapSection>) {

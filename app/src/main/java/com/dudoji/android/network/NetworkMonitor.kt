@@ -8,7 +8,6 @@ import android.net.ConnectivityManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import com.dudoji.android.util.network.NoNetWorkUtil
 
 class NetworkMonitor(private val context: Context) : LifecycleObserver{//안드로이드 생명 주기 감지 옵저버 상속
 
@@ -49,10 +48,11 @@ class NetworkMonitor(private val context: Context) : LifecycleObserver{//안드�
 
     //현재 네트워크 상태 확인 함수
     private fun checkNetworkState(){
-        if(NoNetWorkUtil(context).isNetworkAvailable()){
+        if(NetworkChecker.isNetworkAvailable(context)){
             onNetworkAvailable?.invoke()
         }else{
             onNetworkLost?.invoke()
         }
     }
+
 }

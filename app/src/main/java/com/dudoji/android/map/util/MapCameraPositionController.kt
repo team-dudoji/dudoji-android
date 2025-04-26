@@ -1,4 +1,4 @@
-package com.dudoji.android.util.map
+package com.dudoji.android.map.util
 
 import android.location.Location
 import android.widget.Button

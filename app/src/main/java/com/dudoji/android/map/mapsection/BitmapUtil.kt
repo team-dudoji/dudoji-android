@@ -1,4 +1,4 @@
-package com.dudoji.android.util.mapsection
+package com.dudoji.android.map.mapsection
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
