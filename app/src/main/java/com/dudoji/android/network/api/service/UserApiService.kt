@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 // user API endpoints
 interface UserApiService {
-    @GET("/api/user/info/get/profile_image")
+    @GET("/api/user/info/get/profile-image")
     suspend fun getUserProfileImageUrl(): Response<String>
 
     @GET("/api/user/info/get/name")
