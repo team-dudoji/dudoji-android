@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
+import com.dudoji.android.mypage.achievement.AchievementActivity
 import com.dudoji.android.map.MapActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
