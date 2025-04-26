@@ -19,6 +19,7 @@ object RetrofitClient {
     private const val BASE_URL = "http://${BuildConfig.HOST_IP_ADDRESS}/"
 
     val gson = GsonBuilder()
+        .setDateFormat("yyyy-MM-dd")
         .setLenient()
         .create()
 
