@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import com.dudoji.android.R
 import com.dudoji.android.model.mapsection.MapSection
-import com.dudoji.android.util.tile.TILE_SIZE
+import com.dudoji.android.map.util.tile.TILE_SIZE
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader

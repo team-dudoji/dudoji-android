@@ -1,10 +1,10 @@
-package com.dudoji.android.util.tile.mask
+package com.dudoji.android.map.util.tile.mask
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import com.dudoji.android.util.tile.TILE_SIZE
+import com.dudoji.android.map.util.tile.TILE_SIZE
 
 // for Test MaskTileMaker (50% transparency mask)
 class OpaqueMaskTileMaker : IMaskTileMaker {

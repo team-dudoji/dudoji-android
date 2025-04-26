@@ -1,8 +1,8 @@
-package com.dudoji.android.util.tile
+package com.dudoji.android.map.util.tile
 
 
 import android.graphics.Bitmap
-import com.dudoji.android.util.tile.mask.IMaskTileMaker
+import com.dudoji.android.map.util.tile.mask.IMaskTileMaker
 import com.google.android.gms.maps.model.*
 import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream

@@ -1,4 +1,4 @@
-package com.dudoji.android.util.tile
+package com.dudoji.android.map.util.tile
 
 import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.model.TileCoordinate

@@ -1,4 +1,4 @@
-package com.dudoji.android.util.tile.mask
+package com.dudoji.android.map.util.tile.mask
 
 import android.graphics.Bitmap
 

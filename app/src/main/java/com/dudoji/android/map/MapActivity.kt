@@ -18,10 +18,10 @@ import com.dudoji.android.map.util.MapUtil
 import com.dudoji.android.mypage.MypageActivity
 import com.dudoji.android.repository.MapSectionRepository
 import com.dudoji.android.repository.RevealCircleRepository
-import com.dudoji.android.util.tile.MaskTileProvider
-import com.dudoji.android.util.tile.mask.IMaskTileMaker
-import com.dudoji.android.util.tile.mask.MapSectionMaskTileMaker
-import com.dudoji.android.util.tile.mask.PositionsMaskTileMaker
+import com.dudoji.android.map.util.tile.MaskTileProvider
+import com.dudoji.android.map.util.tile.mask.IMaskTileMaker
+import com.dudoji.android.map.util.tile.mask.MapSectionMaskTileMaker
+import com.dudoji.android.map.util.tile.mask.PositionsMaskTileMaker
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
