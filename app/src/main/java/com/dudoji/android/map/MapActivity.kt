@@ -6,7 +6,6 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Button
 import androidx.lifecycle.lifecycleScope
-import com.dudoji.android.MainActivity
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
