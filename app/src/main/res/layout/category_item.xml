@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#f8f8f8">
+
+    <!-- 카테고리 제목 -->
+    <TextView
+        android:id="@+id/categoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="이동거리"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:textStyle="bold" />
+
+    <!-- 카드 목록 -->
+    <LinearLayout
+        android:id="@+id/itemsContainer"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="start"/>
+
+    <!-- 전체보기 버튼 -->
+    <TextView
+        android:id="@+id/viewAllButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="전체보기 >"
+        android:textColor="#888888"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp" />
+</LinearLayout>
