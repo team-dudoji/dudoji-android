@@ -1,13 +1,16 @@
 package com.dudoji.android.network.api.service
 
-
-import com.dudoji.android.network.entity.TokenResponse
 import retrofit2.Response
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.GET
 
-// User Data API endpoints
+// user API endpoints
 interface UserApiService {
-    @POST("auth/login/kakao/app-login")
-    suspend fun kakaoLogin(@Header("Authorization") token: String): Response<TokenResponse>
+    @GET("/api/user/info/get/profile-image")
+    suspend fun getUserProfileImageUrl(): Response<String>
+
+    @GET("/api/user/info/get/name")
+    suspend fun getUserName(): Response<String>
+
+    @GET("/api/user/info/get/email")
+    suspend fun getUserEmail(): Response<String>
 }
