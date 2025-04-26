@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 object KakaoLoginUtil {
     val TAG = "KakaoLoginUtilDEBUG"
-    private val userApiService = RetrofitClient.userApiService
+    private val userApiService = RetrofitClient.loginApiService
 
     val callback: (OAuthToken?, Throwable?, Context) -> Unit = { token, error, context ->
         if (error != null) {

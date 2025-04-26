@@ -2,6 +2,7 @@
 import android.content.Context
 import android.util.Log
 import com.dudoji.android.BuildConfig
+import com.dudoji.android.network.api.service.LoginApiService
 import com.dudoji.android.network.api.service.MapApiService
 import com.dudoji.android.network.api.service.UserApiService
 import com.dudoji.android.util.network.NetWorkUtil.client
@@ -33,6 +34,7 @@ object RetrofitClient {
             .build()
 
         mapApiService = retrofit.create(MapApiService::class.java)
+        userApiService = retrofit.create(UserApiService::class.java)
         Log.d("MapApiService", "Retrofit client initialized")
     }
 
@@ -69,9 +71,10 @@ object RetrofitClient {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
-    val userApiService: UserApiService by lazy {
-        retrofit.create(UserApiService::class.java)
+    val loginApiService: LoginApiService by lazy {
+        retrofit.create(LoginApiService::class.java)
     }
 
-    lateinit var mapApiService: MapApiService;
+    lateinit var userApiService: UserApiService
+    lateinit var mapApiService: MapApiService
 }
