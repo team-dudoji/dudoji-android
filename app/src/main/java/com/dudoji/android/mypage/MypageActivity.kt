@@ -6,6 +6,7 @@ import android.widget.TextView
 import com.dudoji.android.map.MapActivity
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
+import com.dudoji.android.mypage.achievement.AchievementActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MypageActivity : NavigatableActivity() {
