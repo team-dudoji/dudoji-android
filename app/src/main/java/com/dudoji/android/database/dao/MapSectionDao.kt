@@ -1,10 +1,9 @@
 package com.dudoji.android.database.dao
 
-import android.R.attr.x
-import android.R.attr.y
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.util.Log
 import com.dudoji.android.database.DataBaseHelper
 import com.dudoji.android.map.domain.mapsection.DetailedMapSection
 import com.dudoji.android.map.domain.mapsection.MapSection
@@ -41,8 +40,10 @@ class MapSectionDao(val context: Context) {
         val db = dataBaseHelper.readableDatabase
         val cursor = db.rawQuery(GET_ALL_MAP_SECTIONS, null)
         val mapSections = mutableListOf<MapSection>()
+        Log.d("MapSectionDao", "getMapSections: ${cursor.count}")
         if (cursor.moveToFirst()) {
             do {
+                Log.d("MapSectionDao", "x: ${cursor.getInt(0)}, y: ${cursor.getInt(1)}")
                 val x = cursor.getInt(0)
                 val y = cursor.getInt(1)
                 val bitmapBlob = cursor.getBlob(2)
@@ -68,8 +69,10 @@ class MapSectionDao(val context: Context) {
 
     fun setMapSection(mapSection: MapSection){
         if (!checkMapSection(mapSection.x, mapSection.y)) {
+            Log.d("MapSectionDao", "insertMapSection: ${mapSection.x}, ${mapSection.y}")
             insertMapSection(mapSection)
         } else {
+            Log.d("MapSectionDao", "updateMapSection: ${mapSection.x}, ${mapSection.y}")
             updateMapSection(mapSection)
         }
     }
@@ -104,7 +107,7 @@ class MapSectionDao(val context: Context) {
             val statement1 = db.compileStatement(INSERT_MAP_SECTION)
             statement1.bindLong(1, mapSection.x.toLong())
             statement1.bindLong(2, mapSection.y.toLong())
-            statement1.bindLong(2, 0L)
+            statement1.bindLong(3, 0L)
             statement1.executeInsert()
 
             val statement2 = db.compileStatement(INSERT_MAP_SECTION_STATE_BITMAP)
@@ -119,12 +122,8 @@ class MapSectionDao(val context: Context) {
             val statement = db.compileStatement(INSERT_MAP_SECTION)
             statement.bindLong(1, mapSection.x.toLong())
             statement.bindLong(2, mapSection.y.toLong())
-            statement.bindLong(2, 1L)
+            statement.bindLong(3, 1L)
             statement.executeInsert()
         }
-        val statement = db.compileStatement(INSERT_MAP_SECTION)
-        statement.bindLong(1, x.toLong())
-        statement.bindLong(2, y.toLong())
-        statement.executeInsert()
     }
 }
