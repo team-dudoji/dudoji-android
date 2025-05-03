@@ -15,3 +15,5 @@ const val DEFAULT_ZOOM_LEVEL = 17f
 // Google Map Config
 const val MIN_ZOOM = 10f
 const val MAX_ZOOM = 20f
+
+const val SPEED_THRESHOLD = 1f
