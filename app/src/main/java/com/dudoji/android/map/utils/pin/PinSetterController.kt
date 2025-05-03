@@ -3,10 +3,16 @@ package com.dudoji.android.map.utils.pin
 import android.content.ClipData
 import android.view.DragEvent
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import com.dudoji.android.R
 import com.dudoji.android.map.domain.Pin
 import com.dudoji.android.map.repository.PinRepository
+import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import java.util.Date
 
@@ -15,12 +21,14 @@ class PinSetterController{
     val pinDropZone: FrameLayout
     val googleMap: GoogleMap
     val pinApplier: PinApplier
+    val activity: AppCompatActivity
 
-    constructor(pinSetter: ImageView, pinDropZone: FrameLayout, googleMap: GoogleMap) {
+    constructor(pinSetter: ImageView, pinDropZone: FrameLayout, googleMap: GoogleMap, activity: AppCompatActivity) {
         this.pinSetter = pinSetter
         this.pinDropZone = pinDropZone
         this.googleMap = googleMap
         this.pinApplier = PinApplier(googleMap)
+        this.activity = activity
 
         setDragAndDropListener()
     }
@@ -38,28 +46,51 @@ class PinSetterController{
                     DragEvent.ACTION_DRAG_STARTED -> {
                         true
                     }
+
                     DragEvent.ACTION_DROP -> {
                         val x = event.x
                         val y = event.y
                         val (lat, lng) = getPinSetterPosition(x, y)
-                        val pin = Pin(
-                            lat = lat,
-                            lng = lng,
-                            pinId = 0L,
-                            userId = 0L,
-                            createdDate = Date(),
-                            title = "New Pin",
-                            content = "Pin Content"
-                        )
-
-                        PinRepository.addPin(pin)
-                        pinApplier.applyPin(pin)
+                        getPinMemoData {
+                            val pin = Pin(
+                                lat,
+                                lng,
+                                0L,
+                                0L,
+                                Date(),
+                                it.first,
+                                it.second
+                            )
+                            PinRepository.addPin(pin)
+                            pinApplier.applyPin(pin)
+                        }
                         true
                     }
                     else -> false
                 }
             }
         )
+    }
+
+    fun getPinMemoData(onComplete: (Pair<String, String>) -> Unit) {
+        Modal.showCustomModal(activity, R.layout.modal_pin_memo) { view ->
+            val pinTitle = view.findViewById<EditText>(R.id.memo_title_input)
+            val pinContent = view.findViewById<EditText>(R.id.memo_title_input)
+            val saveButton = view.findViewById<Button>(R.id.memo_save_button)
+
+            saveButton.setOnClickListener {
+                onComplete(
+                    Pair(
+                        pinTitle.text.toString(),
+                        pinContent.text.toString()
+                    )
+                )
+
+                // Close the modal
+                (view.parent.parent.parent as? ViewGroup)?.removeView(view.parent.parent as View?)
+                true
+            }
+        }
     }
 
     fun getPinSetterPosition(x: Float, y: Float): Pair<Double, Double> {

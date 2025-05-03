@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
@@ -175,6 +174,6 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     fun setPinSetterController() {
         pinDropZone = findViewById(R.id.outer_drop_zone)
         pinSetter = findViewById(R.id.pinSetter)
-        pinSetterController = PinSetterController(pinSetter, pinDropZone, googleMap!!)
+        pinSetterController = PinSetterController(pinSetter, pinDropZone, googleMap!!, this)
     }
 }
