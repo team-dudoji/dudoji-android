@@ -8,16 +8,23 @@
     android:layout_height="match_parent"
     tools:context=".map.activity.MapActivity">
 
-    <!-- Map 프래그먼트 -->
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/mapView"
+    <FrameLayout
+        android:id="@+id/outer_drop_zone"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/navigationView" />
+        app:layout_constraintBottom_toTopOf="@id/navigationView">
+
+    <!-- Map 프래그먼트 -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+    </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/myLocationButton"
@@ -27,6 +34,16 @@
         android:layout_marginBottom="124dp"
         android:visibility="gone"
         android:background="@drawable/my_location_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/pinSetter"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="644dp"
+        android:background="@drawable/pin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
