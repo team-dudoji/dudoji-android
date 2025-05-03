@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.network.utils.NetworkMonitor
-import com.dudoji.android.network.activiity.NoNetworkActivity
+import com.dudoji.android.network.activity.NoNetworkActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 abstract class NavigatableActivity : AppCompatActivity() {

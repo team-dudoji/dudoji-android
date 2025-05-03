@@ -1,4 +1,4 @@
-package com.dudoji.android.network.activiity
+package com.dudoji.android.network.activity
 
 import com.dudoji.android.R
 import android.os.Bundle

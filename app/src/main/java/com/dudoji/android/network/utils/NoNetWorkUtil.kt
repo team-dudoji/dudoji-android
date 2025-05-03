@@ -6,7 +6,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
-import com.dudoji.android.network.activiity.NoNetworkActivity
+import com.dudoji.android.network.activity.NoNetworkActivity
 
 // Util for checking network connectivity
 class NoNetWorkUtil(private val context: Context) {
