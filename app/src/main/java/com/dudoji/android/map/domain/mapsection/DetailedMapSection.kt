@@ -3,14 +3,18 @@ package com.dudoji.android.map.domain.mapsection
 import android.graphics.Bitmap
 
 class DetailedMapSection : MapSection {
-    private val bitmap : Bitmap
+    private var bitmap : Bitmap
   
     constructor(builder: Builder) : super(builder) {
         bitmap = builder.bitmap!!
     }
     
-    fun GetBitmap() : Bitmap {
+    fun getBitmap() : Bitmap {
         return bitmap
+    }
+
+    fun setBitmap(bitmap: Bitmap) {
+        this.bitmap = bitmap
     }
 }
 

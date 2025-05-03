@@ -11,6 +11,11 @@ open class MapSection {
         this.y = builder.y
     }
 
+    constructor(detailedMapSection: DetailedMapSection) {
+        this.x = detailedMapSection.x
+        this.y = detailedMapSection.y
+    }
+
     class Builder {
         var x : Int = 0
         var y : Int = 0

@@ -9,6 +9,7 @@ import android.graphics.PorterDuffXfermode
 import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.map.domain.RevealCircle
 import com.dudoji.android.map.domain.TileCoordinate
+import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.location.IRevealCircleListener
 import com.dudoji.android.map.utils.tile.TileCoordinateUtil
@@ -47,14 +48,18 @@ class PositionsMaskTileMaker<MaskTileMaker: IMaskTileMaker>(private val maskTile
 
     private fun applyPositions(canvas: Canvas, tileCoordinate: TileCoordinate) {
         val coordinates = TileCoordinateUtil.Companion.getCloseBasicTileCoordinates(tileCoordinate, 4)
+
         for (coordinate in coordinates) {
+            if (worldPositions[coordinate] != null)
+                MapSectionManager.setDirtyCoordinate(coordinate) // mark the tile as dirty
+
             for (position in worldPositions[coordinate] ?: continue) {
                 canvas.applyPosition(tileCoordinate, position.xOfWold, position.yOfWorld, position.radius)
             }
         }
     }
 
-    private fun Canvas.applyPosition(tileCoordinate: TileCoordinate, xOfWold: Double, yOfWorld: Double, radius: Int) {
+    fun Canvas.applyPosition(tileCoordinate: TileCoordinate, xOfWold: Double, yOfWorld: Double, radius: Int) {
         val pixelCoordinate = TileCoordinateUtil.Companion.worldToPixel(xOfWold, yOfWorld, tileCoordinate.zoom)
         val pixelInTile = TileCoordinateUtil.Companion.pixelToPixelInTile(pixelCoordinate.first, pixelCoordinate.second, tileCoordinate)
         val paint = Paint()

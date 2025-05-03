@@ -15,13 +15,44 @@ import com.dudoji.android.map.utils.tile.TILE_SIZE
 class MapSectionManager(mapSections: List<MapSection>) {
     private val mapSections: Map<TileCoordinate, MapSection>
 
+
     private val emptyBitmap: Bitmap
     private val fullBitmap: Bitmap
 
     init {
         this.mapSections = mapSections.associateBy { TileCoordinate(it.x, it.y, 15) }
         emptyBitmap = createBitmapWithColor(TILE_SIZE, TILE_SIZE, Color.TRANSPARENT)
-        fullBitmap = createBitmapWithColor(TILE_SIZE, TILE_SIZE, Color.BLACK)
+        fullBitmap = createBitmapWithColor(TILE_SIZE, TILE_SIZE, Color.LTGRAY)
+    }
+    companion object {
+        private val dirtyMapSectionCoordinates: HashSet<TileCoordinate> = HashSet()
+
+        fun setDirtyCoordinate(coordinate: TileCoordinate) {
+            val diff = BASIC_ZOOM_LEVEL - coordinate.zoom
+
+            val baseX = coordinate.x shl diff
+            val baseY = coordinate.y shl diff
+            val tileCount = 1 shl kotlin.math.abs(diff)
+
+            for (x in 0 until tileCount) {
+                for (y in 0 until tileCount) {
+                    val targetCoordinate = TileCoordinate(
+                        baseX + x,
+                        baseY + y,
+                        BASIC_ZOOM_LEVEL
+                    )
+                    dirtyMapSectionCoordinates.add(targetCoordinate)
+                }
+            }
+        }
+    }
+
+    fun getDirtyMapSections(): List<MapSection> {
+        val dirtyCoordinates = dirtyMapSectionCoordinates.mapNotNull { coordinate ->
+            mapSections[coordinate]
+        }
+        dirtyMapSectionCoordinates.clear()
+        return dirtyCoordinates
     }
 
     fun getBitmap(coordinate: TileCoordinate): Bitmap? {
@@ -31,7 +62,7 @@ class MapSectionManager(mapSections: List<MapSection>) {
                 return fullBitmap
             } else { // MapSection is found
                 if (mapSection is DetailedMapSection) {
-                    return mapSection.GetBitmap()
+                    return mapSection.getBitmap()
                 } else {
                     return emptyBitmap
                 }
@@ -62,7 +93,7 @@ class MapSectionManager(mapSections: List<MapSection>) {
                     canvas.combineBitmapInGrid(fullBitmap, numOfTile, xOfTile, yOfTile)
                 } else {
                     if (childMapSection is DetailedMapSection) {
-                        canvas.combineBitmapInGrid(childMapSection.GetBitmap(), numOfTile, xOfTile, yOfTile)
+                        canvas.combineBitmapInGrid(childMapSection.getBitmap(), numOfTile, xOfTile, yOfTile)
                     } else {
                         canvas.combineBitmapInGrid(emptyBitmap, numOfTile, xOfTile, yOfTile)
                     }
@@ -91,7 +122,7 @@ class MapSectionManager(mapSections: List<MapSection>) {
             return fullBitmap
         } else { // Bitmap is found
             if (parentMapSection is DetailedMapSection) {
-                return BitmapUtil.cropBitmapInGrid(parentMapSection.GetBitmap(), TILE_SIZE, numOfTile, xOfTile, yOfTile)
+                return BitmapUtil.cropBitmapInGrid(parentMapSection.getBitmap(), TILE_SIZE, numOfTile, xOfTile, yOfTile)
             } else {
                 return emptyBitmap
             }
@@ -109,5 +140,4 @@ class MapSectionManager(mapSections: List<MapSection>) {
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
         return bitmap
     }
-
 }
