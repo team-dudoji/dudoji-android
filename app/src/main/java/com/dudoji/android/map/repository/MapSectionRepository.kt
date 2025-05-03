@@ -51,6 +51,7 @@ object MapSectionRepository {
     fun getMapSectionManager(context: Context): MapSectionManager {
         val mapSectionDao = MapSectionDao(context)
         val mapSections = mapSectionDao.getMapSections()
+        Log.d("MapSectionDao", "getMapSections: ${mapSections.size}")
         return MapSectionManager(mapSections)
     }
 }

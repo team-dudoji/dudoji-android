@@ -58,6 +58,7 @@ object RevealCircleRepository {
         val resultMapSections = mutableListOf<MapSection>()
 
         val mapSectionDao = MapSectionDao(context)
+        Log.d(TAG, "saveRevealCirclesToDatabase: dirtyMapSections.size = ${dirtyMapSections.size}")
         for (mapSection in dirtyMapSections) {
             if (mapSection is DetailedMapSection) {
                 val bitmap = maskTileMaker.createMaskTile(mapSection.x, mapSection.y, BASIC_ZOOM_LEVEL)
@@ -71,11 +72,15 @@ object RevealCircleRepository {
                 }
             }
         }
-
-        for (mapSection in resultMapSections) {
-            if (mapSection is DetailedMapSection) {
-                mapSectionDao.setMapSection(mapSection)
+        try {
+            Log.d(TAG, "saveRevealCirclesToDatabase: resultMapSections.size = ${resultMapSections.size}")
+            for (mapSection in resultMapSections) {
+                if (mapSection is DetailedMapSection) {
+                    mapSectionDao.setMapSection(mapSection)
+                }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error saving map sections to database: ${e.message}")
         }
     }
 }

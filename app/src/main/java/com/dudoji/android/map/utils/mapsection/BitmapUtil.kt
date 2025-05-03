@@ -2,6 +2,7 @@ package com.dudoji.android.map.utils.mapsection
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.Rect
 import java.io.ByteArrayOutputStream
 
@@ -61,6 +62,18 @@ class BitmapUtil {
             }
 
             return transparentCount.toFloat() / totalPixels
+        }
+
+        fun createBitmapWithColor(width: Int, height: Int, color: Int): Bitmap {
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+
+            val canvas = Canvas(bitmap)
+            val paint = Paint().apply {
+                this.color = color
+                style = Paint.Style.FILL
+            }
+            canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+            return bitmap
         }
     }
 }

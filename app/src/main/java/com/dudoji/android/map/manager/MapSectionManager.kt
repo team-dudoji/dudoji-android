@@ -3,8 +3,9 @@ package com.dudoji.android.map.manager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
+import android.util.Log
 import com.dudoji.android.config.BASIC_ZOOM_LEVEL
+import com.dudoji.android.config.FOG_COLOR
 import com.dudoji.android.map.domain.TileCoordinate
 import com.dudoji.android.map.domain.mapsection.DetailedMapSection
 import com.dudoji.android.map.domain.mapsection.MapSection
@@ -21,8 +22,8 @@ class MapSectionManager(mapSections: List<MapSection>) {
 
     init {
         this.mapSections = mapSections.associateBy { TileCoordinate(it.x, it.y, 15) }
-        emptyBitmap = createBitmapWithColor(TILE_SIZE, TILE_SIZE, Color.TRANSPARENT)
-        fullBitmap = createBitmapWithColor(TILE_SIZE, TILE_SIZE, Color.LTGRAY)
+        emptyBitmap = BitmapUtil.createBitmapWithColor(TILE_SIZE, TILE_SIZE, Color.TRANSPARENT)
+        fullBitmap = BitmapUtil.createBitmapWithColor(TILE_SIZE, TILE_SIZE, FOG_COLOR)
     }
     companion object {
         private val dirtyMapSectionCoordinates: HashSet<TileCoordinate> = HashSet()
@@ -30,9 +31,9 @@ class MapSectionManager(mapSections: List<MapSection>) {
         fun setDirtyCoordinate(coordinate: TileCoordinate) {
             val diff = BASIC_ZOOM_LEVEL - coordinate.zoom
 
-            val baseX = coordinate.x shl diff
-            val baseY = coordinate.y shl diff
-            val tileCount = 1 shl kotlin.math.abs(diff)
+            val baseX = (coordinate.x shl diff) - 1
+            val baseY = (coordinate.y shl diff) - 1
+            val tileCount = (1 shl kotlin.math.abs(diff)) + 2
 
             for (x in 0 until tileCount) {
                 for (y in 0 until tileCount) {
@@ -41,6 +42,7 @@ class MapSectionManager(mapSections: List<MapSection>) {
                         baseY + y,
                         BASIC_ZOOM_LEVEL
                     )
+                    Log.d("MapSectionManager", "setDirtyCoordinate: $targetCoordinate")
                     dirtyMapSectionCoordinates.add(targetCoordinate)
                 }
             }
@@ -49,7 +51,7 @@ class MapSectionManager(mapSections: List<MapSection>) {
 
     fun getDirtyMapSections(): List<MapSection> {
         val dirtyCoordinates = dirtyMapSectionCoordinates.mapNotNull { coordinate ->
-            mapSections[coordinate]
+            mapSections[coordinate] ?: DetailedMapSection(coordinate)
         }
         dirtyMapSectionCoordinates.clear()
         return dirtyCoordinates
@@ -127,17 +129,5 @@ class MapSectionManager(mapSections: List<MapSection>) {
                 return emptyBitmap
             }
         }
-    }
-
-    fun createBitmapWithColor(width: Int, height: Int, color: Int): Bitmap {
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-
-        val canvas = Canvas(bitmap)
-        val paint = Paint().apply {
-            this.color = color
-            style = Paint.Style.FILL
-        }
-        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
-        return bitmap
     }
 }
