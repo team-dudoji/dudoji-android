@@ -1,13 +1,15 @@
 package com.dudoji.android.map.utils.pin
 
+import com.dudoji.android.map.domain.MarkerTag
+import com.dudoji.android.map.domain.MarkerType
 import com.dudoji.android.map.domain.Pin
 import com.google.android.gms.maps.GoogleMap
+
 
 class PinApplier(val googleMap: GoogleMap) {
     companion object {
         private val appliedPins: HashSet<Pin> = HashSet()
     }
-
 
     fun applyPin(pin: Pin) {
         if (!appliedPins.contains(pin)) {
@@ -15,7 +17,10 @@ class PinApplier(val googleMap: GoogleMap) {
                 .position(com.google.android.gms.maps.model.LatLng(pin.lat, pin.lng))
                 .title(pin.title)
                 .snippet(pin.content)
-            googleMap.addMarker(markerOptions)
+
+            val marker = googleMap.addMarker(markerOptions)
+            marker.tag = MarkerTag(MarkerType.PIN, pin)
+
             appliedPins.add(pin)
         }
     }

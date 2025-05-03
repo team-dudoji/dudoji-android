@@ -10,8 +10,8 @@
 
     <FrameLayout
         android:id="@+id/modal_content"
-        android:layout_width="230dp"
-        android:layout_height="223dp"
+        android:layout_width="256dp"
+        android:layout_height="418dp"
         android:layout_gravity="center"
         android:layout_marginStart="88dp"
         android:layout_marginBottom="344dp"

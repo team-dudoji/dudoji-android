@@ -8,12 +8,16 @@ import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
+import com.dudoji.android.map.domain.MarkerTag
+import com.dudoji.android.map.domain.MarkerType
+import com.dudoji.android.map.domain.Pin
 import com.dudoji.android.map.repository.MapSectionRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
@@ -26,6 +30,7 @@ import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MypageActivity
+import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
@@ -145,6 +150,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
             ))
             startLocationUpdates()
         }
+        setupOnMapPinOnClickListener()
         setPinSetterController()
     }
 
@@ -175,5 +181,24 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         pinDropZone = findViewById(R.id.outer_drop_zone)
         pinSetter = findViewById(R.id.pinSetter)
         pinSetterController = PinSetterController(pinSetter, pinDropZone, googleMap!!, this)
+    }
+
+    fun setupOnMapPinOnClickListener() {
+        googleMap?.setOnMarkerClickListener{
+            marker ->
+            val tag: MarkerTag<*> = marker.tag as MarkerTag<*>
+            if (tag.tag == MarkerType.PIN) {
+                val pin = tag.data as Pin
+                Modal.showCustomModal(this, R.layout.modal_pin_memo_show) { view ->
+                    val pinTitle = view.findViewById<TextView>(R.id.memo_title_output)
+                    val pinContent = view.findViewById<TextView>(R.id.memo_content_output)
+                    val pinDate = view.findViewById<TextView>(R.id.memo_date_output)
+                    pinTitle.text = pin.title
+                    pinContent.text = pin.content
+                    pinDate.text = pin.createdDate.toString()
+                }
+            }
+            true
+        }
     }
 }

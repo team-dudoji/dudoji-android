@@ -75,7 +75,7 @@ class PinSetterController{
     fun getPinMemoData(onComplete: (Pair<String, String>) -> Unit) {
         Modal.showCustomModal(activity, R.layout.modal_pin_memo) { view ->
             val pinTitle = view.findViewById<EditText>(R.id.memo_title_input)
-            val pinContent = view.findViewById<EditText>(R.id.memo_title_input)
+            val pinContent = view.findViewById<EditText>(R.id.memo_content_input)
             val saveButton = view.findViewById<Button>(R.id.memo_save_button)
 
             saveButton.setOnClickListener {
