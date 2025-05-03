@@ -6,13 +6,11 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.location.Location
 import android.util.Log
 
 class MapDirectionController(
     context: Context,
     private val mapCameraController: MapCameraPositionController,
-    private val locationProvider: () -> Location?
 ) : SensorEventListener {
 
     private val sensorManager =
@@ -43,11 +41,7 @@ class MapDirectionController(
 
         Log.d("MapDirection", "${bearing}")
 
-
-
         mapCameraController.setBearing(bearing)
-
-
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}

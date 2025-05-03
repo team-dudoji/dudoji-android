@@ -13,18 +13,17 @@ import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.map.manager.MapSectionManager
-import com.dudoji.android.mypage.activity.MypageActivity
-import com.dudoji.android.map.repository.MapSectionRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
-import com.dudoji.android.map.utils.location.LocationCallbackFilter
-import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.map.utils.MapCameraPositionController
 import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapUtil
+import com.dudoji.android.map.utils.location.LocationCallbackFilter
+import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.map.utils.tile.MaskTileProvider
 import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
+import com.dudoji.android.mypage.activity.MypageActivity
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
@@ -94,7 +93,6 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
                         Log.d("MapActivity", "location callback: Location is Saved")
                         RevealCircleRepository.addLocation(it)
                         updateLocationOnMap(it)
-
                     }
                     mapCameraPositionController.updateLocation(it)
                 }
@@ -148,15 +146,7 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
         directionController = MapDirectionController(
             this,
             mapCameraPositionController
-        ) {
-            locationService.getLastLatLng().let { (lat, lng) ->
-                if (lat == 0.0 && lng == 0.0) null else Location("manual").apply {
-                    latitude = lat
-                    longitude = lng
-                }
-            }
-        }
-
+        )
         directionController.start()
     }
 

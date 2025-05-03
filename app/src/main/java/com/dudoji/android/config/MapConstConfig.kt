@@ -16,4 +16,4 @@ const val DEFAULT_ZOOM_LEVEL = 17f
 const val MIN_ZOOM = 10f
 const val MAX_ZOOM = 20f
 
-const val SPEED_THRESHOLD = 1f
+const val SPEED_THRESHOLD = 0.5f
