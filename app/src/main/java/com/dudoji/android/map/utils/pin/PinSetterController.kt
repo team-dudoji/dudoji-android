@@ -1,6 +1,7 @@
 package com.dudoji.android.map.utils.pin
 
 import android.content.ClipData
+import android.location.Location
 import android.view.DragEvent
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
+import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
 import com.dudoji.android.map.domain.Pin
 import com.dudoji.android.map.repository.PinRepository
+import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import java.util.Date
@@ -51,18 +55,32 @@ class PinSetterController{
                         val x = event.x
                         val y = event.y
                         val (lat, lng) = getPinSetterPosition(x, y)
-                        getPinMemoData {
-                            val pin = Pin(
-                                lat,
-                                lng,
-                                0L,
-                                0L,
-                                Date(),
-                                it.first,
-                                it.second
-                            )
-                            PinRepository.addPin(pin)
-                            pinApplier.applyPin(pin)
+                        if (LocationService.isCloseToLastLocation(
+                            Location("manual").apply {
+                                latitude = lat
+                                longitude = lng
+                            },
+                                REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
+                        )) {
+                            getPinMemoData {
+                                val pin = Pin(
+                                    lat,
+                                    lng,
+                                    0L,
+                                    0L,
+                                    Date(),
+                                    it.first,
+                                    it.second
+                                )
+                                PinRepository.addPin(pin)
+                                pinApplier.applyPin(pin)
+                            }
+                        } else {
+                            Toast.makeText(
+                                activity,
+                                "핀을 드롭할 수 있는 위치가 아닙니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                         true
                     }

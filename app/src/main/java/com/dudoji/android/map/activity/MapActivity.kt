@@ -31,8 +31,6 @@ import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MypageActivity
 import com.dudoji.android.util.modal.Modal
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlay
@@ -94,19 +92,20 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
 
     private fun setupLocationUpdates(){
-        locationService.setLocationCallback(object: LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?){
-                locationResult?.lastLocation?.let{
-                    Log.d("MapActivity", "location callback: Location Updated: ${it.latitude}, ${it.longitude}")
-                    if (!LocationCallbackFilter.isSameLocation(it)) {
-                        Log.d("MapActivity", "location callback: Location is Saved")
-                        RevealCircleRepository.addLocation(it)
-                        updateLocationOnMap(it)
-                        mapCameraPositionController.updateLocation(it)
-                    }
+        locationService.setLocationCallback { locationResult ->
+            locationResult?.lastLocation?.let {
+                Log.d(
+                    "MapActivity",
+                    "location callback: Location Updated: ${it.latitude}, ${it.longitude}"
+                )
+                if (!LocationCallbackFilter.isSameLocation(it)) {
+                    Log.d("MapActivity", "location callback: Location is Saved")
+                    RevealCircleRepository.addLocation(it)
+                    updateLocationOnMap(it)
+                    mapCameraPositionController.updateLocation(it)
                 }
             }
-        })
+        }
     }
 
     // Update location on map
