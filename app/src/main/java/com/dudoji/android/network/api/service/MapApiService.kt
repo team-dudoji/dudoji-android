@@ -1,7 +1,7 @@
 package com.dudoji.android.network.api.service
 
-import com.dudoji.android.network.entity.MapSectionResponse
-import com.dudoji.android.network.entity.revealcircle.RevealCircleRequest
+import com.dudoji.android.network.dto.MapSectionResponse
+import com.dudoji.android.network.dto.revealcircle.RevealCircleRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

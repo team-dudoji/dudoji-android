@@ -5,7 +5,6 @@ import com.dudoji.android.BuildConfig
 import com.dudoji.android.network.api.service.LoginApiService
 import com.dudoji.android.network.api.service.MapApiService
 import com.dudoji.android.network.api.service.UserApiService
-import com.dudoji.android.util.network.NetWorkUtil.client
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -66,7 +65,7 @@ object RetrofitClient {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .client(client)
+        .client(OkHttpClient.Builder().build())
         .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
