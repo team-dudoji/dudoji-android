@@ -13,13 +13,19 @@ import com.google.android.gms.location.*
 class LocationService { // 위치 서비스 초기화 때문에 context를 private으로 저장
     companion object{
         const val LOCATION_CALLBACK_INTERVAL = 1000L
+        private var lastLocation: Location? = null //제일 최근 위치 저장
+
+        // method to check if the location is close to the last known location
+        fun isCloseToLastLocation(location: Location, distance: Float): Boolean {
+            return lastLocation?.distanceTo(location) ?: Float.MAX_VALUE < distance
+        }
     }
 
     private var context: Context //외부에서 전달받은 Context를 저장하는 변수
     private lateinit var fusedLocationClient: FusedLocationProviderClient // 위치 정보 제공
     private lateinit var locationCallback: LocationCallback // 위치 업데이트 콜백
     private val handler: Handler // 메인 스레드에서 작업을 예약하기 위한 Handler 객체
-    private var lastLocation: Location? = null //제일 최근 위치 저장
+
 
     constructor(context: Context) { // 생성자 // 초기화 context를 받기 위해 추가
         this.context = context//conext를 인자로 받아 객체를 생성하는 생성자
@@ -28,8 +34,13 @@ class LocationService { // 위치 서비스 초기화 때문에 context를 priva
     }
 
     // location callback을 설정하는 메서드
-    fun setLocationCallback(callback: LocationCallback) {
-        locationCallback = callback //콜백을 변수에 저장
+    fun setLocationCallback(callback: (LocationResult?)->Unit) {
+        locationCallback =  object: LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?){
+                lastLocation = locationResult?.lastLocation
+                callback(locationResult)
+            }
+        }
 
         val locationRequest = LocationRequest.create().apply { //LocationRequest 객체 생성, 설정 블록 적용
             interval = LOCATION_CALLBACK_INTERVAL

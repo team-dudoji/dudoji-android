@@ -90,11 +90,11 @@ class TileCoordinateUtil {
         }
 
         fun meterToPixel(length: Double, lat: Double, zoomLevel: Int): Double {
+
             return length / (
                     cos(Math.toRadians(lat)) * 2.0 * Math.PI * EARTH_RADIUS
                      / (TILE_SIZE * (1 shl zoomLevel))
-
-                    )
+                    ) / 9
         }
     }
 }

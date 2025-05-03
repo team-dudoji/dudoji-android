@@ -6,25 +6,31 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
-import com.dudoji.android.mypage.activity.MypageActivity
+import com.dudoji.android.map.domain.MarkerTag
+import com.dudoji.android.map.domain.MarkerType
+import com.dudoji.android.map.domain.Pin
 import com.dudoji.android.map.repository.MapSectionRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
-import com.dudoji.android.map.utils.location.LocationCallbackFilter
-import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.map.utils.MapCameraPositionController
 import com.dudoji.android.map.utils.MapUtil
+import com.dudoji.android.map.utils.location.LocationCallbackFilter
+import com.dudoji.android.map.utils.location.LocationService
+import com.dudoji.android.map.utils.pin.PinSetterController
 import com.dudoji.android.map.utils.tile.MaskTileProvider
 import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
+import com.dudoji.android.mypage.activity.MypageActivity
+import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlay
@@ -32,7 +38,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
-class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
+class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     override val navigationItems = mapOf(
         R.id.mapFragment to null, // 기본 맵 화면
@@ -44,6 +50,10 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
     private lateinit var myLocationButton : Button;
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
+
+    private lateinit var pinSetter: ImageView
+    private lateinit var pinSetterController: PinSetterController
+    private lateinit var pinDropZone: FrameLayout
 
     private var googleMap: GoogleMap? = null
     private var mapUtil: MapUtil = MapUtil(this)
@@ -82,19 +92,20 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
 
 
     private fun setupLocationUpdates(){
-        locationService.setLocationCallback(object: LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?){
-                locationResult?.lastLocation?.let{
-                    Log.d("MapActivity", "location callback: Location Updated: ${it.latitude}, ${it.longitude}")
-                    if (!LocationCallbackFilter.isSameLocation(it)) {
-                        Log.d("MapActivity", "location callback: Location is Saved")
-                        RevealCircleRepository.addLocation(it)
-                        updateLocationOnMap(it)
-                        mapCameraPositionController.updateLocation(it)
-                    }
+        locationService.setLocationCallback { locationResult ->
+            locationResult?.lastLocation?.let {
+                Log.d(
+                    "MapActivity",
+                    "location callback: Location Updated: ${it.latitude}, ${it.longitude}"
+                )
+                if (!LocationCallbackFilter.isSameLocation(it)) {
+                    Log.d("MapActivity", "location callback: Location is Saved")
+                    RevealCircleRepository.addLocation(it)
+                    updateLocationOnMap(it)
+                    mapCameraPositionController.updateLocation(it)
                 }
             }
-        })
+        }
     }
 
     // Update location on map
@@ -138,6 +149,8 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
             ))
             startLocationUpdates()
         }
+        setupOnMapPinOnClickListener()
+        setPinSetterController()
     }
 
     fun setupMyLocationButton() {
@@ -160,6 +173,31 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
         super.onStop()
         lifecycleScope.launch {
             RevealCircleRepository.saveRevealCircles()
+        }
+    }
+
+    fun setPinSetterController() {
+        pinDropZone = findViewById(R.id.outer_drop_zone)
+        pinSetter = findViewById(R.id.pinSetter)
+        pinSetterController = PinSetterController(pinSetter, pinDropZone, googleMap!!, this)
+    }
+
+    fun setupOnMapPinOnClickListener() {
+        googleMap?.setOnMarkerClickListener{
+            marker ->
+            val tag: MarkerTag<*> = marker.tag as MarkerTag<*>
+            if (tag.tag == MarkerType.PIN) {
+                val pin = tag.data as Pin
+                Modal.showCustomModal(this, R.layout.modal_pin_memo_show) { view ->
+                    val pinTitle = view.findViewById<TextView>(R.id.memo_title_output)
+                    val pinContent = view.findViewById<TextView>(R.id.memo_content_output)
+                    val pinDate = view.findViewById<TextView>(R.id.memo_date_output)
+                    pinTitle.text = pin.title
+                    pinContent.text = pin.content
+                    pinDate.text = pin.createdDate.toString()
+                }
+            }
+            true
         }
     }
 }
