@@ -12,12 +12,14 @@ import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
+import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.mypage.activity.MypageActivity
 import com.dudoji.android.map.repository.MapSectionRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.map.utils.MapCameraPositionController
+import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapUtil
 import com.dudoji.android.map.utils.tile.MaskTileProvider
 import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
@@ -52,6 +54,8 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
     private val numOfTileOverlay = 2
     private var indexOfTileOverlay = 0
     private val tileOverlays: MutableList<TileOverlay> = mutableListOf()
+
+    lateinit var directionController: MapDirectionController
 
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
@@ -90,8 +94,9 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
                         Log.d("MapActivity", "location callback: Location is Saved")
                         RevealCircleRepository.addLocation(it)
                         updateLocationOnMap(it)
-                        mapCameraPositionController.updateLocation(it)
+
                     }
+                    mapCameraPositionController.updateLocation(it)
                 }
             }
         })
@@ -132,12 +137,27 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
             // apply tile overlay to google map
             setTileMaskTileMaker(PositionsMaskTileMaker(
                 MapSectionMaskTileMaker(
-//                    MapSectionManager(listOf())
-                    MapSectionRepository.getMapSectionManager()
+                    MapSectionManager(listOf())
+                    //MapSectionRepository.getMapSectionManager()
                 )
             ))
             startLocationUpdates()
         }
+
+        //방향 스껄~
+        directionController = MapDirectionController(
+            this,
+            mapCameraPositionController
+        ) {
+            locationService.getLastLatLng().let { (lat, lng) ->
+                if (lat == 0.0 && lng == 0.0) null else Location("manual").apply {
+                    latitude = lat
+                    longitude = lng
+                }
+            }
+        }
+
+        directionController.start()
     }
 
     fun setupMyLocationButton() {
@@ -161,5 +181,10 @@ class MapActivity :  NavigatableActivity(), OnMapReadyCallback {
         lifecycleScope.launch {
             RevealCircleRepository.saveRevealCircles()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        directionController.stop()
     }
 }
