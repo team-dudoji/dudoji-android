@@ -6,7 +6,7 @@
     android:id="@+id/mapRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".map.MapActivity">
+    tools:context=".map.activity.MapActivity">
 
     <!-- Map 프래그먼트 -->
     <androidx.fragment.app.FragmentContainerView

@@ -34,7 +34,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".login.activity.MainActivity"
             android:launchMode="singleTop"
             android:exported="true">
             <intent-filter>
@@ -43,13 +43,13 @@
             </intent-filter>
         </activity>
       
-        <activity android:name=".map.MapActivity" />
-        <activity android:name=".mypage.MypageActivity" />
-        <activity android:name=".mypage.StatisticsActivity" />
-        <activity android:name=".mypage.AchievementActivity" />
+        <activity android:name=".map.activity.MapActivity" />
+        <activity android:name=".mypage.activity.MypageActivity" />
+        <activity android:name=".mypage.activity.StatisticsActivity" />
+        <activity android:name=".mypage.activity.AchievementActivity" />
       
         <activity
-            android:name=".network.NoNetworkActivity"
+            android:name=".network.activiity.NoNetworkActivity"
             android:launchMode="singleTop" />
       
         <activity

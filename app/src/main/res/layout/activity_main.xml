@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.dudoji.android.MainActivity"
+    tools:context="com.dudoji.android.login.activity.MainActivity"
     android:gravity="center_horizontal"
     android:background="#C4B8A6">
 
