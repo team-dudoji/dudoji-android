@@ -80,6 +80,7 @@ object KakaoLoginUtil {
 //        }
 //    }
 
+        // TODO: Re-enable the production Kakao login logic before releasing to production.
         //테스트용
         RetrofitClient.init(context)
         val intent = Intent(context, MapActivity::class.java)
