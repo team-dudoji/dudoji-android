@@ -19,6 +19,10 @@ class MapDirectionController(
     fun start() {
         val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
+        if (sensor == null) {
+            Log.w("MapDirectionController", "Rotation vector sensor not available on this device.")
+            return
+        }
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI)
     }
 
