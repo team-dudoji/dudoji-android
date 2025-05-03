@@ -92,7 +92,6 @@ class MapCameraPositionController {
         }
 
         marker?.position = latLng
-        marker?.rotation = bearing
 
         markerIconToggler?.setSpeed(location.speed)
     }
