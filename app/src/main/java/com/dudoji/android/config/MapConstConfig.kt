@@ -1,5 +1,7 @@
 package com.dudoji.android.config
 
+import android.graphics.Color
+
 // location diff threshold for update
 const val LOCATION_UPDATE_THRESHOLD = 5 // meter
 
@@ -15,3 +17,5 @@ const val DEFAULT_ZOOM_LEVEL = 17f
 // Google Map Config
 const val MIN_ZOOM = 10f
 const val MAX_ZOOM = 20f
+
+const val FOG_COLOR = Color.LTGRAY
