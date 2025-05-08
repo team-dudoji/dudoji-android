@@ -3,8 +3,9 @@ package com.dudoji.android.map.manager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
+import android.util.Log
 import com.dudoji.android.config.BASIC_ZOOM_LEVEL
+import com.dudoji.android.config.FOG_COLOR
 import com.dudoji.android.map.domain.TileCoordinate
 import com.dudoji.android.map.domain.mapsection.DetailedMapSection
 import com.dudoji.android.map.domain.mapsection.MapSection
@@ -15,13 +16,45 @@ import com.dudoji.android.map.utils.tile.TILE_SIZE
 class MapSectionManager(mapSections: List<MapSection>) {
     private val mapSections: Map<TileCoordinate, MapSection>
 
+
     private val emptyBitmap: Bitmap
     private val fullBitmap: Bitmap
 
     init {
         this.mapSections = mapSections.associateBy { TileCoordinate(it.x, it.y, 15) }
-        emptyBitmap = createBitmapWithColor(TILE_SIZE, TILE_SIZE, Color.TRANSPARENT)
-        fullBitmap = createBitmapWithColor(TILE_SIZE, TILE_SIZE, Color.BLACK)
+        emptyBitmap = BitmapUtil.createBitmapWithColor(TILE_SIZE, TILE_SIZE, Color.TRANSPARENT)
+        fullBitmap = BitmapUtil.createBitmapWithColor(TILE_SIZE, TILE_SIZE, FOG_COLOR)
+    }
+    companion object {
+        private val dirtyMapSectionCoordinates: HashSet<TileCoordinate> = HashSet()
+
+        fun setDirtyCoordinate(coordinate: TileCoordinate) {
+            val diff = BASIC_ZOOM_LEVEL - coordinate.zoom
+
+            val baseX = (coordinate.x shl diff) - 1
+            val baseY = (coordinate.y shl diff) - 1
+            val tileCount = (1 shl kotlin.math.abs(diff)) + 2
+
+            for (x in 0 until tileCount) {
+                for (y in 0 until tileCount) {
+                    val targetCoordinate = TileCoordinate(
+                        baseX + x,
+                        baseY + y,
+                        BASIC_ZOOM_LEVEL
+                    )
+                    Log.d("MapSectionManager", "setDirtyCoordinate: $targetCoordinate")
+                    dirtyMapSectionCoordinates.add(targetCoordinate)
+                }
+            }
+        }
+    }
+
+    fun getDirtyMapSections(): List<MapSection> {
+        val dirtyCoordinates = dirtyMapSectionCoordinates.mapNotNull { coordinate ->
+            mapSections[coordinate] ?: DetailedMapSection(coordinate)
+        }
+        dirtyMapSectionCoordinates.clear()
+        return dirtyCoordinates
     }
 
     fun getBitmap(coordinate: TileCoordinate): Bitmap? {
@@ -31,7 +64,7 @@ class MapSectionManager(mapSections: List<MapSection>) {
                 return fullBitmap
             } else { // MapSection is found
                 if (mapSection is DetailedMapSection) {
-                    return mapSection.GetBitmap()
+                    return mapSection.getBitmap()
                 } else {
                     return emptyBitmap
                 }
@@ -62,7 +95,7 @@ class MapSectionManager(mapSections: List<MapSection>) {
                     canvas.combineBitmapInGrid(fullBitmap, numOfTile, xOfTile, yOfTile)
                 } else {
                     if (childMapSection is DetailedMapSection) {
-                        canvas.combineBitmapInGrid(childMapSection.GetBitmap(), numOfTile, xOfTile, yOfTile)
+                        canvas.combineBitmapInGrid(childMapSection.getBitmap(), numOfTile, xOfTile, yOfTile)
                     } else {
                         canvas.combineBitmapInGrid(emptyBitmap, numOfTile, xOfTile, yOfTile)
                     }
@@ -91,23 +124,10 @@ class MapSectionManager(mapSections: List<MapSection>) {
             return fullBitmap
         } else { // Bitmap is found
             if (parentMapSection is DetailedMapSection) {
-                return BitmapUtil.cropBitmapInGrid(parentMapSection.GetBitmap(), TILE_SIZE, numOfTile, xOfTile, yOfTile)
+                return BitmapUtil.cropBitmapInGrid(parentMapSection.getBitmap(), TILE_SIZE, numOfTile, xOfTile, yOfTile)
             } else {
                 return emptyBitmap
             }
         }
     }
-
-    fun createBitmapWithColor(width: Int, height: Int, color: Int): Bitmap {
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-
-        val canvas = Canvas(bitmap)
-        val paint = Paint().apply {
-            this.color = color
-            style = Paint.Style.FILL
-        }
-        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
-        return bitmap
-    }
-
 }

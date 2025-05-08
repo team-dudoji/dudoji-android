@@ -1,12 +1,20 @@
 package com.dudoji.android.map.repository
 
+import android.content.Context
 import android.location.Location
 import android.util.Log
+import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
+import com.dudoji.android.database.dao.MapSectionDao
 import com.dudoji.android.map.domain.RevealCircle
+import com.dudoji.android.map.domain.mapsection.DetailedMapSection
+import com.dudoji.android.map.domain.mapsection.MapSection
+import com.dudoji.android.map.manager.MapSectionManager
+import com.dudoji.android.map.utils.location.IRevealCircleListener
+import com.dudoji.android.map.utils.mapsection.BitmapUtil
+import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.network.dto.revealcircle.RevealCircleRequest
 import com.dudoji.android.util.listener.ListenerCaller
-import com.dudoji.android.map.utils.location.IRevealCircleListener
 import java.util.*
 
 // This repository is responsible for managing the reveal circle data.
@@ -32,7 +40,8 @@ object RevealCircleRepository {
     }
 
     // save reveal circles to the server
-    suspend fun saveRevealCircles() {
+    @Deprecated("This method is deprecated, use saveMapSections instead.")
+    suspend fun saveRevealCirclesToServer() {
         val revealCircles: RevealCircleRequest = RevealCircleRequest(
             revealCircles = getLocations()
         )
@@ -41,6 +50,37 @@ object RevealCircleRepository {
             Log.d(TAG, "Saved reveal circles: ${revealCircles.revealCircles}")
         } else {
             Log.e(TAG, "Failed to save reveal circles: ${response.message()}")
+        }
+    }
+
+    suspend fun saveRevealCirclesToDatabase(context: Context, mapSectionManager: MapSectionManager, maskTileMaker: IMaskTileMaker) {
+        val dirtyMapSections = mapSectionManager.getDirtyMapSections()
+        val resultMapSections = mutableListOf<MapSection>()
+
+        val mapSectionDao = MapSectionDao(context)
+        Log.d(TAG, "saveRevealCirclesToDatabase: dirtyMapSections.size = ${dirtyMapSections.size}")
+        for (mapSection in dirtyMapSections) {
+            if (mapSection is DetailedMapSection) {
+                val bitmap = maskTileMaker.createMaskTile(mapSection.x, mapSection.y, BASIC_ZOOM_LEVEL)
+                mapSection.setBitmap(bitmap)
+
+                val transparencyRatio = BitmapUtil.calculateTransparencyRatio(bitmap)
+                if (transparencyRatio > 0.8) {
+                    resultMapSections.add(MapSection(mapSection))
+                } else {
+                    resultMapSections.add(mapSection)
+                }
+            }
+        }
+        try {
+            Log.d(TAG, "saveRevealCirclesToDatabase: resultMapSections.size = ${resultMapSections.size}")
+            for (mapSection in resultMapSections) {
+                if (mapSection is DetailedMapSection) {
+                    mapSectionDao.setMapSection(mapSection)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error saving map sections to database: ${e.message}")
         }
     }
 }

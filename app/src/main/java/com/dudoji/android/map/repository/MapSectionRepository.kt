@@ -1,17 +1,19 @@
 package com.dudoji.android.map.repository
 
+import android.content.Context
 import android.util.Log
+import com.dudoji.android.database.dao.MapSectionDao
 import com.dudoji.android.map.domain.mapsection.MapSection
 import com.dudoji.android.map.manager.MapSectionManager
-import com.dudoji.android.network.api.service.MapApiService
 import com.dudoji.android.map.utils.mapsection.MapSectionParser
+import com.dudoji.android.network.api.service.MapApiService
 
 // This repository is responsible for managing the map section data.
 object MapSectionRepository {
     lateinit var mapApiService: MapApiService
 
     // load map sections from the server
-    suspend fun loadMapSections(): List<MapSection> {
+    suspend fun loadMapSectionsFromServer(): List<MapSection> {
         if (!::mapApiService.isInitialized) {
             mapApiService = RetrofitClient.mapApiService
             Log.d("MapApiService", "mapApiService initialized in repository")
@@ -42,6 +44,14 @@ object MapSectionRepository {
 
     // return map section manager
     suspend fun getMapSectionManager(): MapSectionManager {
-        return MapSectionManager(loadMapSections())
+        return MapSectionManager(loadMapSectionsFromServer())
+    }
+
+    // return map section manager
+    fun getMapSectionManager(context: Context): MapSectionManager {
+        val mapSectionDao = MapSectionDao(context)
+        val mapSections = mapSectionDao.getMapSections()
+        Log.d("MapSectionDao", "getMapSections: ${mapSections.size}")
+        return MapSectionManager(mapSections)
     }
 }

@@ -1,6 +1,8 @@
 package com.dudoji.android.map.domain.mapsection
 
 import android.graphics.Bitmap
+import com.dudoji.android.config.BASIC_ZOOM_LEVEL
+import com.dudoji.android.map.domain.TileCoordinate
 
 open class MapSection {
     val x : Int
@@ -9,6 +11,20 @@ open class MapSection {
     constructor(builder: Builder) {
         this.x = builder.x
         this.y = builder.y
+    }
+
+    constructor(tileCoordinate: TileCoordinate) {
+        if (tileCoordinate.zoom != BASIC_ZOOM_LEVEL) {
+            throw IllegalArgumentException("MapSection constructor only accepts zoom level $BASIC_ZOOM_LEVEL")
+        }
+        this.x = tileCoordinate.x
+        this.y = tileCoordinate.y
+    }
+
+
+    constructor(detailedMapSection: DetailedMapSection) {
+        this.x = detailedMapSection.x
+        this.y = detailedMapSection.y
     }
 
     class Builder {

@@ -19,6 +19,7 @@ import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.domain.MarkerTag
 import com.dudoji.android.map.domain.MarkerType
 import com.dudoji.android.map.domain.Pin
+import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
@@ -67,9 +68,13 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     private var indexOfTileOverlay = 0
     private val tileOverlays: MutableList<TileOverlay> = mutableListOf()
 
+    private lateinit var maskTileMaker: IMaskTileMaker
+    private lateinit var mapSectionManager: MapSectionManager
+
     lateinit var directionController: MapDirectionController
 
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
+        this.maskTileMaker = maskTileMaker
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
         for (i in 0 until numOfTileOverlay) {
             tileOverlays.add(googleMap?.addTileOverlay(tileOverlayOptions)!!)
@@ -147,10 +152,10 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
         lifecycleScope.launch {
             // apply tile overlay to google map
+            mapSectionManager = MapSectionRepository.getMapSectionManager(this@MapActivity)
             setTileMaskTileMaker(PositionsMaskTileMaker(
                 MapSectionMaskTileMaker(
-                    MapSectionManager(listOf())
-                    //MapSectionRepository.getMapSectionManager()
+                    mapSectionManager
                 )
             ))
             startLocationUpdates()
@@ -185,7 +190,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     override fun onStop() {
         super.onStop()
         lifecycleScope.launch {
-            RevealCircleRepository.saveRevealCircles()
+            RevealCircleRepository.saveRevealCirclesToDatabase(this@MapActivity, mapSectionManager, maskTileMaker)
         }
     }
 
