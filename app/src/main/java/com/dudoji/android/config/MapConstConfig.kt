@@ -19,3 +19,5 @@ const val MIN_ZOOM = 10f
 const val MAX_ZOOM = 20f
 
 const val FOG_COLOR = Color.LTGRAY
+
+const val SPEED_THRESHOLD = 0.5f
