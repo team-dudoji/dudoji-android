@@ -1,23 +1,27 @@
 package com.dudoji.android.network.activity
 
-import com.dudoji.android.R
 import android.os.Bundle
+import com.dudoji.android.R
 import androidx.appcompat.app.AppCompatActivity
-import com.dudoji.android.NavigatableActivity
+import com.dudoji.android.network.utils.NetworkMonitor
 
-class NoNetworkActivity :  NavigatableActivity(){
+class NoNetworkActivity : AppCompatActivity() {
 
-    // 네비게이션이 필요 없는 액티비티이므로 빈  mapOf 화면 반환
-    override val navigationItems = mapOf<Int, Class<out AppCompatActivity>?>()
-    override val defaultSelectedItemId = R.id.mapFragment // 기본 값
+    private lateinit var networkMonitor: NetworkMonitor
 
-    override fun onCreate(saveInstanceState: Bundle?){
-        super.onCreate(saveInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_network)
+
+        setupNetworkMonitoring()
     }
 
-    override fun setupNetworkMonitoring() {
+    private fun setupNetworkMonitoring() {
+        networkMonitor = NetworkMonitor(this)
+        lifecycle.addObserver(networkMonitor)
+
         networkMonitor.onNetworkAvailable = {
+            // 네트워크 복구 시 현재 NoNetworkActivity 종료
             finish()
         }
     }
