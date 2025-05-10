@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingVertical="12dp"
+    android:paddingHorizontal="8dp">
+
+    <!-- 프로필 이미지 -->
+    <ImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/ic_profile"
+        android:background="@drawable/ic_circle"
+        android:scaleType="centerCrop"
+        android:contentDescription="프로필 이미지" />
+
+    <!-- 이름 및 설명 -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이름"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/textDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설명"
+            android:textSize="12sp"
+            android:textColor="#666666" />
+    </LinearLayout>
+
+    <!-- 보임/숨김 아이콘 -->
+    <ImageView
+        android:id="@+id/imgVisibility"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/visibility"
+        android:contentDescription="보임 상태"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        app:tint="@null" />
+</LinearLayout>
