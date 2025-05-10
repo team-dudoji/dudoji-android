@@ -4,36 +4,37 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
 import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.launch
 
-class MypageActivity : NavigatableActivity() {
+class MypageActivity : AppCompatActivity() {
     private val TAG = "MypageActivityDEBUG"
 
-    override val navigationItems = mapOf(
-        R.id.mypageFragment to null,
-        R.id.mapFragment to MapActivity::class.java
-    )
+//    override val navigationItems = mapOf(
+//        R.id.mypageFragment to null,
+//        R.id.mapFragment to MapActivity::class.java
+//    )
 
-    private lateinit var bottomNav: BottomNavigationView
+    //private lateinit var bottomNav: BottomNavigationView
 
-    // 기본 선택 항목 설정
-    override val defaultSelectedItemId = R.id.mypageFragment
+//    // 기본 선택 항목 설정
+//    override val defaultSelectedItemId = R.id.mypageFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mypage)
 
-        bottomNav = findViewById(R.id.navigationView)
-        bottomNav.selectedItemId = R.id.mypageFragment
+        //bottomNav = findViewById(R.id.navigationView)
+       // bottomNav.selectedItemId = R.id.mypageFragment
 
-        setupBottomNavigation(findViewById(R.id.navigationView))
+        //setupBottomNavigation(findViewById(R.id.navigationView))
 
         setProfile()
 
@@ -48,6 +49,8 @@ class MypageActivity : NavigatableActivity() {
             val intent = Intent(this, AchievementActivity::class.java)
             startActivity(intent)
         }
+
+        AnimationButton()
     }
 
     fun setProfile() {
@@ -76,5 +79,20 @@ class MypageActivity : NavigatableActivity() {
                 }
             }
         }
+    }
+
+    fun AnimationButton(){
+        AnimatedNavButtonHelper.setup(
+            activity = this,
+            centerButton = findViewById(R.id.centerButton),
+            leftButton = findViewById(R.id.leftButton),
+            rightButton = findViewById(R.id.rightButton),
+            onLeftClick = {
+                startActivity(Intent(this, MapActivity::class.java))
+            },
+            onRightClick = {
+                startActivity(Intent(this, MypageActivity::class.java))
+            }
+        )
     }
 }
