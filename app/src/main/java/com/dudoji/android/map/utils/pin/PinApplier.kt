@@ -68,6 +68,12 @@ class PinApplier(val clusterManager: ClusterManager<Pin>, val activity: AppCompa
         }
     }
 
+    fun clearPins(pin: Pin) {
+        appliedPins.clear()
+        clusterManager.clearItems()
+        clusterManager.cluster()
+    }
+
     fun applyPin(pin: Pin) {
         if (!appliedPins.contains(pin)) {
             clusterManager.addItem(pin)
