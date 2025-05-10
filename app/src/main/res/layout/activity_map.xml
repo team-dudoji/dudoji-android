@@ -47,6 +47,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <ImageButton
+        android:id="@+id/btnFriend"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/orange_background"
+        android:src="@drawable/ic_profile"
+        android:scaleType="centerInside"
+        android:elevation="6dp"
+        android:contentDescription="친구 목록 버튼"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigationView"
         android:layout_width="match_parent"
