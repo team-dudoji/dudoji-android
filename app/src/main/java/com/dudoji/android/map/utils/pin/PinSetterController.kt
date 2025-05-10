@@ -18,6 +18,7 @@ import com.dudoji.android.map.repository.PinRepository
 import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
+import com.google.maps.android.clustering.ClusterManager
 import java.util.Date
 
 class PinSetterController{
@@ -27,11 +28,11 @@ class PinSetterController{
     val pinApplier: PinApplier
     val activity: AppCompatActivity
 
-    constructor(pinSetter: ImageView, pinDropZone: FrameLayout, googleMap: GoogleMap, activity: AppCompatActivity) {
+    constructor(pinSetter: ImageView, pinDropZone: FrameLayout, googleMap: GoogleMap, activity: AppCompatActivity, clusterManager: ClusterManager<Pin>) {
         this.pinSetter = pinSetter
         this.pinDropZone = pinDropZone
         this.googleMap = googleMap
-        this.pinApplier = PinApplier(googleMap)
+        this.pinApplier = PinApplier(clusterManager, activity)
         this.activity = activity
 
         setDragAndDropListener()

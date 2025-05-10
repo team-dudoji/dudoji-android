@@ -54,7 +54,7 @@ GoogleApiClient.OnConnectionFailedListener{
     // Initialize Google Map Api
     fun prepareMap() {
         (activity.supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment)!!.getMapAsync(
-            activity as OnMapReadyCallback?
+            activity as OnMapReadyCallback
         )
     }
 

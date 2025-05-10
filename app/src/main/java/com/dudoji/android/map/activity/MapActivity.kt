@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,14 +37,12 @@ import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MypageActivity
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlay
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
 
 class MapActivity : NavigatableActivity(), OnMapReadyCallback {
@@ -65,7 +62,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     private lateinit var pinSetterController: PinSetterController
     private lateinit var pinDropZone: FrameLayout
 
-    private var googleMap: GoogleMap? = null
+    private lateinit var googleMap: GoogleMap
     private var mapUtil: MapUtil = MapUtil(this)
     private lateinit var mapCameraPositionController : MapCameraPositionController
 
@@ -80,11 +77,13 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     lateinit var directionController: MapDirectionController
 
+    private lateinit var clusterManager: ClusterManager<Pin>
+
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         this.maskTileMaker = maskTileMaker
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
         for (i in 0 until numOfTileOverlay) {
-            tileOverlays.add(googleMap?.addTileOverlay(tileOverlayOptions)!!)
+            tileOverlays.add(googleMap.addTileOverlay(tileOverlayOptions)!!)
         }
     }
 
@@ -150,36 +149,6 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         }, TILE_OVERLAY_LOADING_TIME)
     }
 
-
-    override fun onMapReady(p0: GoogleMap?) {
-        googleMap = p0
-        mapUtil.setGoogleMap(p0)
-        p0?.setMinZoomPreference(MIN_ZOOM)  // set zoom level bounds
-        p0?.setMaxZoomPreference(MAX_ZOOM)
-
-        mapCameraPositionController = MapCameraPositionController(p0!!, myLocationButton)
-
-        lifecycleScope.launch {
-            // apply tile overlay to google map
-            mapSectionManager = MapSectionRepository.getMapSectionManager(this@MapActivity)
-            setTileMaskTileMaker(PositionsMaskTileMaker(
-                MapSectionMaskTileMaker(
-                    mapSectionManager
-                )
-            ))
-            startLocationUpdates()
-        }
-
-        //방향 스껄~
-        directionController = MapDirectionController(
-            this,
-            mapCameraPositionController
-        )
-        directionController.start()
-        setupOnMapPinOnClickListener()
-        setPinSetterController()
-    }
-
     fun setupMyLocationButton() {
         myLocationButton = findViewById(R.id.myLocationButton)
         myLocationButton.setOnClickListener {
@@ -211,26 +180,39 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     fun setPinSetterController() {
         pinDropZone = findViewById(R.id.outer_drop_zone)
         pinSetter = findViewById(R.id.pinSetter)
-        pinSetterController = PinSetterController(pinSetter, pinDropZone, googleMap!!, this)
+        pinSetterController = PinSetterController(pinSetter, pinDropZone, googleMap, this, clusterManager)
     }
 
-    fun setupOnMapPinOnClickListener() {
-        googleMap?.setOnMarkerClickListener{
-            marker ->
-            val tag: MarkerTag<*> = marker.tag as MarkerTag<*>
-            if (tag.tag == MarkerType.PIN) {
-                val pin = tag.data as Pin
-                Modal.showCustomModal(this, R.layout.modal_pin_memo_show) { view ->
-                    val pinTitle = view.findViewById<TextView>(R.id.memo_title_output)
-                    val pinContent = view.findViewById<TextView>(R.id.memo_content_output)
-                    val pinDate = view.findViewById<TextView>(R.id.memo_date_output)
-                    pinTitle.text = pin.title
-                    pinContent.text = pin.content
-                    pinDate.text = pin.createdDate.toString()
-                }
-            }
-            true
+    override fun onMapReady(p0: GoogleMap) {
+        googleMap = p0
+        mapUtil.setGoogleMap(p0)
+        p0.setMinZoomPreference(MIN_ZOOM)  // set zoom level bounds
+        p0.setMaxZoomPreference(MAX_ZOOM)
+
+        mapCameraPositionController = MapCameraPositionController(p0, myLocationButton)
+
+        lifecycleScope.launch {
+            // apply tile overlay to google map
+            mapSectionManager = MapSectionRepository.getMapSectionManager(this@MapActivity)
+            setTileMaskTileMaker(PositionsMaskTileMaker(
+                MapSectionMaskTileMaker(
+                    mapSectionManager
+                )
+            ))
+            startLocationUpdates()
         }
+
+        // set up map section manager for pin
+        clusterManager = ClusterManager<Pin>(this, googleMap)
+        googleMap.setOnCameraIdleListener(clusterManager)
+        googleMap.setOnMarkerClickListener(clusterManager)
+
+        directionController = MapDirectionController(
+            this,
+            mapCameraPositionController
+        )
+        directionController.start()
+        setPinSetterController()
     }
 
     fun friendButton() {
