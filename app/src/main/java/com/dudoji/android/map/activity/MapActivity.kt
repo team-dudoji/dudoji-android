@@ -5,21 +5,26 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
+import com.dudoji.android.friend.Friend
+import com.dudoji.android.friend.FriendAdapter
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.domain.MarkerTag
 import com.dudoji.android.map.domain.MarkerType
 import com.dudoji.android.map.domain.Pin
-import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
@@ -71,6 +76,8 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     private lateinit var maskTileMaker: IMaskTileMaker
     private lateinit var mapSectionManager: MapSectionManager
 
+    private lateinit var friendButton :ImageButton
+
     lateinit var directionController: MapDirectionController
 
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
@@ -99,6 +106,8 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
         setupMyLocationButton()
         setupLocationUpdates() // Setup location updates Callback
+
+        friendButton()
     }
 
 
@@ -223,4 +232,35 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
             true
         }
     }
+
+    fun friendButton() {
+        friendButton = findViewById(R.id.btnFriend)
+
+        friendButton.setOnClickListener {
+            Modal.showCustomModal(this, R.layout.friend_modal) { view ->
+                val closeBtn = view.findViewById<ImageView>(R.id.btnCloseModal)
+                closeBtn.setOnClickListener {
+                    (view.parent?.parent as? ViewGroup)?.removeView(view.parent as View)
+                }
+
+                val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerFriendList)
+                recyclerView.layoutManager = LinearLayoutManager(this)
+
+                val friends = listOf(
+                    Friend("유미르", "시조의 거인", true),
+                    Friend("에렌 예거", "진격의 거인", false),
+                    Friend("지크 예거", "짐승 거인", true),
+                    Friend("라이너 브라운", "갑옷 거인", true),
+                    Friend("아르민 알레르토", "초대형 거인", false),
+                    Friend("타이버", "전퇴의 거인", true),
+                    Friend("피크 핑거", "차력 거인", true),
+                    Friend("갤리어드 포르코", "턱 거인", false),
+                    Friend("애니 레온하트", "여성형 거인", true)
+                )
+
+                recyclerView.adapter = FriendAdapter(friends)
+            }
+        }
+    }
+
 }
