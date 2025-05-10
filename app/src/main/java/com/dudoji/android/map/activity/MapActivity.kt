@@ -18,12 +18,10 @@ import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
-import com.dudoji.android.friend.Friend
 import com.dudoji.android.friend.FriendAdapter
-import com.dudoji.android.map.manager.MapSectionManager
-import com.dudoji.android.map.domain.MarkerTag
-import com.dudoji.android.map.domain.MarkerType
+import com.dudoji.android.friend.repository.FriendRepository
 import com.dudoji.android.map.domain.Pin
+import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
@@ -37,6 +35,7 @@ import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MypageActivity
+import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlay
@@ -59,7 +58,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
 
     private lateinit var pinSetter: ImageView
-    private lateinit var pinSetterController: PinSetterController
+    lateinit var pinSetterController: PinSetterController
     private lateinit var pinDropZone: FrameLayout
 
     private lateinit var googleMap: GoogleMap
@@ -222,27 +221,16 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
             Modal.showCustomModal(this, R.layout.friend_modal) { view ->
                 val closeBtn = view.findViewById<ImageView>(R.id.btnCloseModal)
                 closeBtn.setOnClickListener {
-                    (view.parent?.parent as? ViewGroup)?.removeView(view.parent as View)
+                    (view.parent?.parent?.parent as? ViewGroup)?.removeView(view.parent.parent as View)
                 }
 
                 val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerFriendList)
                 recyclerView.layoutManager = LinearLayoutManager(this)
 
-                val friends = listOf(
-                    Friend("유미르", "시조의 거인", true),
-                    Friend("에렌 예거", "진격의 거인", false),
-                    Friend("지크 예거", "짐승 거인", true),
-                    Friend("라이너 브라운", "갑옷 거인", true),
-                    Friend("아르민 알레르토", "초대형 거인", false),
-                    Friend("타이버", "전퇴의 거인", true),
-                    Friend("피크 핑거", "차력 거인", true),
-                    Friend("갤리어드 포르코", "턱 거인", false),
-                    Friend("애니 레온하트", "여성형 거인", true)
-                )
+                val friends = FriendRepository.getFriends()
 
-                recyclerView.adapter = FriendAdapter(friends)
+                recyclerView.adapter = FriendAdapter(friends, this)
             }
         }
     }
-
 }

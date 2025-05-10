@@ -19,7 +19,7 @@ import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.maps.android.clustering.ClusterManager
-import java.util.Date
+import java.time.LocalDateTime
 
 class PinSetterController{
     val pinSetter: ImageView
@@ -69,7 +69,7 @@ class PinSetterController{
                                     lng,
                                     0L,
                                     0L,
-                                    Date(),
+                                    LocalDateTime.now(),
                                     it.first,
                                     it.second
                                 )
