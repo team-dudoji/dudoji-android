@@ -1,5 +1,6 @@
 package com.dudoji.android.map.activity
 
+import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
@@ -7,10 +8,12 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.dudoji.android.NavigatableActivity
+import com.airbnb.lottie.LottieAnimationView
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
@@ -30,6 +33,7 @@ import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MypageActivity
+import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -38,17 +42,11 @@ import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
-class MapActivity : NavigatableActivity(), OnMapReadyCallback {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    override val navigationItems = mapOf(
-        R.id.mapFragment to null, // 기본 맵 화면
-        R.id.mypageFragment to MypageActivity::class.java
-    )
-
-    override val defaultSelectedItemId = R.id.mapFragment
 
     private lateinit var myLocationButton : Button;
-    private lateinit var bottomNav: BottomNavigationView
+    //private lateinit var bottomNav: BottomNavigationView
     private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
 
     private lateinit var pinSetter: ImageView
@@ -62,6 +60,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     private val numOfTileOverlay = 2
     private var indexOfTileOverlay = 0
     private val tileOverlays: MutableList<TileOverlay> = mutableListOf()
+
 
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
@@ -78,16 +77,15 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         mapUtil.requestLocationPermission()
         mapUtil.prepareMap()
 
-        bottomNav = findViewById(R.id.navigationView)
 
-        bottomNav.selectedItemId = R.id.mapFragment
-
-        setupBottomNavigation(findViewById(R.id.navigationView))
+        //bottomNav.selectedItemId = R.id.mapFragment
 
         locationService = LocationService(this)
 
         setupMyLocationButton()
         setupLocationUpdates() // Setup location updates Callback
+
+        AnimationButton()
     }
 
 
@@ -199,5 +197,20 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
             }
             true
         }
+    }
+
+    fun AnimationButton(){
+        AnimatedNavButtonHelper.setup(
+            activity = this,
+            centerButton = findViewById(R.id.centerButton),
+            leftButton = findViewById(R.id.leftButton),
+            rightButton = findViewById(R.id.rightButton),
+            onLeftClick = {
+                startActivity(Intent(this, MapActivity::class.java))
+            },
+            onRightClick = {
+                startActivity(Intent(this, MypageActivity::class.java))
+            }
+        )
     }
 }
