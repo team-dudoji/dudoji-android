@@ -36,8 +36,8 @@ class LocationService { // 위치 서비스 초기화 때문에 context를 priva
     // location callback을 설정하는 메서드
     fun setLocationCallback(callback: (LocationResult?)->Unit) {
         locationCallback =  object: LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?){
-                lastLocation = locationResult?.lastLocation
+            override fun onLocationResult(locationResult: LocationResult){
+                lastLocation = locationResult.lastLocation
                 callback(locationResult)
             }
         }
@@ -68,7 +68,7 @@ class LocationService { // 위치 서비스 초기화 때문에 context를 priva
     private fun setupLocationComponents() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context) // LocationServices를 사용해 context를 기반으로 초기화
         locationCallback = object : LocationCallback(){ //로케이션 콜백 로직 구현
-            override fun onLocationResult(locationResult: LocationResult?){ //위치 업데이트가 들어올 때 호출되는 콜백 메서드
+            override fun onLocationResult(locationResult: LocationResult){ //위치 업데이트가 들어올 때 호출되는 콜백 메서드
                 locationResult?.let {//location result가 null이 아닐때 실행
                     lastLocation = it.lastLocation //최신 위치 갱신
                 }
