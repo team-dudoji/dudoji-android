@@ -32,7 +32,7 @@ object FriendRepository {
     }
 
     suspend fun getRecommendedFriends(query: String): List<User> {
-        val response = RetrofitClient.friendApiService.getRecommendedFriends()
+        val response = RetrofitClient.friendApiService.getRecommendedFriends(query)
         if (response.isSuccessful) {
             response.body()?.let { friends ->
                 return friends

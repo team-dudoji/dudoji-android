@@ -5,21 +5,17 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
-import com.dudoji.android.friend.FriendAdapter
-import com.dudoji.android.friend.repository.FriendRepository
+import com.dudoji.android.friend.FriendModal
 import com.dudoji.android.map.domain.Pin
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
@@ -35,7 +31,6 @@ import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MypageActivity
-import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlay
@@ -105,7 +100,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         setupMyLocationButton()
         setupLocationUpdates() // Setup location updates Callback
 
-        friendButton()
+        setFriendFilterButton()
     }
 
 
@@ -214,23 +209,11 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         setPinSetterController()
     }
 
-    fun friendButton() {
+    fun setFriendFilterButton() {
         friendButton = findViewById(R.id.btnFriend)
 
         friendButton.setOnClickListener {
-            Modal.showCustomModal(this, R.layout.friend_modal) { view ->
-                val closeBtn = view.findViewById<ImageView>(R.id.btnCloseModal)
-                closeBtn.setOnClickListener {
-                    (view.parent?.parent?.parent as? ViewGroup)?.removeView(view.parent.parent as View)
-                }
-
-                val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerFriendList)
-                recyclerView.layoutManager = LinearLayoutManager(this)
-
-                val friends = FriendRepository.getFriends()
-
-                recyclerView.adapter = FriendAdapter(friends, this)
-            }
+            FriendModal.openFriendFilterModal(this)
         }
     }
 }

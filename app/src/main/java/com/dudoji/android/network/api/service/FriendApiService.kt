@@ -4,6 +4,7 @@ import com.dudoji.android.friend.domain.User
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface FriendApiService {
     @GET("/api/user/friends")
@@ -13,5 +14,5 @@ interface FriendApiService {
     suspend fun addFriend(friendId: Long): Response<Boolean>
 
     @GET("/api/user/friends/recommended")
-    suspend fun getRecommendedFriends(): Response<List<User>>
+    suspend fun getRecommendedFriends(@Query("email") email: String): Response<List<User>>
 }

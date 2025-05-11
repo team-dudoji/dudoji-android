@@ -2,6 +2,7 @@ package com.dudoji.android.map.utils.pin
 
 import android.content.ClipData
 import android.location.Location
+import android.os.Build
 import android.view.DragEvent
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.maps.android.clustering.ClusterManager
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 class PinSetterController{
     val pinSetter: ImageView
@@ -64,15 +66,21 @@ class PinSetterController{
                                 REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
                         )) {
                             getPinMemoData {
-                                val pin = Pin(
-                                    lat,
-                                    lng,
-                                    0L,
-                                    0L,
-                                    LocalDateTime.now(),
-                                    it.first,
-                                    it.second
-                                )
+                                val pin =
+                                    Pin(
+                                        lat,
+                                        lng,
+                                        0L,
+                                        0L,
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        LocalDateTime.now(ZoneId.systemDefault())
+                                        } else {
+                                            LocalDateTime.now(ZoneId.of("UTC"))
+                                        },
+                                        it.first,
+                                        it.second
+                                    )
+
                                 PinRepository.addPin(pin)
                                 pinApplier.applyPin(pin)
                             }

@@ -10,7 +10,6 @@ class DataBaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val DATABASE_VERSION = 1
     }
 
-
     override fun onCreate(p0: SQLiteDatabase?) {
         val createTableMapSection =
             "CREATE TABLE MapSection (" +
