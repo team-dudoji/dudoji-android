@@ -9,8 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.dudoji.android.R
 import com.dudoji.android.map.activity.MapActivity
-import com.dudoji.android.ui.AnimatedNavButtonHelper
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.dudoji.android.animationbutton.AnimatedNavButtonHelper
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.launch
 

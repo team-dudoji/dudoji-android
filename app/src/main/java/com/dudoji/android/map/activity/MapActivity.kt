@@ -8,12 +8,10 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.lottie.LottieAnimationView
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
@@ -33,13 +31,15 @@ import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MypageActivity
-import com.dudoji.android.ui.AnimatedNavButtonHelper
+import com.dudoji.android.animationbutton.AnimatedNavButtonHelper
+import com.dudoji.android.animationbutton.FragmentSwitchHelper
+import com.dudoji.android.fragment.MapFragment
+import com.dudoji.android.fragment.MypageFragment
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlay
 import com.google.android.gms.maps.model.TileOverlayOptions
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -200,17 +200,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun AnimationButton(){
-        AnimatedNavButtonHelper.setup(
+        FragmentSwitchHelper.setup(
             activity = this,
             centerButton = findViewById(R.id.centerButton),
             leftButton = findViewById(R.id.leftButton),
             rightButton = findViewById(R.id.rightButton),
-            onLeftClick = {
-                startActivity(Intent(this, MapActivity::class.java))
-            },
-            onRightClick = {
-                startActivity(Intent(this, MypageActivity::class.java))
-            }
+            fragmentContainerId = R.id.fragmentContainer,
+            mapFragment = MapFragment(),
+            mypageFragment = MypageFragment()
         )
+
     }
 }

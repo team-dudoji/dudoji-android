@@ -1,4 +1,4 @@
-package com.dudoji.android.ui
+package com.dudoji.android.animationbutton
 
 import android.app.Activity
 import android.view.View
