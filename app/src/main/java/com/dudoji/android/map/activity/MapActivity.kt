@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.NavigatableActivity
@@ -14,6 +15,7 @@ import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
+import com.dudoji.android.friend.FriendModal
 import com.dudoji.android.map.domain.Pin
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
@@ -51,7 +53,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
 
     private lateinit var pinSetter: ImageView
-    private lateinit var pinSetterController: PinSetterController
+    lateinit var pinSetterController: PinSetterController
     private lateinit var pinDropZone: FrameLayout
 
     private lateinit var googleMap: GoogleMap
@@ -64,6 +66,8 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     private lateinit var maskTileMaker: IMaskTileMaker
     private lateinit var mapSectionManager: MapSectionManager
+
+    private lateinit var friendButton :ImageButton
 
     lateinit var directionController: MapDirectionController
 
@@ -95,6 +99,8 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
         setupMyLocationButton()
         setupLocationUpdates() // Setup location updates Callback
+
+        setFriendFilterButton()
     }
 
 
@@ -201,5 +207,13 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         )
         directionController.start()
         setPinSetterController()
+    }
+
+    fun setFriendFilterButton() {
+        friendButton = findViewById(R.id.btnFriend)
+
+        friendButton.setOnClickListener {
+            FriendModal.openFriendFilterModal(this)
+        }
     }
 }
