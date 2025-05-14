@@ -10,9 +10,9 @@ import retrofit2.http.POST
 // Map Data API endpoints
 // ex) MapSections, RevealCircle
 interface MapApiService {
-    @GET("/api/user/map_section/get")
+    @GET("/api/user/map-sections")
     suspend fun getMapSections(): Response<MapSectionResponse>
 
-    @POST("/api/user/reveal_circles/save")
+    @POST("/api/user/reveal-circles")
     suspend fun saveCircle(@Body request:RevealCircleRequest): Response<String>
 }

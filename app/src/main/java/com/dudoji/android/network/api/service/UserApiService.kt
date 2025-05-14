@@ -5,12 +5,12 @@ import retrofit2.http.GET
 
 // user API endpoints
 interface UserApiService {
-    @GET("/api/user/info/get/profile-image")
+    @GET("/api/user/info/profile-image")
     suspend fun getUserProfileImageUrl(): Response<String>
 
-    @GET("/api/user/info/get/name")
+    @GET("/api/user/info/name")
     suspend fun getUserName(): Response<String>
 
-    @GET("/api/user/info/get/email")
+    @GET("/api/user/info/email")
     suspend fun getUserEmail(): Response<String>
 }
