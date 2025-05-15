@@ -12,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.R
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
 import com.dudoji.android.map.domain.Pin
@@ -20,6 +21,7 @@ import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.maps.android.clustering.ClusterManager
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -81,8 +83,11 @@ class PinSetterController{
                                         it.second
                                     )
 
-                                PinRepository.addPin(pin)
-                                pinApplier.applyPin(pin)
+                                activity.lifecycleScope.launch {
+                                    PinRepository.addPin(pin)
+                                    pinApplier.applyPin(pin)
+                                }
+
                             }
                         } else {
                             Toast.makeText(

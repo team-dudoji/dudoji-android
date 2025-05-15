@@ -24,11 +24,9 @@ object PinRepository {
         }
     }
 
-    fun addPin(pin: Pin) {
+    suspend fun addPin(pin: Pin) {
         pinList.add(pin)
-        suspend {
-            RetrofitClient.pinApiService.createPin(pin.toPinDto())
-        }
+        RetrofitClient.pinApiService.createPin(pin.toPinDto())
     }
 
     fun updateFilter(pinApplier: PinApplier) {
