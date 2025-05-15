@@ -1,4 +1,4 @@
-package com.dudoji.android.friend
+package com.dudoji.android.follow
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,18 +6,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dudoji.android.R
-import com.dudoji.android.friend.domain.User
+import com.dudoji.android.follow.domain.User
 import com.dudoji.android.map.activity.MapActivity
+import kotlinx.coroutines.launch
 
 class FriendRecommendAdapter(val recommendedFriends: List<User>, val activity: MapActivity) : RecyclerView.Adapter<FriendRecommendAdapter.FriendRecommendViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): FriendRecommendViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_friend_recommended, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_following, parent, false)
         return FriendRecommendViewHolder(view)
     }
 
@@ -39,9 +41,9 @@ class FriendRecommendAdapter(val recommendedFriends: List<User>, val activity: M
         }
 
         holder.itemView.setOnClickListener {
-            suspend {
-                RetrofitClient.friendApiService.addFriend(user.id)
-                Toast.makeText(activity, "${user.name}에게 친구 요청을 보냈습니다.", Toast.LENGTH_SHORT).show()
+            activity.lifecycleScope.launch {
+                RetrofitClient.followApiService.addFriend(user.id)
+                Toast.makeText(activity, "${user.name}를 팔로우 합니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }

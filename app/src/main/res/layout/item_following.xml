@@ -36,22 +36,11 @@
             android:textColor="#000000" />
 
         <TextView
-            android:id="@+id/textDesc"
+            android:id="@+id/textEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="설명"
             android:textSize="12sp"
             android:textColor="#666666" />
     </LinearLayout>
-
-    <!-- 보임/숨김 아이콘 -->
-    <ImageView
-        android:id="@+id/imgVisibility"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/visibility"
-        android:contentDescription="보임 상태"
-        android:background="@android:color/transparent"
-        android:scaleType="fitCenter"
-        app:tint="@null" />
 </LinearLayout>

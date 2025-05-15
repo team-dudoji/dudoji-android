@@ -1,7 +1,5 @@
 package com.dudoji.android.map.repository
 
-import android.util.Log
-import com.dudoji.android.friend.repository.FriendRepository
 import com.dudoji.android.map.domain.Pin
 import com.dudoji.android.map.utils.pin.PinApplier
 import com.google.android.gms.maps.GoogleMap
@@ -34,17 +32,17 @@ object PinRepository {
     }
 
     fun updateFilter(pinApplier: PinApplier) {
-        pinApplier.clearPins()
-        val visibleFriendId: HashSet<Long> = FriendRepository.getFriends()
-            .filter { it.isVisible }
-            .map { it.user.id }
-            .toHashSet()
-        Log.d("PinRepository", "Visible Friend IDs: $visibleFriendId")
-        pinList.forEach { pin ->
-            if (visibleFriendId.contains(pin.userId)) {
-                pinApplier.applyPin(pin)
-            }
-        }
+//        pinApplier.clearPins()
+//        val visibleFriendId: HashSet<Long> = FollowRepository.getFollowings()
+//            .filter { it.isVisible }
+//            .map { it.user.id }
+//            .toHashSet()
+//        Log.d("PinRepository", "Visible Friend IDs: $visibleFriendId")
+//        pinList.forEach { pin ->
+//            if (visibleFriendId.contains(pin.userId)) {
+//                pinApplier.applyPin(pin)
+//            }
+//        }
     }
 
     fun getPins(): List<Pin> {

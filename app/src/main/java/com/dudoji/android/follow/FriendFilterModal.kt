@@ -1,4 +1,4 @@
-package com.dudoji.android.friend
+package com.dudoji.android.follow
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,15 +11,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.friend.domain.User
-import com.dudoji.android.friend.repository.FriendRepository
+import com.dudoji.android.follow.domain.User
+import com.dudoji.android.follow.repository.FollowRepository
 import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.util.modal.Modal
 import kotlinx.coroutines.launch
 
 object FriendModal {
     fun openFriendFilterModal(activity: MapActivity) {
-        Modal.showCustomModal(activity, R.layout.friend_modal) { view ->
+        Modal.showCustomModal(activity, R.layout.following_modal) { view ->
             val closeBtn = view.findViewById<ImageView>(R.id.btnCloseModal)
             closeBtn.setOnClickListener {
                 (view.parent?.parent?.parent as? ViewGroup)?.removeView(view.parent.parent as View)
@@ -28,17 +28,17 @@ object FriendModal {
             val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerFriendList)
             recyclerView.layoutManager = LinearLayoutManager(activity)
 
-            val friends = FriendRepository.getFriends()
+            val followings = FollowRepository.getFollowings()
             val addFriendButton = view.findViewById<ImageView>(R.id.btnAddFriend)
             addFriendButton.setOnClickListener {
                 openFriendFinderModal(activity)
             }
-            recyclerView.adapter = FriendAdapter(friends, activity)
+            recyclerView.adapter = FollowAdapter(followings, activity)
         }
     }
 
     fun openFriendFinderModal(activity: MapActivity) {
-        Modal.showCustomModal(activity, R.layout.find_friend_modal) { view ->
+        Modal.showCustomModal(activity, R.layout.recommeded_following_modal) { view ->
             val closeBtn = view.findViewById<ImageView>(R.id.btnCloseModal)
             closeBtn.setOnClickListener {
                 (view.parent?.parent?.parent as? ViewGroup)?.removeView(view.parent.parent as View)
@@ -59,7 +59,7 @@ object FriendModal {
                         activity.lifecycleScope.launch {
                             try {
                                 friends.clear()
-                                friends.addAll(FriendRepository.getRecommendedFriends(email))
+                                friends.addAll(FollowRepository.getRecommendedUsers(email))
                                 recyclerView.adapter?.notifyDataSetChanged()
                             } catch (e: Exception) {
                                 friends.clear()

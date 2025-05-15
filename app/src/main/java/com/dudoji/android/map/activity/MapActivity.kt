@@ -15,7 +15,7 @@ import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
-import com.dudoji.android.friend.FriendModal
+import com.dudoji.android.follow.FriendModal
 import com.dudoji.android.map.domain.Pin
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
