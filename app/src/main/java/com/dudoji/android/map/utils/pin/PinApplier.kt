@@ -1,21 +1,28 @@
 package com.dudoji.android.map.utils.pin
 
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
 import com.dudoji.android.map.domain.Pin
+import com.dudoji.android.map.repository.PinRepository
 import com.dudoji.android.util.modal.Modal
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener
 import com.google.maps.android.clustering.ClusterManager
+import kotlinx.coroutines.launch
 
 
-class PinApplier(val clusterManager: ClusterManager<Pin>, val activity: AppCompatActivity) {
+class PinApplier(val clusterManager: ClusterManager<Pin>, val googleMap: GoogleMap, val activity: AppCompatActivity): OnCameraIdleListener {
     companion object {
         private val appliedPins: HashSet<Pin> = HashSet()
     }
@@ -91,6 +98,17 @@ class PinApplier(val clusterManager: ClusterManager<Pin>, val activity: AppCompa
             }
         }
         clusterManager.cluster()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onCameraIdle() {
+        activity.lifecycleScope.launch {
+            if (PinRepository.loadPins(googleMap.projection.visibleRegion.latLngBounds.center, 100.0)) {
+                val pins = PinRepository.getPins()
+                clearPins()
+                applyPins(pins)
+            }
+        }
     }
 }
 

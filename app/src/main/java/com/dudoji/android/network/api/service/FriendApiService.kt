@@ -1,18 +1,24 @@
 package com.dudoji.android.network.api.service
 
-import com.dudoji.android.friend.domain.User
+import com.dudoji.android.follow.domain.User
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface FriendApiService {
-    @GET("/api/user/friends")
+interface FollowApiService {
+
+    @GET("/api/user/follows/")
     suspend fun getFriends(): Response<List<User>>
 
-    @POST("/api/user/friends")
-    suspend fun addFriend(friendId: Long): Response<Boolean>
+    @POST("/api/user/follows/{userId}")
+    suspend fun addFriend(@Path("userId") userId: Long): Response<Boolean>
 
-    @GET("/api/user/friends/recommended")
-    suspend fun getRecommendedFriends(@Query("email") email: String): Response<List<User>>
+    @DELETE("/api/user/follows/{userId}")
+    suspend fun deleteFriend(@Path("userId") userId: Long): Response<Boolean>
+
+    @GET("/api/user/follows/recommended")
+    suspend fun getRecommendedUsers(@Query("email") email: String): Response<List<User>>
 }

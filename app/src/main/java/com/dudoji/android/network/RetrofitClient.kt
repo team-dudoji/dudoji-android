@@ -1,29 +1,37 @@
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.dudoji.android.BuildConfig
-import com.dudoji.android.network.api.service.FriendApiService
+import com.dudoji.android.network.api.service.FollowApiService
 import com.dudoji.android.network.api.service.LoginApiService
 import com.dudoji.android.network.api.service.MapApiService
 import com.dudoji.android.network.api.service.PinApiService
 import com.dudoji.android.network.api.service.UserApiService
+import com.dudoji.android.network.utils.LocalDateTimeAdapter
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 
 // REST API client
+@RequiresApi(Build.VERSION_CODES.O)
 object RetrofitClient {
     private const val BASE_URL = "http://${BuildConfig.HOST_IP_ADDRESS}/"
 
+    @RequiresApi(Build.VERSION_CODES.O)
     val gson = GsonBuilder()
         .setLenient()
+        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
         .create()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun init(context: Context) {
         val client = provideOkHttpClient(context)
 
@@ -36,7 +44,7 @@ object RetrofitClient {
 
         mapApiService = retrofit.create(MapApiService::class.java)
         userApiService = retrofit.create(UserApiService::class.java)
-        friendApiService = retrofit.create(FriendApiService::class.java)
+        followApiService = retrofit.create(FollowApiService::class.java)
         pinApiService = retrofit.create(PinApiService::class.java)
         Log.d("MapApiService", "Retrofit client initialized")
     }
@@ -67,6 +75,7 @@ object RetrofitClient {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(OkHttpClient.Builder().build())
@@ -80,6 +89,6 @@ object RetrofitClient {
 
     lateinit var userApiService: UserApiService
     lateinit var mapApiService: MapApiService
-    lateinit var friendApiService: FriendApiService
+    lateinit var followApiService: FollowApiService
     lateinit var pinApiService: PinApiService
 }

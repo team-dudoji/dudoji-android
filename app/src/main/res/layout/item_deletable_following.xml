@@ -44,5 +44,11 @@
                 android:textColor="#666666" />
     </LinearLayout>
 
-
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonDelete"
+            android:textColor="@color/black"
+            android:backgroundTint="#00FFFFFF"
+            android:text="삭제하기" />
 </LinearLayout>

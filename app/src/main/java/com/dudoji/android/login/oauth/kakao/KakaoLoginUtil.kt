@@ -53,37 +53,37 @@ object KakaoLoginUtil {
     }
 
     fun loginWithKakao(context: Context) {
-//        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-//            UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-//                if (error != null) {
-//                    Log.e(TAG, "Unsuccess to kakao login ", error)
-//
-//                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-//                        return@loginWithKakaoTalk
-//                    }
-//
-//                    UserApiClient.instance.loginWithKakaoAccount(context) {
-//                        token, error ->
-//                        callback(token, error, context)
-//                    }
-//                } else if (token != null) {
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        onLoginSuccess(token, context)
-//                    }
-//                }
-//            }
-//        } else {
-//            UserApiClient.instance.loginWithKakaoAccount(context) {
-//                    token, error ->
-//                callback(token, error, context)
-//            }
-//        }
-//    }
+        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+            UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+                if (error != null) {
+                    Log.e(TAG, "Unsuccess to kakao login ", error)
 
-        // TODO: Re-enable the production Kakao login logic before releasing to production.
-        //테스트용
-        RetrofitClient.init(context)
-        val intent = Intent(context, MapActivity::class.java)
-        context.startActivity(intent)
+                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                        return@loginWithKakaoTalk
+                    }
+
+                    UserApiClient.instance.loginWithKakaoAccount(context) {
+                        token, error ->
+                        callback(token, error, context)
+                    }
+                } else if (token != null) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        onLoginSuccess(token, context)
+                    }
+                }
+            }
+        } else {
+            UserApiClient.instance.loginWithKakaoAccount(context) {
+                    token, error ->
+                callback(token, error, context)
+            }
+        }
     }
+
+//        // TODO: Re-enable the production Kakao login logic before releasing to production.
+//        //테스트용
+//        RetrofitClient.init(context)
+//        val intent = Intent(context, MapActivity::class.java)
+//        context.startActivity(intent)
+//    }
 }

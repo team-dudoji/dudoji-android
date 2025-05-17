@@ -5,6 +5,8 @@ import android.graphics.Color
 // location diff threshold for update
 const val LOCATION_UPDATE_THRESHOLD = 5 // meter
 
+const val PIN_UPDATE_THRESHOLD = 200.0 // meter
+
 const val REVEAL_CIRCLE_RADIUS_BY_WALK = 100.0 // meter
 
 // for swapping Tile overlay

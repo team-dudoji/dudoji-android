@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 data class Pin (
     val lat: Double,
     val lng: Double,
-    val pinId: Long,
+//    val pinId: Long,
     val userId: Long,
     val createdDate: LocalDateTime,
     @get:JvmName("getPinTitle")
