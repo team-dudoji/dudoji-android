@@ -33,7 +33,7 @@ class FriendRecommendAdapter(val recommendedFriends: List<User>, val activity: M
         holder.name.text = user.name
         holder.email.text = user.email
         val imageUrl = user.profileImageUrl
-        if (imageUrl.isNullOrEmpty()) {
+        if (!imageUrl.isNullOrEmpty()) {
             Glide.with(activity)
                 .load(imageUrl)
                 .error(R.drawable.ic_profile)
