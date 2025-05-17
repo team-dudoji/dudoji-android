@@ -13,7 +13,7 @@ object MapSectionRepository {
     lateinit var mapApiService: MapApiService
 
     // load map sections from the server
-    @Deprecated("This method is deprecated. Use getMapSectionManager() instead.")
+    @Deprecated("This method is deprecated. Use getMapSectionManager(context: Context) instead.")
     suspend fun loadMapSectionsFromServer(): List<MapSection> {
         if (!::mapApiService.isInitialized) {
             mapApiService = RetrofitClient.mapApiService
