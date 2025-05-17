@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dudoji.android.R
 import com.dudoji.android.follow.domain.User
+import com.dudoji.android.follow.repository.FollowRepository
 import com.dudoji.android.map.activity.MapActivity
 import kotlinx.coroutines.launch
 
@@ -32,7 +33,7 @@ class FriendRecommendAdapter(val recommendedFriends: List<User>, val activity: M
         holder.name.text = user.name
         holder.email.text = user.email
         val imageUrl = user.profileImageUrl
-        if (imageUrl.isNotEmpty()) {
+        if (imageUrl.isNullOrEmpty()) {
             Glide.with(activity)
                 .load(imageUrl)
                 .error(R.drawable.ic_profile)
@@ -42,8 +43,10 @@ class FriendRecommendAdapter(val recommendedFriends: List<User>, val activity: M
 
         holder.itemView.setOnClickListener {
             activity.lifecycleScope.launch {
-                RetrofitClient.followApiService.addFriend(user.id)
-                Toast.makeText(activity, "${user.name}를 팔로우 합니다.", Toast.LENGTH_SHORT).show()
+                if (FollowRepository.addFollowing(user))
+                    Toast.makeText(activity, "${user.name}를 팔로우 합니다.", Toast.LENGTH_SHORT).show()
+                else
+                    Toast.makeText(activity, "팔로우에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }

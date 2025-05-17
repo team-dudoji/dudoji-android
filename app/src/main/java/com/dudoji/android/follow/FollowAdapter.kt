@@ -31,7 +31,7 @@ class FollowAdapter(private val followings: List<User>, private val activity: Ma
         holder.name.text = following.name
         holder.desc.text = following.email
         val imageUrl = following.profileImageUrl
-        if (imageUrl.isNotEmpty()) {
+        if (imageUrl.isNullOrBlank()) {
             Glide.with(activity)
                 .load(imageUrl)
                 .error(R.drawable.ic_profile)

@@ -1,31 +1,28 @@
 package com.dudoji.android.follow.repository
 
+import android.util.Log
 import com.dudoji.android.follow.domain.User
 
 object FollowRepository {
-    private val followings = mutableListOf<User>(
-        User("유미르", "시조의 거인"),
-        User("에렌 예거", "진격의 거인"),
-        User("지크 예거", "짐승 거인"),
-        User("라이너 브라운", "갑옷 거인"),
-        User("아르민 알레르토", "초대형 거인"),
-        User("타이버", "전퇴의 거인"),
-        User("피크 핑거", "차력 거인"),
-        User("갤리어드 포르코", "턱 거인"),
-        User("애니 레온하트", "여성형 거인")
-    )
+    private val followings = mutableListOf<User>()
 
-    fun getFollowings(): List<User> {
+    private var isLoaded = false
+
+     suspend fun getFollowings(): List<User> {
+        if (!isLoaded) {
+            loadFollowings()
+            isLoaded = true
+        }
         return followings
     }
 
-    suspend fun addFollowing(user: User) {
+    suspend fun addFollowing(user: User): Boolean {
         followings.add(user)
-        RetrofitClient.followApiService.addFriend(user.id)
+        return RetrofitClient.followApiService.addFriend(user.id).isSuccessful
     }
 
     suspend fun getRecommendedUsers(email: String): List<User> {
-        val response = RetrofitClient.followApiService.getRecommendedUsers()
+        val response = RetrofitClient.followApiService.getRecommendedUsers(email)
         if (response.isSuccessful) {
             return response.body() ?: emptyList();
         }
@@ -43,6 +40,9 @@ object FollowRepository {
                 followings.clear()
                 followings.addAll(users)
             }
+            Log.d("FollowRepository", "Followings loaded successfully: $followings")
+        } else {
+            Log.e("FollowRepository", "Failed to load followings: ${response.errorBody()?.string()}")
         }
     }
 }

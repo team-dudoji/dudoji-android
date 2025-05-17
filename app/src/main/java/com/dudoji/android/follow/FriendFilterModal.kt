@@ -28,12 +28,14 @@ object FriendModal {
             val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerFriendList)
             recyclerView.layoutManager = LinearLayoutManager(activity)
 
-            val followings = FollowRepository.getFollowings()
-            val addFriendButton = view.findViewById<ImageView>(R.id.btnAddFriend)
-            addFriendButton.setOnClickListener {
-                openFriendFinderModal(activity)
+            activity.lifecycleScope.launch {
+                val followings = FollowRepository.getFollowings()
+                val addFriendButton = view.findViewById<ImageView>(R.id.btnAddFriend)
+                addFriendButton.setOnClickListener {
+                    openFriendFinderModal(activity)
+                }
+                recyclerView.adapter = FollowAdapter(followings, activity)
             }
-            recyclerView.adapter = FollowAdapter(followings, activity)
         }
     }
 

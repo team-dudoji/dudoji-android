@@ -6,10 +6,11 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface FollowApiService {
 
-    @GET("/api/user/follows")
+    @GET("/api/user/follows/")
     suspend fun getFriends(): Response<List<User>>
 
     @POST("/api/user/follows/{userId}")
@@ -19,5 +20,5 @@ interface FollowApiService {
     suspend fun deleteFriend(@Path("userId") userId: Long): Response<Boolean>
 
     @GET("/api/user/follows/recommended")
-    suspend fun getRecommendedUsers(): Response<List<User>>
+    suspend fun getRecommendedUsers(@Query("email") email: String): Response<List<User>>
 }
