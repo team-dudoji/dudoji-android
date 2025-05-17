@@ -2,6 +2,7 @@ package com.dudoji.android.map.utils
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +16,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 
 class MapUtil : GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener{
@@ -22,6 +24,14 @@ GoogleApiClient.OnConnectionFailedListener{
     lateinit var providerClient: FusedLocationProviderClient
     lateinit var apiClient: GoogleApiClient
     private var googleMap: GoogleMap? = null
+
+    companion object {
+        fun distanceBetween(p1: LatLng, p2: LatLng): Double {
+            val results = FloatArray(1)
+            Location.distanceBetween(p1.latitude, p1.longitude, p2.latitude, p2.longitude, results)
+            return results[0].toDouble()
+        }
+    }
 
     constructor(activity: AppCompatActivity) {
         this.activity = activity

@@ -1,6 +1,7 @@
 package com.dudoji.android.map.activity
 
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -9,6 +10,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.NavigatableActivity
 import com.dudoji.android.R
@@ -16,6 +18,7 @@ import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.follow.FriendModal
+import com.dudoji.android.follow.repository.FollowRepository
 import com.dudoji.android.map.domain.Pin
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
@@ -25,6 +28,7 @@ import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapUtil
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
+import com.dudoji.android.map.utils.pin.PinApplier
 import com.dudoji.android.map.utils.pin.PinSetterController
 import com.dudoji.android.map.utils.tile.MaskTileProvider
 import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
@@ -55,6 +59,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     private lateinit var pinSetter: ImageView
     lateinit var pinSetterController: PinSetterController
     private lateinit var pinDropZone: FrameLayout
+    private lateinit var pinApplier: PinApplier
 
     private lateinit var googleMap: GoogleMap
     private var mapUtil: MapUtil = MapUtil(this)
@@ -101,6 +106,10 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         setupLocationUpdates() // Setup location updates Callback
 
         setFriendFilterButton()
+
+        lifecycleScope.launch{
+            FollowRepository.loadFollowings() // Load followings
+        }
     }
 
 
@@ -171,12 +180,14 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         directionController.stop()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun setPinSetterController() {
         pinDropZone = findViewById(R.id.outer_drop_zone)
         pinSetter = findViewById(R.id.pinSetter)
-        pinSetterController = PinSetterController(pinSetter, pinDropZone, googleMap, this, clusterManager)
+        pinSetterController = PinSetterController(pinSetter, pinDropZone ,pinApplier, googleMap, this, clusterManager)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onMapReady(p0: GoogleMap) {
         googleMap = p0
         mapUtil.setGoogleMap(p0)
@@ -200,6 +211,9 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         clusterManager = ClusterManager<Pin>(this, googleMap)
         googleMap.setOnCameraIdleListener(clusterManager)
         googleMap.setOnMarkerClickListener(clusterManager)
+
+        pinApplier = PinApplier(clusterManager, googleMap, this)
+        googleMap.setOnCameraIdleListener(pinApplier)
 
         directionController = MapDirectionController(
             this,

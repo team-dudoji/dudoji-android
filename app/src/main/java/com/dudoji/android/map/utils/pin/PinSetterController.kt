@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.R
@@ -32,16 +33,18 @@ class PinSetterController{
     val pinApplier: PinApplier
     val activity: AppCompatActivity
 
-    constructor(pinSetter: ImageView, pinDropZone: FrameLayout, googleMap: GoogleMap, activity: AppCompatActivity, clusterManager: ClusterManager<Pin>) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    constructor(pinSetter: ImageView, pinDropZone: FrameLayout, pinApplier: PinApplier, googleMap: GoogleMap, activity: AppCompatActivity, clusterManager: ClusterManager<Pin>) {
         this.pinSetter = pinSetter
         this.pinDropZone = pinDropZone
         this.googleMap = googleMap
-        this.pinApplier = PinApplier(clusterManager, activity)
+        this.pinApplier = pinApplier
         this.activity = activity
 
         setDragAndDropListener()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun setDragAndDropListener() {
         pinSetter.setOnLongClickListener {
             val data = ClipData.newPlainText("", "")
@@ -73,19 +76,27 @@ class PinSetterController{
                                         lat,
                                         lng,
                                         0L,
-                                        0L,
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                        LocalDateTime.now(ZoneId.systemDefault())
-                                        } else {
-                                            LocalDateTime.now(ZoneId.of("UTC"))
-                                        },
+                                        LocalDateTime.now(ZoneId.systemDefault()),
                                         it.first,
                                         it.second
                                     )
 
                                 activity.lifecycleScope.launch {
-                                    PinRepository.addPin(pin)
-                                    pinApplier.applyPin(pin)
+                                    if (PinRepository.addPin(pin)) {
+                                        pinApplier.applyPin(pin)
+                                        Toast.makeText(
+                                            activity,
+                                            "핀 추가에 성공했습니다.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    else {
+                                        Toast.makeText(
+                                            activity,
+                                            "핀 추가에 실패했습니다.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 }
 
                             }
