@@ -209,11 +209,15 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
         // set up map section manager for pin
         clusterManager = ClusterManager<Pin>(this, googleMap)
-        googleMap.setOnCameraIdleListener(clusterManager)
+        googleMap.setOnCameraIdleListener(
+            GoogleMap.OnCameraIdleListener {
+                clusterManager.onCameraIdle()
+                pinApplier.onCameraIdle()
+            }
+        )
         googleMap.setOnMarkerClickListener(clusterManager)
 
         pinApplier = PinApplier(clusterManager, googleMap, this)
-        googleMap.setOnCameraIdleListener(pinApplier)
 
         directionController = MapDirectionController(
             this,
