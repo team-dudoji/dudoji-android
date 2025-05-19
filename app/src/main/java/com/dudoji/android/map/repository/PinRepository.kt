@@ -9,6 +9,7 @@ import com.dudoji.android.map.utils.MapUtil
 import com.dudoji.android.map.utils.pin.PinApplier
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import java.time.LocalDateTime
 
 object PinRepository {
     private val pinList = mutableListOf<Pin>()
@@ -58,7 +59,18 @@ object PinRepository {
 //            }
 //        }
     }
+//    fun getPins(): List<Pin> {
+//        return pinList
+//    }
+
+    //테스트용 더미 데이터
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getPins(): List<Pin> {
-        return pinList
+        return listOf(
+            Pin(37.0, 127.0, 1L, LocalDateTime.now(), "내 핀 1", "내용"),    // 나
+            Pin(37.1, 127.1, 2L, LocalDateTime.now(), "친구 핀 1", "내용"), // 친구
+            Pin(37.2, 127.2, 3L, LocalDateTime.now(), "모르는 핀 1", "내용") // 모름
+        )
     }
+
 }
