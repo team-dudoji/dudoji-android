@@ -19,6 +19,7 @@ import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.follow.FriendModal
 import com.dudoji.android.follow.repository.FollowRepository
+import com.dudoji.android.map.controller.PinFilterController
 import com.dudoji.android.map.domain.Pin
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
@@ -78,6 +79,10 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     private lateinit var clusterManager: ClusterManager<Pin>
 
+    private lateinit var pinFilterController: PinFilterController // 핀 필터 변수
+    private var currentUserId: Long = -1L // 유저 id
+
+
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         this.maskTileMaker = maskTileMaker
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
@@ -86,6 +91,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
@@ -110,6 +116,11 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         lifecycleScope.launch{
             FollowRepository.loadFollowings() // Load followings
         }
+
+        //currentUserId = UserRepository.getCurrentUserId() 유저 아이디 가져오기
+        currentUserId = 1L //값 하드코딩
+
+
     }
 
 
@@ -223,6 +234,21 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
             mapCameraPositionController
         )
         directionController.start()
+
+        lifecycleScope.launch {
+            FollowRepository.loadFollowings()
+            //val friendIds = FollowRepository.getFollowings().map { it.id }.toSet()
+            val friendIds = setOf(2L)
+
+            pinFilterController = PinFilterController(
+                this@MapActivity,
+                pinApplier,
+                currentUserId,
+                friendIds
+            )
+            pinFilterController.setupFilterButtons()
+        }
+
         setPinSetterController()
     }
 
