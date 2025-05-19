@@ -11,6 +11,7 @@ object FollowRepository {
 
     private var isLoaded = false
 
+     @RequiresApi(Build.VERSION_CODES.O)
      suspend fun getFollowings(): List<User> {
         if (!isLoaded) {
             loadFollowings()
