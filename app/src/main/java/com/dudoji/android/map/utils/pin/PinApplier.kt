@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.map.domain.Pin
+import com.dudoji.android.map.domain.pin.Pin
 import com.dudoji.android.map.repository.PinRepository
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
@@ -22,7 +22,10 @@ import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
 
 
-class PinApplier(val clusterManager: ClusterManager<Pin>, val googleMap: GoogleMap, val activity: AppCompatActivity): OnCameraIdleListener {
+class PinApplier(val clusterManager: ClusterManager<Pin>,
+                 val googleMap: GoogleMap,
+                 val activity: AppCompatActivity,
+                 private val currentUserId: Long): OnCameraIdleListener {
     companion object {
         private val appliedPins: HashSet<Pin> = HashSet()
     }
@@ -103,11 +106,11 @@ class PinApplier(val clusterManager: ClusterManager<Pin>, val googleMap: GoogleM
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCameraIdle() {
         activity.lifecycleScope.launch {
-            if (PinRepository.loadPins(googleMap.projection.visibleRegion.latLngBounds.center, 100.0)) {
-                val pins = PinRepository.getPins()
-                clearPins()
-                applyPins(pins)
-            }
+//            if (PinRepository.loadPins(googleMap.projection.visibleRegion.latLngBounds.center, 100.0, currentUserId)) { //유저 아이디 추가
+//                val pins = PinRepository.getPins()
+//                clearPins()
+//                applyPins(pins)
+//            } 하드 코딩 테스트를 위해 잠시 주석 처리
         }
     }
 }
