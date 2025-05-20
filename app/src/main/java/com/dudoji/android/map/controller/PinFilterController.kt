@@ -13,8 +13,13 @@ import com.dudoji.android.map.utils.pin.PinApplier
 
 class PinFilterController(
     private val activity: AppCompatActivity,
-    private val pinApplier: PinApplier
 ) {
+    private lateinit var pinApplier: PinApplier
+
+    fun setPinApplier(applier: PinApplier) {
+        pinApplier = applier
+    }
+
     // 각 who에 대한 가시성 맵
     private val visibilityMap = mutableMapOf(
         Who.MINE to true,
@@ -62,29 +67,8 @@ class PinFilterController(
     fun applyFilteredPins() {
         val allPins = PinRepository.getPins() // 핀정보 가져옴
 
-        allPins.forEach { pin ->
-            Log.d("PinFilter", "Pin: ${pin.title}, who: ${pin.master}, visible: ${visibilityMap[pin.master]}")
-        }
-
         // 전체 핀 리스트에서 값이 true인 핀들만 걸러낸다.
         val filteredPins = filterPins(allPins)
-
-        //핀 개수 초기화
-        val counts = mutableMapOf(
-            Who.MINE to 0,
-            Who.FOLLOWING to 0,
-            Who.UNKNOWN to 0
-        )
-
-        //순환하며 값 세기
-        filteredPins.forEach {
-            counts[it.master] = counts.getOrDefault(it.master, 0) + 1
-        }
-
-        Log.d("PinFilter", "필터 적용 중인 핀 개수:")
-        Log.d("PinFilter", "  내 핀: ${counts[Who.MINE]}")
-        Log.d("PinFilter", "  친구 핀: ${counts[Who.FOLLOWING]}")
-        Log.d("PinFilter", "  모르는 사람 핀: ${counts[Who.UNKNOWN]}")
         
         pinApplier.clearPins()
         pinApplier.applyPins(filteredPins)
