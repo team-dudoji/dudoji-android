@@ -203,60 +203,47 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     override fun onMapReady(p0: GoogleMap) {
         googleMap = p0
         mapUtil.setGoogleMap(p0)
-        p0.setMinZoomPreference(MIN_ZOOM)  // set zoom level bounds
+        p0.setMinZoomPreference(MIN_ZOOM)
         p0.setMaxZoomPreference(MAX_ZOOM)
 
         mapCameraPositionController = MapCameraPositionController(p0, myLocationButton)
 
-
         lifecycleScope.launch {
-            // apply tile overlay to google map
             mapSectionManager = MapSectionRepository.getMapSectionManager(this@MapActivity)
-            setTileMaskTileMaker(PositionsMaskTileMaker(
-                MapSectionMaskTileMaker(
-                    mapSectionManager
+            setTileMaskTileMaker(
+                PositionsMaskTileMaker(
+                    MapSectionMaskTileMaker(mapSectionManager)
                 )
-            ))
-
-
+            )
             startLocationUpdates()
+
+            FollowRepository.loadFollowings()
+
+            clusterManager = ClusterManager(this@MapActivity, googleMap)
+            pinApplier = PinApplier(clusterManager, googleMap, this@MapActivity)
+            pinFilterController = PinFilterController(this@MapActivity)
+
+            //서로 객체가 필요하므로 객체 선언 후 set으로 전달
+            pinApplier.setPinFilterController(pinFilterController) //pinApplier 객체에 pinFilterController를 전달함
+            pinFilterController.setPinApplier(pinApplier) // pinFilterController 객체에 pinApplier를 전달합니다.
+
+            pinFilterController.setupFilterButtons() //필터 버튼 함수
+            pinFilterController.applyFilteredPins() // 필터 버튼 지도 적용
         }
 
-        // set up map section manager for pin
-        clusterManager = ClusterManager<Pin>(this, googleMap)
-        pinApplier = PinApplier(clusterManager, googleMap, this, currentUserId) //현재 유저 아이디 추가
-        googleMap.setOnCameraIdleListener(
-            GoogleMap.OnCameraIdleListener {
-                clusterManager.onCameraIdle()
-                pinApplier.onCameraIdle()
-            }
-        )
+        googleMap.setOnCameraIdleListener {
+            clusterManager.onCameraIdle()
+            pinApplier.onCameraIdle()
+        }
+
         googleMap.setOnMarkerClickListener(clusterManager)
 
-        directionController = MapDirectionController(
-            this,
-            mapCameraPositionController
-        )
+        directionController = MapDirectionController(this@MapActivity, mapCameraPositionController)
         directionController.start()
-
-        lifecycleScope.launch {
-            FollowRepository.loadFollowings()
-            //val friendIds = FollowRepository.getFollowings().map { it.id }.toSet()
-
-            pinFilterController = PinFilterController(this@MapActivity, pinApplier)
-            pinFilterController.setupFilterButtons()
-        }
-
-        // pinFilterController 초기화 먼저!
-        pinFilterController = PinFilterController(this, pinApplier)
-        pinFilterController.setupFilterButtons()
-
-        // 테스트용 핀 주입과 필터 적용은 초기화 후 호출
-        PinRepository.injectTestPins()
-        pinFilterController.applyFilteredPins()
 
         setPinSetterController()
     }
+
 
     fun setFriendFilterButton() {
         friendButton = findViewById(R.id.btnFriend)
