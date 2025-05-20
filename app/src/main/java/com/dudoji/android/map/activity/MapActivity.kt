@@ -20,9 +20,10 @@ import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.follow.FriendModal
 import com.dudoji.android.follow.repository.FollowRepository
 import com.dudoji.android.map.controller.PinFilterController
-import com.dudoji.android.map.domain.Pin
+import com.dudoji.android.map.domain.pin.Pin
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
+import com.dudoji.android.map.repository.PinRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
 import com.dudoji.android.map.utils.MapDirectionController
@@ -207,6 +208,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
         mapCameraPositionController = MapCameraPositionController(p0, myLocationButton)
 
+
         lifecycleScope.launch {
             // apply tile overlay to google map
             mapSectionManager = MapSectionRepository.getMapSectionManager(this@MapActivity)
@@ -215,12 +217,14 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
                     mapSectionManager
                 )
             ))
+
+
             startLocationUpdates()
         }
 
         // set up map section manager for pin
         clusterManager = ClusterManager<Pin>(this, googleMap)
-        pinApplier = PinApplier(clusterManager, googleMap, this)
+        pinApplier = PinApplier(clusterManager, googleMap, this, currentUserId) //현재 유저 아이디 추가
         googleMap.setOnCameraIdleListener(
             GoogleMap.OnCameraIdleListener {
                 clusterManager.onCameraIdle()
@@ -238,16 +242,18 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         lifecycleScope.launch {
             FollowRepository.loadFollowings()
             //val friendIds = FollowRepository.getFollowings().map { it.id }.toSet()
-            val friendIds = setOf(2L)
 
-            pinFilterController = PinFilterController(
-                this@MapActivity,
-                pinApplier,
-                currentUserId,
-                friendIds
-            )
+            pinFilterController = PinFilterController(this@MapActivity, pinApplier)
             pinFilterController.setupFilterButtons()
         }
+
+        // pinFilterController 초기화 먼저!
+        pinFilterController = PinFilterController(this, pinApplier)
+        pinFilterController.setupFilterButtons()
+
+        // 테스트용 핀 주입과 필터 적용은 초기화 후 호출
+        PinRepository.injectTestPins()
+        pinFilterController.applyFilteredPins()
 
         setPinSetterController()
     }
