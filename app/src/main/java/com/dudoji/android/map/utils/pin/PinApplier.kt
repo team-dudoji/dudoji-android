@@ -116,7 +116,7 @@ class PinApplier(val clusterManager: ClusterManager<Pin>,
                 //val pins = PinRepository.getPins()
                 //clearPins()
                 // applyPins(pins)
-                pinFilterController.applyFilteredPins() //핀필터 적용하여 맵에 띄움
+                pinFilterController.applyFilteredPins() //핀 필터 적용하여 맵에 띄움
             }
         }
     }

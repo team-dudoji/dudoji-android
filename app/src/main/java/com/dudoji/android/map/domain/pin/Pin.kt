@@ -14,7 +14,7 @@
         @get:JvmName("getPinTitle")
         val title: String,
         val content: String,
-        val master: Who // 기본값 마이핀
+        val master: Who
     ) : ClusterItem {
         override fun getPosition(): LatLng {
             return LatLng(lat, lng)
