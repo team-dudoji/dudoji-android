@@ -63,4 +63,12 @@ object FollowRepository {
             Log.e("FollowRepository", "Failed to load followings: ${response.errorBody()?.string()}")
         }
     }
+
+    //팔로잉 확인 함수
+    fun isFollowing(userId: Long): Boolean {
+        return followings.any { it.id == userId }
+    }
+
+
+
 }
