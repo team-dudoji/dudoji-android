@@ -4,13 +4,10 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.config.PIN_UPDATE_THRESHOLD
-import com.dudoji.android.follow.repository.FollowRepository
 import com.dudoji.android.map.domain.pin.Pin
-import com.dudoji.android.map.domain.pin.Who
 import com.dudoji.android.map.utils.MapUtil
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-import java.time.LocalDateTime
 
 object PinRepository {
     private val pinList = mutableListOf<Pin>()
@@ -28,8 +25,7 @@ object PinRepository {
                 latLng.longitude)
             if (response.isSuccessful) {
                 val pins = response.body()
-                FollowRepository.getFollowings() //팔로잉 정보 로딩
-                
+
                 pinList.clear()
                 pinList.addAll(pins?.map { pinDto ->
                     pinDto.toDomain()
@@ -72,22 +68,5 @@ object PinRepository {
     fun getPins(): List<Pin> {
         return pinList
     }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun injectTestPins() {
-        val now = LocalDateTime.now()
-        pinList.clear()
-        pinList.addAll(
-            listOf(
-                Pin(37.0, 127.0, 1L, now, "내 핀", "내용", Who.MINE),
-                Pin(37.1, 127.1, 2L, now, "친구 핀", "내용", Who.FOLLOWING),
-                Pin(37.2, 127.2, 3L, now, "모르는 핀", "내용", Who.UNKNOWN)
-            )
-        )
-        Log.d("PinRepository", "✅ 테스트 핀 3개 주입 완료")
-    }
-
-
-
 
 }
