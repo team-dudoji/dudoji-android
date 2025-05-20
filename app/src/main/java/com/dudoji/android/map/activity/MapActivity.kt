@@ -23,7 +23,6 @@ import com.dudoji.android.map.controller.PinFilterController
 import com.dudoji.android.map.domain.pin.Pin
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
-import com.dudoji.android.map.repository.PinRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
 import com.dudoji.android.map.utils.MapDirectionController
@@ -48,7 +47,7 @@ import kotlinx.coroutines.launch
 class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     override val navigationItems = mapOf(
-        R.id.mapFragment to null, // 기본 맵 화면
+        R.id.mapFragment to null,
         R.id.mypageFragment to MypageActivity::class.java
     )
 
@@ -56,7 +55,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     private lateinit var myLocationButton : Button;
     private lateinit var bottomNav: BottomNavigationView
-    private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
+    private lateinit var locationService: LocationService
 
     private lateinit var pinSetter: ImageView
     lateinit var pinSetterController: PinSetterController
@@ -80,8 +79,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     private lateinit var clusterManager: ClusterManager<Pin>
 
-    private lateinit var pinFilterController: PinFilterController // 핀 필터 변수
-    private var currentUserId: Long = -1L // 유저 id
+    private lateinit var pinFilterController: PinFilterController
 
 
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
@@ -110,16 +108,14 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         locationService = LocationService(this)
 
         setupMyLocationButton()
-        setupLocationUpdates() // Setup location updates Callback
+        setupLocationUpdates()
 
         setFriendFilterButton()
 
         lifecycleScope.launch{
-            FollowRepository.loadFollowings() // Load followings
+            FollowRepository.loadFollowings()
         }
 
-        //currentUserId = UserRepository.getCurrentUserId() 유저 아이디 가져오기
-        currentUserId = 1L //값 하드코딩
 
 
     }
@@ -142,7 +138,6 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         }
     }
 
-    // Update location on map
     private fun updateLocationOnMap(location: Location){
         if (tileOverlays.size == 0)
             return
@@ -172,7 +167,6 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         }
     }
 
-    // location updating routine
     private fun startLocationUpdates() {
         lifecycleScope.launch {
             while (true)
