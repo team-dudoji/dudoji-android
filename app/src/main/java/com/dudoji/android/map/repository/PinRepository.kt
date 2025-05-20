@@ -4,9 +4,10 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.config.PIN_UPDATE_THRESHOLD
-import com.dudoji.android.map.domain.Pin
+import com.dudoji.android.follow.repository.FollowRepository
+import com.dudoji.android.map.domain.pin.Pin
+import com.dudoji.android.map.domain.pin.Who
 import com.dudoji.android.map.utils.MapUtil
-import com.dudoji.android.map.utils.pin.PinApplier
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import java.time.LocalDateTime
@@ -21,11 +22,19 @@ object PinRepository {
     suspend fun loadPins(latLng: LatLng, radius: Double): Boolean{
         if (lastPinUpdatedLatLng == null ||
             MapUtil.distanceBetween(lastPinUpdatedLatLng!!, latLng) > PIN_UPDATE_THRESHOLD) {
-            val response = RetrofitClient.pinApiService.getPins(radius.toInt(), latLng.latitude, latLng.longitude)
+            val response = RetrofitClient.pinApiService.getPins(
+                radius.toInt(),
+                latLng.latitude,
+                latLng.longitude)
             if (response.isSuccessful) {
                 val pins = response.body()
+                FollowRepository.getFollowings() //팔로잉 정보 로딩
+                
                 pinList.clear()
-                pinList.addAll(pins?.map { pinDto -> pinDto.toDomain() } ?: emptyList())
+                pinList.addAll(pins?.map { pinDto ->
+                    pinDto.toDomain()
+                    } ?: emptyList()
+                )
                 lastPinUpdatedLatLng = latLng
                 return true
             } else {
@@ -46,7 +55,7 @@ object PinRepository {
         return false
     }
 
-    fun updateFilter(pinApplier: PinApplier) {
+//    fun updateFilter(pinApplier: PinApplier) {
 //        pinApplier.clearPins()
 //        val visibleFriendId: HashSet<Long> = FollowRepository.getFollowings()
 //            .filter { it.isVisible }
@@ -58,19 +67,27 @@ object PinRepository {
 //                pinApplier.applyPin(pin)
 //            }
 //        }
-    }
-//    fun getPins(): List<Pin> {
-//        return pinList
 //    }
 
-    //테스트용 더미 데이터
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getPins(): List<Pin> {
-        return listOf(
-            Pin(37.0, 127.0, 1L, LocalDateTime.now(), "내 핀 1", "내용"),    // 나
-            Pin(37.1, 127.1, 2L, LocalDateTime.now(), "친구 핀 1", "내용"), // 친구
-            Pin(37.2, 127.2, 3L, LocalDateTime.now(), "모르는 핀 1", "내용") // 모름
-        )
+        return pinList
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun injectTestPins() {
+        val now = LocalDateTime.now()
+        pinList.clear()
+        pinList.addAll(
+            listOf(
+                Pin(37.0, 127.0, 1L, now, "내 핀", "내용", Who.MINE),
+                Pin(37.1, 127.1, 2L, now, "친구 핀", "내용", Who.FOLLOWING),
+                Pin(37.2, 127.2, 3L, now, "모르는 핀", "내용", Who.UNKNOWN)
+            )
+        )
+        Log.d("PinRepository", "✅ 테스트 핀 3개 주입 완료")
+    }
+
+
+
 
 }
