@@ -29,7 +29,7 @@ object PinRepository {
                 pinList.clear()
                 pinList.addAll(pins?.map { pinDto ->
                     pinDto.toDomain()
-                    } ?: emptyList()
+                } ?: emptyList()
                 )
                 lastPinUpdatedLatLng = latLng
                 return true
@@ -50,20 +50,6 @@ object PinRepository {
         Log.e("PinRepository", "Failed to add pin: ${response.errorBody()?.string()}")
         return false
     }
-
-//    fun updateFilter(pinApplier: PinApplier) {
-//        pinApplier.clearPins()
-//        val visibleFriendId: HashSet<Long> = FollowRepository.getFollowings()
-//            .filter { it.isVisible }
-//            .map { it.user.id }
-//            .toHashSet()
-//        Log.d("PinRepository", "Visible Friend IDs: $visibleFriendId")
-//        pinList.forEach { pin ->
-//            if (visibleFriendId.contains(pin.userId)) {
-//                pinApplier.applyPin(pin)
-//            }
-//        }
-//    }
 
     fun getPins(): List<Pin> {
         return pinList
