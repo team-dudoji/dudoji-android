@@ -1,4 +1,4 @@
-package com.dudoji.android.map.controller
+package com.dudoji.android.map.utils.pin
 
 import android.os.Build
 import android.util.Log
@@ -9,16 +9,10 @@ import com.dudoji.android.R
 import com.dudoji.android.map.domain.pin.Pin
 import com.dudoji.android.map.domain.pin.Who
 import com.dudoji.android.map.repository.PinRepository
-import com.dudoji.android.map.utils.pin.PinApplier
 
-class PinFilterController(
+class PinFilter(
     private val activity: AppCompatActivity,
 ) {
-    private lateinit var pinApplier: PinApplier
-
-    fun setPinApplier(applier: PinApplier) {
-        pinApplier = applier
-    }
 
     // 각 who에 대한 가시성 맵
     private val visibilityMap = mutableMapOf(
@@ -30,7 +24,7 @@ class PinFilterController(
     //핀 필터 함수
     fun filterPins(pins: List<Pin>): List<Pin> {
         return pins.filter {
-            pin -> visibilityMap[pin.master] == true
+                pin -> visibilityMap[pin.master] == true
         }
     }
 
@@ -58,19 +52,7 @@ class PinFilterController(
     @RequiresApi(Build.VERSION_CODES.O)
     private fun toggle(who: Who) {
         visibilityMap[who] = !(visibilityMap[who] ?: true)
-        Log.d("PinFilter", "🔁 ${who.name} toggled: ${visibilityMap[who]}")
-        applyFilteredPins()
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun applyFilteredPins() {
-        val allPins = PinRepository.getPins() // 핀정보 가져옴
-
-        // 전체 핀 리스트에서 값이 true인 핀들만 걸러낸다.
-        val filteredPins = filterPins(allPins)
-        
-        pinApplier.clearPins()
-        pinApplier.applyPins(filteredPins)
-    }
 }
