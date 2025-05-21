@@ -19,7 +19,7 @@ import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.follow.FriendModal
 import com.dudoji.android.follow.repository.FollowRepository
-import com.dudoji.android.map.controller.PinFilterController
+import com.dudoji.android.map.utils.pin.PinFilter
 import com.dudoji.android.map.domain.pin.Pin
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     override val navigationItems = mapOf(
-        R.id.mapFragment to null,
+        R.id.mapFragment to null, // 기본 맵 화면
         R.id.mypageFragment to MypageActivity::class.java
     )
 
@@ -55,7 +55,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     private lateinit var myLocationButton : Button;
     private lateinit var bottomNav: BottomNavigationView
-    private lateinit var locationService: LocationService
+    private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
 
     private lateinit var pinSetter: ImageView
     lateinit var pinSetterController: PinSetterController
@@ -79,7 +79,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     private lateinit var clusterManager: ClusterManager<Pin>
 
-    private lateinit var pinFilterController: PinFilterController
+    private lateinit var pinFilter: PinFilter // 핀 필터 변수
 
 
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
@@ -108,14 +108,13 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         locationService = LocationService(this)
 
         setupMyLocationButton()
-        setupLocationUpdates()
+        setupLocationUpdates() // Setup location updates Callback
 
         setFriendFilterButton()
 
         lifecycleScope.launch{
-            FollowRepository.loadFollowings()
+            FollowRepository.loadFollowings() // Load followings
         }
-
 
 
     }
@@ -138,6 +137,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         }
     }
 
+    // Update location on map
     private fun updateLocationOnMap(location: Location){
         if (tileOverlays.size == 0)
             return
@@ -167,6 +167,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         }
     }
 
+    // location updating routine
     private fun startLocationUpdates() {
         lifecycleScope.launch {
             while (true)
@@ -211,18 +212,11 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
             )
             startLocationUpdates()
 
-            FollowRepository.loadFollowings()
-
             clusterManager = ClusterManager(this@MapActivity, googleMap)
-            pinApplier = PinApplier(clusterManager, googleMap, this@MapActivity)
-            pinFilterController = PinFilterController(this@MapActivity)
+            pinFilter = PinFilter(this@MapActivity)
+            pinApplier = PinApplier(clusterManager, googleMap, this@MapActivity, pinFilter)
 
-            //서로 객체가 필요하므로 객체 선언 후 set으로 전달
-            pinApplier.setPinFilterController(pinFilterController) //pinApplier 객체에 pinFilterController를 전달함
-            pinFilterController.setPinApplier(pinApplier) // pinFilterController 객체에 pinApplier를 전달합니다.
-
-            pinFilterController.setupFilterButtons() //필터 버튼 함수
-            pinFilterController.applyFilteredPins() // 필터 버튼 지도 적용
+            pinFilter.setupFilterButtons()
         }
 
         googleMap.setOnCameraIdleListener {
