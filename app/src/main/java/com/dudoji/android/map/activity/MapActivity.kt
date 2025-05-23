@@ -19,7 +19,8 @@ import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.follow.FriendModal
 import com.dudoji.android.follow.repository.FollowRepository
-import com.dudoji.android.map.domain.Pin
+import com.dudoji.android.map.utils.pin.PinFilter
+import com.dudoji.android.map.domain.pin.Pin
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
@@ -78,6 +79,9 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     private lateinit var clusterManager: ClusterManager<Pin>
 
+    private lateinit var pinFilter: PinFilter // 핀 필터 변수
+
+
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         this.maskTileMaker = maskTileMaker
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
@@ -86,6 +90,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
@@ -110,6 +115,8 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         lifecycleScope.launch{
             FollowRepository.loadFollowings() // Load followings
         }
+
+
     }
 
 
@@ -191,40 +198,40 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
     override fun onMapReady(p0: GoogleMap) {
         googleMap = p0
         mapUtil.setGoogleMap(p0)
-        p0.setMinZoomPreference(MIN_ZOOM)  // set zoom level bounds
+        p0.setMinZoomPreference(MIN_ZOOM)
         p0.setMaxZoomPreference(MAX_ZOOM)
 
         mapCameraPositionController = MapCameraPositionController(p0, myLocationButton)
 
         lifecycleScope.launch {
-            // apply tile overlay to google map
             mapSectionManager = MapSectionRepository.getMapSectionManager(this@MapActivity)
-            setTileMaskTileMaker(PositionsMaskTileMaker(
-                MapSectionMaskTileMaker(
-                    mapSectionManager
+            setTileMaskTileMaker(
+                PositionsMaskTileMaker(
+                    MapSectionMaskTileMaker(mapSectionManager)
                 )
-            ))
+            )
             startLocationUpdates()
+
+            clusterManager = ClusterManager(this@MapActivity, googleMap)
+            pinFilter = PinFilter(this@MapActivity)
+            pinApplier = PinApplier(clusterManager, googleMap, this@MapActivity, pinFilter)
+
+            pinFilter.setupFilterButtons()
         }
 
-        // set up map section manager for pin
-        clusterManager = ClusterManager<Pin>(this, googleMap)
-        pinApplier = PinApplier(clusterManager, googleMap, this)
-        googleMap.setOnCameraIdleListener(
-            GoogleMap.OnCameraIdleListener {
-                clusterManager.onCameraIdle()
-                pinApplier.onCameraIdle()
-            }
-        )
+        googleMap.setOnCameraIdleListener {
+            clusterManager.onCameraIdle()
+            pinApplier.onCameraIdle()
+        }
+
         googleMap.setOnMarkerClickListener(clusterManager)
 
-        directionController = MapDirectionController(
-            this,
-            mapCameraPositionController
-        )
+        directionController = MapDirectionController(this@MapActivity, mapCameraPositionController)
         directionController.start()
+
         setPinSetterController()
     }
+
 
     fun setFriendFilterButton() {
         friendButton = findViewById(R.id.btnFriend)

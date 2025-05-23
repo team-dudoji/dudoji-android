@@ -1,6 +1,7 @@
 package com.dudoji.android.network.dto
 
-import com.dudoji.android.map.domain.Pin
+import com.dudoji.android.map.domain.pin.Pin
+import com.dudoji.android.map.domain.pin.Who
 import java.time.LocalDateTime
 
 data class PinDto(
@@ -9,9 +10,11 @@ data class PinDto(
     val userId: Long,
     val createdDate: LocalDateTime,
     val title: String,
-    val content: String
+    val content: String,
+    val master: Who
 ) {
     fun toDomain(): Pin {
+
         return Pin(
             lat = lat,
             lng = lng,
@@ -19,7 +22,8 @@ data class PinDto(
             userId = userId,
             createdDate = createdDate,
             title = title,
-            content = content
+            content = content,
+            master = master
         )
+        }
     }
-}

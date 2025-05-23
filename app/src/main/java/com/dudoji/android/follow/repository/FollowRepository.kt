@@ -1,6 +1,5 @@
 package com.dudoji.android.follow.repository
 
-import android.R
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -11,6 +10,7 @@ object FollowRepository {
 
     private var isLoaded = false
 
+     @RequiresApi(Build.VERSION_CODES.O)
      suspend fun getFollowings(): List<User> {
         if (!isLoaded) {
             loadFollowings()
@@ -62,4 +62,7 @@ object FollowRepository {
             Log.e("FollowRepository", "Failed to load followings: ${response.errorBody()?.string()}")
         }
     }
+
+
+
 }

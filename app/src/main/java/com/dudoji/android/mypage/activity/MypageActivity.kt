@@ -1,9 +1,11 @@
 package com.dudoji.android.mypage.activity
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.dudoji.android.NavigatableActivity
@@ -26,6 +28,7 @@ class MypageActivity : NavigatableActivity() {
     // 기본 선택 항목 설정
     override val defaultSelectedItemId = R.id.mypageFragment
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mypage)
@@ -50,6 +53,7 @@ class MypageActivity : NavigatableActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun setProfile() {
         val name = findViewById<TextView>(R.id.name)
         val profileImage = findViewById<ShapeableImageView>(R.id.profile_image)

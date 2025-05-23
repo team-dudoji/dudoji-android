@@ -16,7 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.R
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
-import com.dudoji.android.map.domain.Pin
+import com.dudoji.android.map.domain.pin.Pin
+import com.dudoji.android.map.domain.pin.Who
 import com.dudoji.android.map.repository.PinRepository
 import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.util.modal.Modal
@@ -78,7 +79,8 @@ class PinSetterController{
                                         0L,
                                         LocalDateTime.now(ZoneId.systemDefault()),
                                         it.first,
-                                        it.second
+                                        it.second,
+                                        master = Who.MINE
                                     )
 
                                 activity.lifecycleScope.launch {

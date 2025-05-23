@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.map.domain.Pin
+import com.dudoji.android.map.domain.pin.Pin
 import com.dudoji.android.map.repository.PinRepository
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
@@ -22,48 +22,53 @@ import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
 
 
-class PinApplier(val clusterManager: ClusterManager<Pin>, val googleMap: GoogleMap, val activity: AppCompatActivity): OnCameraIdleListener {
+class PinApplier(val clusterManager: ClusterManager<Pin>,
+                 val googleMap: GoogleMap,
+                 val activity: AppCompatActivity,
+                 val pinFilter: PinFilter
+): OnCameraIdleListener {
+
     companion object {
         private val appliedPins: HashSet<Pin> = HashSet()
     }
-   init {
-       clusterManager.setOnClusterItemClickListener{
-           pin ->
-           showPinMemo(pin)
-           true
-       }
-       clusterManager.setOnClusterClickListener {
-           if (it.size >= 1) {
-               Log.d("PinApplier", "onClusterClick: $it")
-               val pins = it.items
-               Modal.showCustomModal(activity, R.layout.modal_pin_memos_show) {
-                   val memos = it.findViewById<RecyclerView>(R.id.memos_recycler_view)
-                   memos.layoutManager = LinearLayoutManager(activity)
-                   val memoAdapter = PinMemoAdapter(pins.toList())
-                   memos.adapter = memoAdapter
-                   val touchListener = object : RecyclerView.OnItemTouchListener {
-                       override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                           val childView = rv.findChildViewUnder(e.x, e.y)
-                           if (childView != null && e.action == MotionEvent.ACTION_UP) {
-                               val position = rv.getChildAdapterPosition(childView)
-                               val pin = pins.elementAt(position)
-                               showPinMemo(pin)
-                               return true
-                           }
-                           return false
-                       }
+    init {
+        clusterManager.setOnClusterItemClickListener{
+                pin ->
+            showPinMemo(pin)
+            true
+        }
+        clusterManager.setOnClusterClickListener {
+            if (it.size >= 1) {
+                Log.d("PinApplier", "onClusterClick: $it")
+                val pins = it.items
+                Modal.showCustomModal(activity, R.layout.modal_pin_memos_show) {
+                    val memos = it.findViewById<RecyclerView>(R.id.memos_recycler_view)
+                    memos.layoutManager = LinearLayoutManager(activity)
+                    val memoAdapter = PinMemoAdapter(pins.toList())
+                    memos.adapter = memoAdapter
+                    val touchListener = object : RecyclerView.OnItemTouchListener {
+                        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                            val childView = rv.findChildViewUnder(e.x, e.y)
+                            if (childView != null && e.action == MotionEvent.ACTION_UP) {
+                                val position = rv.getChildAdapterPosition(childView)
+                                val pin = pins.elementAt(position)
+                                showPinMemo(pin)
+                                return true
+                            }
+                            return false
+                        }
 
-                       override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+                        override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
 
-                       override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
-                   }
+                        override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+                    }
 
-                   memos.addOnItemTouchListener(touchListener)
-               }
-           }
-           true
-       }
-   }
+                    memos.addOnItemTouchListener(touchListener)
+                }
+            }
+            true
+        }
+    }
     fun showPinMemo(pin: Pin) {
         Modal.showCustomModal(activity, R.layout.modal_pin_memo_show) { view ->
             val pinTitle = view.findViewById<TextView>(R.id.memo_title_output)
@@ -75,23 +80,10 @@ class PinApplier(val clusterManager: ClusterManager<Pin>, val googleMap: GoogleM
         }
     }
 
-    fun clearPins() {
-        appliedPins.clear()
-        clusterManager.clearItems()
-        clusterManager.cluster()
-    }
-
-    fun applyPin(pin: Pin) {
-        if (!appliedPins.contains(pin)) {
-            clusterManager.addItem(pin)
-            Log.d("PinApplier", "applyPin: $pin")
-            appliedPins.add(pin)
-        }
-        clusterManager.cluster()
-    }
-
     fun applyPins(pins: List<Pin>) {
-        pins.forEach { pin ->
+        val filteredPins = pinFilter.filterPins(pins)
+
+        filteredPins.forEach { pin ->
             if (!appliedPins.contains(pin)) {
                 clusterManager.addItem(pin)
                 appliedPins.add(pin)
@@ -99,6 +91,14 @@ class PinApplier(val clusterManager: ClusterManager<Pin>, val googleMap: GoogleM
         }
         clusterManager.cluster()
     }
+
+    fun clearPins() {
+        appliedPins.clear()
+        clusterManager.clearItems()
+        clusterManager.cluster()
+    }
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCameraIdle() {

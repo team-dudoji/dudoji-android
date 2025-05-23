@@ -47,6 +47,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+
     <ImageButton
         android:id="@+id/btnFriend"
         android:layout_width="48dp"
@@ -60,6 +61,48 @@
         android:contentDescription="친구 목록 버튼"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnFilterMine"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/orange_background"
+        android:scaleType="centerInside"
+        android:elevation="6dp"
+        android:contentDescription="나의 핀 필터"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnFilterFriend"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="220dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/orange_background"
+        android:scaleType="centerInside"
+        android:elevation="6dp"
+        android:contentDescription="친구 핀 필터"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnFilterStranger"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="280dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/orange_background"
+        android:scaleType="centerInside"
+        android:elevation="6dp"
+        android:contentDescription="모르는 사람 핀 필터"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
