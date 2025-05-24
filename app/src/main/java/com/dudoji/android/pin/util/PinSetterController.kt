@@ -3,6 +3,7 @@ package com.dudoji.android.pin.util
 import android.content.ClipData
 import android.location.Location
 import android.os.Build
+import android.util.Log
 import android.view.DragEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -14,8 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
 import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.map.utils.location.LocationService
+import com.dudoji.android.pin.api.dto.PinRequestDto
 import com.dudoji.android.pin.domain.Pin
-import com.dudoji.android.pin.domain.Who
 import com.dudoji.android.pin.repository.PinRepository
 import com.dudoji.android.pin.util.PinModal.openPinDataModal
 import com.dudoji.android.util.UriConverter
@@ -68,26 +69,33 @@ class PinSetterController{
                                 REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
                         )) {
                             openPinDataModal(activity as MapActivity) {
-                                val pin =
-                                    Pin(
-                                        lat,
-                                        lng,
-                                        0L,
-                                        0L,
-                                        0,
-                                        false,
-                                        it.second,
-                                        it.first,
-                                        master = Who.MINE
-                                    )
+                                val image = UriConverter.uriToMultipartBodyPart(
+                                    activity,
+                                    it.third!!
+                                )
 
                                 activity.lifecycleScope.launch {
+                                    val imageResponse = RetrofitClient.pinApiService.uploadImage(image)
+                                    if (!imageResponse.isSuccessful) {
+                                        Log.e("PinRepository", "Failed to upload image: ${imageResponse.errorBody()?.string()}")
+                                        Toast.makeText(
+                                            activity,
+                                            "핀 추가에 실패했습니다.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        return@launch
+                                    }
+
+                                    val requestDto =
+                                        PinRequestDto(
+                                            content = it.first,
+                                            createdDate = it.second,
+                                            imageUrl = imageResponse.body()!!,
+                                            lat = lat,
+                                            lng = lng,
+                                        )
                                     if (PinRepository.addPin(
-                                            pin,
-                                            UriConverter.uriToMultipartBodyPart(
-                                                activity,
-                                                it.third!!
-                                            ))) {
+                                            requestDto)) {
                                         pinApplier.markForReload()
                                         Toast.makeText(
                                             activity,

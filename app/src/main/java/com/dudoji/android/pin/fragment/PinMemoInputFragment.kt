@@ -65,6 +65,8 @@ class PinMemoInputFragment(
             calendar.get(Calendar.DAY_OF_MONTH)
         )
 
+        datePicker.datePicker.minDate = System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 7 // 7 days ago
+
         imageView.setOnClickListener {
             imagePickerLauncher.launch("image/*")
         }

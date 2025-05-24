@@ -29,7 +29,7 @@ data class Pin (
         return content
     }
 
-    fun toPinRequestDto(imageUrl: String): PinRequestDto {
+    fun toPinRequestDto(): PinRequestDto {
         return PinRequestDto(
             lat = lat,
             lng = lng,

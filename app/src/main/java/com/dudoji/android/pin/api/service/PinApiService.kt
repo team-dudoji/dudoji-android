@@ -15,7 +15,7 @@ import retrofit2.http.Query
 
 interface PinApiService {
     @POST("/api/user/pin/")
-    suspend fun createPin(@Body pin: PinRequestDto): Response<String>
+    suspend fun createPin(@Body pin: PinRequestDto): Response<PinResponseDto>
 
     @Multipart
     @POST("/api/user/images")
