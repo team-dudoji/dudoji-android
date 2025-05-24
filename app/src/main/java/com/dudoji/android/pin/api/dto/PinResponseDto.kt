@@ -13,7 +13,7 @@ data class PinResponseDto (
     val pinId: Long,
     val likeCount: Int,
     val imageUrl: String,
-    val isLiked: Boolean,
+    val liked: Boolean,
     val createdDate: LocalDateTime,
     val content: String,
     val master: Who
@@ -26,7 +26,7 @@ data class PinResponseDto (
             pinId = pinId,
             userId = userId,
             likeCount = likeCount,
-            isLiked = isLiked,
+            isLiked = liked,
             createdDate = createdDate.toLocalDate(),
             imageUrl = imageUrl,
             content = content,

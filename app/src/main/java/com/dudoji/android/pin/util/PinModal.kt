@@ -48,12 +48,16 @@ object PinModal {
                 if (isLiked) {
                     pinLikeButton.setImageDrawable(activity.getDrawable(R.drawable.heart_unlike))
                     pinLikeCount.text = (pin.likeCount - 1).toString()
+                    pin.likeCount -= 1
+                    pin.isLiked = false
                     activity.lifecycleScope.launch {
                         RetrofitClient.pinApiService.unlikePin(pin.pinId)
                     }
                 } else {
                     pinLikeButton.setImageDrawable(activity.getDrawable(R.drawable.heart_like))
                     pinLikeCount.text = (pin.likeCount + 1).toString()
+                    pin.likeCount += 1
+                    pin.isLiked = true
                     activity.lifecycleScope.launch {
                         RetrofitClient.pinApiService.likePin(pin.pinId)
                     }
