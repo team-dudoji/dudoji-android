@@ -39,11 +39,11 @@
 
     <ImageView
         android:id="@+id/pinSetter"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="644dp"
-        android:background="@drawable/pin"
+        android:background="@drawable/pin_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -100,10 +100,6 @@
         android:contentDescription="모르는 사람 핀 필터"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-
-
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigationView"
