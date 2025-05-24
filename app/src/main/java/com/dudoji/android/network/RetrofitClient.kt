@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 // REST API client
 @RequiresApi(Build.VERSION_CODES.O)
 object RetrofitClient {
-    public const val BASE_URL = "http://${BuildConfig.HOST_IP_ADDRESS}:8080/"
+    public const val BASE_URL = "http://${BuildConfig.HOST_IP_ADDRESS}/"
 
     @RequiresApi(Build.VERSION_CODES.O)
     val gson = GsonBuilder()
