@@ -15,7 +15,7 @@ import com.dudoji.android.util.modal.Modal
 
 object PinModal {
     fun openPinMemoModal(activity: AppCompatActivity, pin: Pin) {
-        Modal.showCustomModal(activity, R.layout.modal_pin_memo_show) { view ->
+        Modal.showCustomModal(activity, R.layout.show_pin_memo_modal) { view ->
             val pinTitle = view.findViewById<TextView>(R.id.memo_title_output)
             val pinContent = view.findViewById<TextView>(R.id.memo_content_output)
             val pinDate = view.findViewById<TextView>(R.id.memo_date_output)
@@ -26,7 +26,7 @@ object PinModal {
     }
 
     fun openPinMemosModal(activity: AppCompatActivity, pins: List<Pin>) {
-        Modal.showCustomModal(activity, R.layout.modal_pin_memos_show) { view ->
+        Modal.showCustomModal(activity, R.layout.show_pin_memos_modal) { view ->
             val memos = view.findViewById<RecyclerView>(R.id.memos_recycler_view)
             memos.layoutManager = LinearLayoutManager(activity)
             val memoAdapter = PinMemoAdapter(pins.toList())
@@ -53,7 +53,7 @@ object PinModal {
     }
 
     fun openPinDataModal(activity: AppCompatActivity, onComplete: (Pair<String, String>) -> Unit) {
-        Modal.showCustomModal(activity, R.layout.modal_pin_memo) { view ->
+        Modal.showCustomModal(activity, R.layout.edit_pin_memo_modal) { view ->
             val pinTitle = view.findViewById<EditText>(R.id.memo_title_input)
             val pinContent = view.findViewById<EditText>(R.id.memo_content_input)
             val saveButton = view.findViewById<Button>(R.id.memo_save_button)
