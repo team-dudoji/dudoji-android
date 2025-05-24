@@ -1,16 +1,17 @@
 package com.dudoji.android.pin.domain
 
     import com.dudoji.android.pin.api.dto.PinDto
-    import com.google.android.gms.maps.model.LatLng
-    import com.google.maps.android.clustering.ClusterItem
-    import java.time.LocalDate
-    import java.time.LocalDateTime
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.clustering.ClusterItem
+import java.time.LocalDate
 
 data class Pin (
     val lat: Double,
     val lng: Double,
     val pinId: Long,
     val userId: Long,
+    val likeCount: Int,
+    val isLiked: Boolean,
     val createdDate: LocalDate,
     val content: String,
     val master: Who
@@ -32,6 +33,8 @@ data class Pin (
             lng = lng,
             pinId = pinId,
             userId = userId,
+            likeCount = likeCount,
+            isLiked = isLiked,
             createdDate = createdDate,
             content = content,
             master = master

@@ -9,6 +9,8 @@ data class PinDto(
     val lng: Double,
     val userId: Long,
     val pinId: Long,
+    val likeCount: Int,
+    val isLiked: Boolean,
     val createdDate: LocalDate,
     val content: String,
     val master: Who
@@ -19,6 +21,8 @@ data class PinDto(
             lng = lng,
             pinId = pinId,
             userId = userId,
+            likeCount = likeCount,
+            isLiked = isLiked,
             createdDate = createdDate,
             content = content,
             master = master)

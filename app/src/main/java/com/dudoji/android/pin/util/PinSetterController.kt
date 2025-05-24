@@ -20,8 +20,6 @@ import com.dudoji.android.pin.util.PinModal.openPinDataModal
 import com.google.android.gms.maps.GoogleMap
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.ZoneId
 
 class PinSetterController{
     val pinSetter: ImageView
@@ -74,6 +72,8 @@ class PinSetterController{
                                         lng,
                                         0L,
                                         0L,
+                                        0,
+                                        false,
                                         it.second,
                                         it.first,
                                         master = Who.MINE
