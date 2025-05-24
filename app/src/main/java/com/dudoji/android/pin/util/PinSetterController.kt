@@ -74,9 +74,8 @@ class PinSetterController{
                                         lng,
                                         0L,
                                         0L,
-                                        LocalDateTime.now(ZoneId.systemDefault()),
-                                        it.first,
                                         it.second,
+                                        it.first,
                                         master = Who.MINE
                                     )
 

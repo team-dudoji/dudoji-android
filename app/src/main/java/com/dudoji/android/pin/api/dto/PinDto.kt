@@ -2,15 +2,14 @@ package com.dudoji.android.pin.api.dto
 
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 data class PinDto(
     val lat: Double,
     val lng: Double,
     val userId: Long,
     val pinId: Long,
-    val createdDate: LocalDateTime,
-    val title: String,
+    val createdDate: LocalDate,
     val content: String,
     val master: Who
 ) {
@@ -21,7 +20,6 @@ data class PinDto(
             pinId = pinId,
             userId = userId,
             createdDate = createdDate,
-            title = title,
             content = content,
             master = master)
         }

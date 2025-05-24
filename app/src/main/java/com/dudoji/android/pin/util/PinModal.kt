@@ -1,25 +1,31 @@
 package com.dudoji.android.pin.util
 
+import android.app.DatePickerDialog
+import android.icu.util.Calendar
+import android.os.Build
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
 import com.dudoji.android.pin.domain.Pin
+import com.dudoji.android.util.WeekTranslator
 import com.dudoji.android.util.modal.Modal
+import java.time.LocalDate
+import kotlin.Pair
 
 object PinModal {
     fun openPinMemoModal(activity: AppCompatActivity, pin: Pin) {
         Modal.showCustomModal(activity, R.layout.show_pin_memo_modal) { view ->
-            val pinTitle = view.findViewById<TextView>(R.id.memo_title_output)
             val pinContent = view.findViewById<TextView>(R.id.memo_content_output)
             val pinDate = view.findViewById<TextView>(R.id.memo_date_output)
-            pinTitle.text = pin.title
             pinContent.text = pin.content
             pinDate.text = pin.createdDate.toString()
         }
@@ -52,17 +58,37 @@ object PinModal {
         }
     }
 
-    fun openPinDataModal(activity: AppCompatActivity, onComplete: (Pair<String, String>) -> Unit) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun openPinDataModal(activity: AppCompatActivity, onComplete: (Pair<String, LocalDate>) -> Unit) {
         Modal.showCustomModal(activity, R.layout.edit_pin_memo_modal) { view ->
-            val pinTitle = view.findViewById<EditText>(R.id.memo_title_input)
             val pinContent = view.findViewById<EditText>(R.id.memo_content_input)
+            val pinDate = view.findViewById<TextView>(R.id.memo_date)
+            val pinDateEditButton = view.findViewById<ImageView>(R.id.memo_date_edit_button)
             val saveButton = view.findViewById<Button>(R.id.memo_save_button)
+            val calendar = Calendar.getInstance()
+            val datePicker = DatePickerDialog(
+                activity,
+                { _, year, month, dayOfMonth ->
+                    val selectedDate = "$year.${month + 1}.$dayOfMonth (${WeekTranslator.translateWeekToKorean(calendar.get(Calendar.DAY_OF_WEEK))})"
+                    pinDate.text = selectedDate
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+
+            pinDateEditButton.setOnClickListener {
+                datePicker.show()
+            }
 
             saveButton.setOnClickListener {
                 onComplete(
                     Pair(
-                        pinTitle.text.toString(),
-                        pinContent.text.toString()
+                        pinContent.text.toString(),
+                        LocalDate.of(
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH) + 1,
+                            calendar.get(Calendar.DAY_OF_MONTH))
                     )
                 )
 
