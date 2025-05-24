@@ -1,31 +1,29 @@
-package com.dudoji.android.map.utils.pin
+package com.dudoji.android.pin.util
 
 import android.content.ClipData
 import android.location.Location
 import android.os.Build
+import android.util.Log
 import android.view.DragEvent
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.dudoji.android.R
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
-import com.dudoji.android.map.domain.pin.Pin
-import com.dudoji.android.map.domain.pin.Who
-import com.dudoji.android.map.repository.PinRepository
+import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.map.utils.location.LocationService
-import com.dudoji.android.util.modal.Modal
+import com.dudoji.android.pin.api.dto.PinRequestDto
+import com.dudoji.android.pin.domain.Pin
+import com.dudoji.android.pin.repository.PinRepository
+import com.dudoji.android.pin.util.PinModal.openPinDataModal
+import com.dudoji.android.util.UriConverter
 import com.google.android.gms.maps.GoogleMap
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.time.ZoneId
 
 class PinSetterController{
     val pinSetter: ImageView
@@ -71,21 +69,35 @@ class PinSetterController{
                             },
                                 REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
                         )) {
-                            getPinMemoData {
-                                val pin =
-                                    Pin(
-                                        lat,
-                                        lng,
-                                        0L,
-                                        LocalDateTime.now(ZoneId.systemDefault()),
-                                        it.first,
-                                        it.second,
-                                        master = Who.MINE
-                                    )
+                            openPinDataModal(activity as MapActivity) {
+                                val image = UriConverter.uriToMultipartBodyPart(
+                                    activity,
+                                    it.third!!
+                                )
 
                                 activity.lifecycleScope.launch {
-                                    if (PinRepository.addPin(pin)) {
-                                        pinApplier.applyPin(pin)
+                                    val imageResponse = RetrofitClient.pinApiService.uploadImage(image)
+                                    if (!imageResponse.isSuccessful) {
+                                        Log.e("PinRepository", "Failed to upload image: ${imageResponse.errorBody()?.string()}")
+                                        Toast.makeText(
+                                            activity,
+                                            "핀 추가에 실패했습니다.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        return@launch
+                                    }
+                                    Log.d("PinRepository", "Image uploaded successfully: ${imageResponse.body()}")
+                                    val requestDto =
+                                        PinRequestDto(
+                                            content = it.first,
+                                            createdDate = LocalDateTime.of(it.second, LocalDateTime.now().toLocalTime()),
+                                            imageUrl = imageResponse.body()!!,
+                                            lat = lat,
+                                            lng = lng,
+                                        )
+                                    if (PinRepository.addPin(
+                                            requestDto)) {
+                                        pinApplier.markForReload()
                                         Toast.makeText(
                                             activity,
                                             "핀 추가에 성공했습니다.",
@@ -100,7 +112,6 @@ class PinSetterController{
                                         ).show()
                                     }
                                 }
-
                             }
                         } else {
                             Toast.makeText(
@@ -115,27 +126,6 @@ class PinSetterController{
                 }
             }
         )
-    }
-
-    fun getPinMemoData(onComplete: (Pair<String, String>) -> Unit) {
-        Modal.showCustomModal(activity, R.layout.modal_pin_memo) { view ->
-            val pinTitle = view.findViewById<EditText>(R.id.memo_title_input)
-            val pinContent = view.findViewById<EditText>(R.id.memo_content_input)
-            val saveButton = view.findViewById<Button>(R.id.memo_save_button)
-
-            saveButton.setOnClickListener {
-                onComplete(
-                    Pair(
-                        pinTitle.text.toString(),
-                        pinContent.text.toString()
-                    )
-                )
-
-                // Close the modal
-                (view.parent.parent.parent as? ViewGroup)?.removeView(view.parent.parent as View?)
-                true
-            }
-        }
     }
 
     fun getPinSetterPosition(x: Float, y: Float): Pair<Double, Double> {

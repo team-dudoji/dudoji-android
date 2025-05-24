@@ -3,4 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="brown">#BC8A5D</color>
+    <color name="orange">#FF8445</color>
+
+    <color name="my_primary">#FF8445</color>
+    <color name="my_secondary">#FFA726</color>
+    <color name="my_surface">#FBFBFB</color>
 </resources>

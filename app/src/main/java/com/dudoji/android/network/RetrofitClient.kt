@@ -7,9 +7,9 @@ import com.dudoji.android.BuildConfig
 import com.dudoji.android.network.api.service.FollowApiService
 import com.dudoji.android.network.api.service.LoginApiService
 import com.dudoji.android.network.api.service.MapApiService
-import com.dudoji.android.network.api.service.PinApiService
 import com.dudoji.android.network.api.service.UserApiService
 import com.dudoji.android.network.utils.LocalDateTimeAdapter
+import com.dudoji.android.pin.api.service.PinApiService
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 // REST API client
 @RequiresApi(Build.VERSION_CODES.O)
 object RetrofitClient {
-    private const val BASE_URL = "http://${BuildConfig.HOST_IP_ADDRESS}/"
+    public const val BASE_URL = "http://${BuildConfig.HOST_IP_ADDRESS}/"
 
     @RequiresApi(Build.VERSION_CODES.O)
     val gson = GsonBuilder()

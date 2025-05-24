@@ -1,11 +1,12 @@
-package com.dudoji.android.map.repository
+package com.dudoji.android.pin.repository
 
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.config.PIN_UPDATE_THRESHOLD
-import com.dudoji.android.map.domain.pin.Pin
 import com.dudoji.android.map.utils.MapUtil
+import com.dudoji.android.pin.api.dto.PinRequestDto
+import com.dudoji.android.pin.domain.Pin
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 
@@ -41,10 +42,10 @@ object PinRepository {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun addPin(pin: Pin): Boolean {
-        val response = RetrofitClient.pinApiService.createPin(pin.toPinDto())
+    suspend fun addPin(pin: PinRequestDto): Boolean {
+        val response = RetrofitClient.pinApiService.createPin(pin)
         if (response.isSuccessful) {
-            pinList.add(pin)
+            pinList.add(response.body()?.toDomain()!!)
             return true
         }
         Log.e("PinRepository", "Failed to add pin: ${response.errorBody()?.string()}")

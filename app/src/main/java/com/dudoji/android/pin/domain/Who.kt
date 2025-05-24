@@ -1,4 +1,4 @@
-package com.dudoji.android.map.domain.pin
+package com.dudoji.android.pin.domain
 
 enum class Who {
     MINE,

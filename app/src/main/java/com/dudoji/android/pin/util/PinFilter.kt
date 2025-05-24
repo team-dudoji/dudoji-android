@@ -1,14 +1,12 @@
-package com.dudoji.android.map.utils.pin
+package com.dudoji.android.pin.util
 
 import android.os.Build
-import android.util.Log
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
-import com.dudoji.android.map.domain.pin.Pin
-import com.dudoji.android.map.domain.pin.Who
-import com.dudoji.android.map.repository.PinRepository
+import com.dudoji.android.pin.domain.Pin
+import com.dudoji.android.pin.domain.Who
 
 class PinFilter(
     private val activity: AppCompatActivity,
