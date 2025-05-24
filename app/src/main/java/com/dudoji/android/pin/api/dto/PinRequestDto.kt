@@ -1,11 +1,11 @@
 package com.dudoji.android.pin.api.dto
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class PinRequestDto(
     val lat: Double,
     val lng: Double,
-    val createdDate: LocalDate,
+    val createdDate: LocalDateTime,
     val imageUrl: String,
     val content: String,
 )

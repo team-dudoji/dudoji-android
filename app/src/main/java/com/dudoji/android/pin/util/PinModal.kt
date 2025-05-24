@@ -31,7 +31,7 @@ object PinModal {
             val isLiked = pin.isLiked
 
             Glide.with(activity)
-                .load(pin.imageUrl)
+                .load("${RetrofitClient.BASE_URL}${pin.imageUrl}")
                 .placeholder(R.drawable.photo_placeholder)
                 .into(pinImage)
 

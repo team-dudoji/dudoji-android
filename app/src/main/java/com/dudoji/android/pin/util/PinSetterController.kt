@@ -23,6 +23,7 @@ import com.dudoji.android.util.UriConverter
 import com.google.android.gms.maps.GoogleMap
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class PinSetterController{
     val pinSetter: ImageView
@@ -85,11 +86,11 @@ class PinSetterController{
                                         ).show()
                                         return@launch
                                     }
-
+                                    Log.d("PinRepository", "Image uploaded successfully: ${imageResponse.body()}")
                                     val requestDto =
                                         PinRequestDto(
                                             content = it.first,
-                                            createdDate = it.second,
+                                            createdDate = LocalDateTime.of(it.second, LocalDateTime.now().toLocalTime()),
                                             imageUrl = imageResponse.body()!!,
                                             lat = lat,
                                             lng = lng,
