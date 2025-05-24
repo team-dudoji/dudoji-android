@@ -28,6 +28,8 @@ class PinApplier(val clusterManager: ClusterManager<Pin>,
                  val pinFilter: PinFilter
 ): OnCameraIdleListener {
 
+    private var hasToReload = false
+
     companion object {
         private val appliedPins: HashSet<Pin> = HashSet()
     }
@@ -92,22 +94,25 @@ class PinApplier(val clusterManager: ClusterManager<Pin>,
         clusterManager.cluster()
     }
 
+    fun markForReload() {
+        hasToReload = true
+    }
+
     fun clearPins() {
         appliedPins.clear()
         clusterManager.clearItems()
         clusterManager.cluster()
     }
 
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCameraIdle() {
         activity.lifecycleScope.launch {
-            if (PinRepository.loadPins(googleMap.projection.visibleRegion.latLngBounds.center, 100.0)) {
+            if (hasToReload || PinRepository.loadPins(googleMap.projection.visibleRegion.latLngBounds.center, 100.0)) {
                 val pins = PinRepository.getPins()
                 clearPins()
                 applyPins(pins)
             }
+            hasToReload = false
         }
     }
 }

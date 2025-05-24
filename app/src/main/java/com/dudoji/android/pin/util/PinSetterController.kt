@@ -16,10 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.R
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
+import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
 import com.dudoji.android.pin.repository.PinRepository
-import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.maps.android.clustering.ClusterManager
@@ -77,6 +77,7 @@ class PinSetterController{
                                         lat,
                                         lng,
                                         0L,
+                                        0L,
                                         LocalDateTime.now(ZoneId.systemDefault()),
                                         it.first,
                                         it.second,
@@ -85,7 +86,7 @@ class PinSetterController{
 
                                 activity.lifecycleScope.launch {
                                     if (PinRepository.addPin(pin)) {
-                                        pinApplier.applyPin(pin)
+                                        pinApplier.markForReload()
                                         Toast.makeText(
                                             activity,
                                             "핀 추가에 성공했습니다.",
