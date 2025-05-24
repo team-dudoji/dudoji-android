@@ -1,7 +1,8 @@
 package com.dudoji.android.pin.domain
 
     import com.dudoji.android.pin.api.dto.PinDto
-import com.google.android.gms.maps.model.LatLng
+    import com.dudoji.android.pin.api.dto.PinRequestDto
+    import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterItem
 import java.time.LocalDate
 
@@ -38,6 +39,16 @@ data class Pin (
             createdDate = createdDate,
             content = content,
             master = master
+        )
+    }
+
+    fun toPinRequestDto(imageUrl: String): PinRequestDto {
+        return PinRequestDto(
+            lat = lat,
+            lng = lng,
+            createdDate = createdDate,
+            content = content,
+            imageUrl = imageUrl
         )
     }
 }

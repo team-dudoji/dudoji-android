@@ -29,4 +29,29 @@ object Modal {
         val rootView = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
         rootView.addView(modalRoot)
     }
+
+    fun showCustomModal(
+        activity: AppCompatActivity,
+        fragment: ModalFragment
+    ) {
+        val inflater = LayoutInflater.from(activity)
+        val modalRoot = inflater.inflate(R.layout.template_modal, null) as ViewGroup
+
+        val rootView = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
+        rootView.addView(modalRoot)
+
+        modalRoot.setOnClickListener {
+            activity.supportFragmentManager.beginTransaction().remove(fragment).commit()
+            rootView.removeView(modalRoot)
+        }
+
+        fragment.setCloseFun{
+            activity.supportFragmentManager.beginTransaction().remove(fragment).commit()
+            rootView.removeView(modalRoot)
+        }
+        activity.supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.modal_content, fragment, "modal_fragment")
+            .commit()
+    }
 }

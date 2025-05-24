@@ -1,6 +1,7 @@
 package com.dudoji.android.map.activity
 
 import android.location.Location
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -10,6 +11,8 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.NavigatableActivity
@@ -19,8 +22,6 @@ import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.follow.FriendModal
 import com.dudoji.android.follow.repository.FollowRepository
-import com.dudoji.android.pin.util.PinFilter
-import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
@@ -29,13 +30,15 @@ import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapUtil
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
-import com.dudoji.android.pin.util.PinApplier
-import com.dudoji.android.pin.util.PinSetterController
 import com.dudoji.android.map.utils.tile.MaskTileProvider
 import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MypageActivity
+import com.dudoji.android.pin.domain.Pin
+import com.dudoji.android.pin.util.PinApplier
+import com.dudoji.android.pin.util.PinFilter
+import com.dudoji.android.pin.util.PinSetterController
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlay
@@ -81,7 +84,6 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     private lateinit var pinFilter: PinFilter // 핀 필터 변수
 
-
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         this.maskTileMaker = maskTileMaker
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
@@ -115,10 +117,7 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         lifecycleScope.launch{
             FollowRepository.loadFollowings() // Load followings
         }
-
-
     }
-
 
     private fun setupLocationUpdates(){
         locationService.setLocationCallback { locationResult ->

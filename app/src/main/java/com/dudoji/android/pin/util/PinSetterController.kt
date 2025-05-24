@@ -12,11 +12,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
+import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
 import com.dudoji.android.pin.repository.PinRepository
 import com.dudoji.android.pin.util.PinModal.openPinDataModal
+import com.dudoji.android.util.UriConverter
 import com.google.android.gms.maps.GoogleMap
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
@@ -65,7 +67,7 @@ class PinSetterController{
                             },
                                 REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
                         )) {
-                            openPinDataModal(activity) {
+                            openPinDataModal(activity as MapActivity) {
                                 val pin =
                                     Pin(
                                         lat,
@@ -80,7 +82,12 @@ class PinSetterController{
                                     )
 
                                 activity.lifecycleScope.launch {
-                                    if (PinRepository.addPin(pin)) {
+                                    if (PinRepository.addPin(
+                                            pin,
+                                            UriConverter.uriToMultipartBodyPart(
+                                                activity,
+                                                it.third!!
+                                            ))) {
                                         pinApplier.markForReload()
                                         Toast.makeText(
                                             activity,

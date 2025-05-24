@@ -1,17 +1,25 @@
 package com.dudoji.android.pin.api.service
 
 import com.dudoji.android.pin.api.dto.PinDto
+import com.dudoji.android.pin.api.dto.PinRequestDto
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface PinApiService {
     @POST("/api/user/pin/")
-    suspend fun createPin(@Body pin: PinDto): Response<String>
+    suspend fun createPin(@Body pin: PinRequestDto): Response<String>
+
+    @Multipart
+    @POST("/api/user/image")
+    suspend fun uploadImage(@Part image: MultipartBody.Part): Response<String>
 
     @GET("/api/user/pin/")
     suspend fun getPins(@Query("radius") radius: Int,
