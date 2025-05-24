@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dudoji.android.R
 import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.pin.domain.Pin
@@ -23,10 +24,16 @@ object PinModal {
     fun openPinMemoModal(activity: AppCompatActivity, pin: Pin) {
         Modal.showCustomModal(activity, R.layout.show_pin_memo_modal) { view ->
             val pinContent = view.findViewById<TextView>(R.id.memo_content_output)
+            val pinImage = view.findViewById<ImageView>(R.id.pin_memo_image)
             val pinDate = view.findViewById<TextView>(R.id.memo_date_output)
             val pinLikeButton = view.findViewById<ImageView>(R.id.memo_like_button)
             val pinLikeCount = view.findViewById<TextView>(R.id.memo_like_count)
             val isLiked = pin.isLiked
+
+            Glide.with(activity)
+                .load(pin.imageUrl)
+                .placeholder(R.drawable.photo_placeholder)
+                .into(pinImage)
 
             pinLikeButton.setImageDrawable(
                 activity.getDrawable(

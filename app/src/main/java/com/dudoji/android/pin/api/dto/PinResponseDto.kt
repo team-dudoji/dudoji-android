@@ -4,12 +4,13 @@ import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
 import java.time.LocalDate
 
-data class PinDto(
+data class PinResponseDto (
     val lat: Double,
     val lng: Double,
     val userId: Long,
     val pinId: Long,
     val likeCount: Int,
+    val imageUrl: String,
     val isLiked: Boolean,
     val createdDate: LocalDate,
     val content: String,
@@ -24,6 +25,7 @@ data class PinDto(
             likeCount = likeCount,
             isLiked = isLiked,
             createdDate = createdDate,
+            imageUrl = imageUrl,
             content = content,
             master = master)
         }

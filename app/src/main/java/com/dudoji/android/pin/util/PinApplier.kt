@@ -19,6 +19,7 @@ import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 class PinApplier(val clusterManager: ClusterManager<Pin>,
                  val googleMap: GoogleMap,
                  val activity: AppCompatActivity,

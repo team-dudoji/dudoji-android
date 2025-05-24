@@ -1,8 +1,7 @@
 package com.dudoji.android.pin.domain
 
-    import com.dudoji.android.pin.api.dto.PinDto
     import com.dudoji.android.pin.api.dto.PinRequestDto
-    import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterItem
 import java.time.LocalDate
 
@@ -13,6 +12,7 @@ data class Pin (
     val userId: Long,
     val likeCount: Int,
     val isLiked: Boolean,
+    val imageUrl: String,
     val createdDate: LocalDate,
     val content: String,
     val master: Who
@@ -27,19 +27,6 @@ data class Pin (
 
     override fun getSnippet(): String? {
         return content
-    }
-    fun toPinDto(): PinDto {
-        return PinDto(
-            lat = lat,
-            lng = lng,
-            pinId = pinId,
-            userId = userId,
-            likeCount = likeCount,
-            isLiked = isLiked,
-            createdDate = createdDate,
-            content = content,
-            master = master
-        )
     }
 
     fun toPinRequestDto(imageUrl: String): PinRequestDto {
