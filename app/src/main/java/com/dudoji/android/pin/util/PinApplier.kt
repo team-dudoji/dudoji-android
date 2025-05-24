@@ -1,4 +1,4 @@
-package com.dudoji.android.map.utils.pin
+package com.dudoji.android.pin.util
 
 import android.os.Build
 import android.util.Log
@@ -13,8 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.map.domain.pin.Pin
-import com.dudoji.android.map.repository.PinRepository
+import com.dudoji.android.pin.domain.Pin
+import com.dudoji.android.pin.repository.PinRepository
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener

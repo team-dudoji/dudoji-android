@@ -1,10 +1,10 @@
-package com.dudoji.android.map.repository
+package com.dudoji.android.pin.repository
 
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.config.PIN_UPDATE_THRESHOLD
-import com.dudoji.android.map.domain.pin.Pin
+import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.map.utils.MapUtil
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng

@@ -1,4 +1,4 @@
-package com.dudoji.android.map.utils.pin
+package com.dudoji.android.pin.util
 
 import android.content.ClipData
 import android.location.Location
@@ -16,9 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.R
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
-import com.dudoji.android.map.domain.pin.Pin
-import com.dudoji.android.map.domain.pin.Who
-import com.dudoji.android.map.repository.PinRepository
+import com.dudoji.android.pin.domain.Pin
+import com.dudoji.android.pin.domain.Who
+import com.dudoji.android.pin.repository.PinRepository
 import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap

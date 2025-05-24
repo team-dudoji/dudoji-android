@@ -19,8 +19,8 @@ import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.follow.FriendModal
 import com.dudoji.android.follow.repository.FollowRepository
-import com.dudoji.android.map.utils.pin.PinFilter
-import com.dudoji.android.map.domain.pin.Pin
+import com.dudoji.android.pin.util.PinFilter
+import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.MapSectionRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
@@ -29,8 +29,8 @@ import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapUtil
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
-import com.dudoji.android.map.utils.pin.PinApplier
-import com.dudoji.android.map.utils.pin.PinSetterController
+import com.dudoji.android.pin.util.PinApplier
+import com.dudoji.android.pin.util.PinSetterController
 import com.dudoji.android.map.utils.tile.MaskTileProvider
 import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker

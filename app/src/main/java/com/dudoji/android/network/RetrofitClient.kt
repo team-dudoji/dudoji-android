@@ -7,7 +7,7 @@ import com.dudoji.android.BuildConfig
 import com.dudoji.android.network.api.service.FollowApiService
 import com.dudoji.android.network.api.service.LoginApiService
 import com.dudoji.android.network.api.service.MapApiService
-import com.dudoji.android.network.api.service.PinApiService
+import com.dudoji.android.pin.api.service.PinApiService
 import com.dudoji.android.network.api.service.UserApiService
 import com.dudoji.android.network.utils.LocalDateTimeAdapter
 import com.google.gson.GsonBuilder
