@@ -1,6 +1,6 @@
-    package com.dudoji.android.map.domain.pin
+package com.dudoji.android.pin.domain
 
-    import com.dudoji.android.network.dto.PinDto
+    import com.dudoji.android.pin.api.dto.PinDto
     import com.google.android.gms.maps.model.LatLng
     import com.google.maps.android.clustering.ClusterItem
     import java.time.LocalDateTime
@@ -8,7 +8,7 @@
     data class Pin (
         val lat: Double,
         val lng: Double,
-    //    val pinId: Long,
+        val pinId: Long,
         val userId: Long,
         val createdDate: LocalDateTime,
         @get:JvmName("getPinTitle")
@@ -31,6 +31,7 @@
             return PinDto(
                 lat = lat,
                 lng = lng,
+                pinId = pinId,
                 userId = userId,
                 createdDate = createdDate,
                 title = title,
