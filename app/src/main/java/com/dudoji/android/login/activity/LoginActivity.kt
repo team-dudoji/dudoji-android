@@ -7,14 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.R
-import com.dudoji.android.databinding.ActivityMainBinding
+import com.dudoji.android.databinding.ActivityLoginBinding
 import com.dudoji.android.login.oauth.kakao.KakaoLoginUtil
 import com.dudoji.android.login.permission.RequestPermissionsUtil
 import com.dudoji.android.network.utils.NoNetWorkUtil
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityLoginBinding
     private lateinit var kakaoLoginButton: Button
 
     override fun onStart() {
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
