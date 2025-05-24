@@ -5,22 +5,18 @@ import android.location.Location
 import android.os.Build
 import android.view.DragEvent
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.dudoji.android.R
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
 import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
 import com.dudoji.android.pin.repository.PinRepository
-import com.dudoji.android.util.modal.Modal
+import com.dudoji.android.pin.util.PinModal.openPinDataModal
 import com.google.android.gms.maps.GoogleMap
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
@@ -71,7 +67,7 @@ class PinSetterController{
                             },
                                 REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
                         )) {
-                            getPinMemoData {
+                            openPinDataModal(activity) {
                                 val pin =
                                     Pin(
                                         lat,
@@ -101,7 +97,6 @@ class PinSetterController{
                                         ).show()
                                     }
                                 }
-
                             }
                         } else {
                             Toast.makeText(
@@ -116,27 +111,6 @@ class PinSetterController{
                 }
             }
         )
-    }
-
-    fun getPinMemoData(onComplete: (Pair<String, String>) -> Unit) {
-        Modal.showCustomModal(activity, R.layout.modal_pin_memo) { view ->
-            val pinTitle = view.findViewById<EditText>(R.id.memo_title_input)
-            val pinContent = view.findViewById<EditText>(R.id.memo_content_input)
-            val saveButton = view.findViewById<Button>(R.id.memo_save_button)
-
-            saveButton.setOnClickListener {
-                onComplete(
-                    Pair(
-                        pinTitle.text.toString(),
-                        pinContent.text.toString()
-                    )
-                )
-
-                // Close the modal
-                (view.parent.parent.parent as? ViewGroup)?.removeView(view.parent.parent as View?)
-                true
-            }
-        }
     }
 
     fun getPinSetterPosition(x: Float, y: Float): Pair<Double, Double> {
