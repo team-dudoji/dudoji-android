@@ -1,5 +1,6 @@
 package com.dudoji.android.map.activity
 
+import android.content.Intent
 import android.location.Location
 import android.net.Uri
 import android.os.Build
@@ -14,8 +15,9 @@ import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.dudoji.android.NavigatableActivity
+import com.airbnb.lottie.LottieAnimationView
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
@@ -39,25 +41,19 @@ import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinFilter
 import com.dudoji.android.pin.util.PinSetterController
+import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlay
 import com.google.android.gms.maps.model.TileOverlayOptions
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
 
-class MapActivity : NavigatableActivity(), OnMapReadyCallback {
+class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
-    override val navigationItems = mapOf(
-        R.id.mapFragment to null, // 기본 맵 화면
-        R.id.mypageFragment to MypageActivity::class.java
-    )
 
-    override val defaultSelectedItemId = R.id.mapFragment
 
     private lateinit var myLocationButton : Button;
-    private lateinit var bottomNav: BottomNavigationView
     private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
 
     private lateinit var pinSetter: ImageView
@@ -84,6 +80,12 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
     private lateinit var pinFilter: PinFilter // 핀 필터 변수
 
+
+
+    private var isExpanded = false
+
+    
+
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         this.maskTileMaker = maskTileMaker
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
@@ -91,6 +93,8 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
             tileOverlays.add(googleMap.addTileOverlay(tileOverlayOptions)!!)
         }
     }
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,11 +105,8 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
         mapUtil.requestLocationPermission()
         mapUtil.prepareMap()
 
-        bottomNav = findViewById(R.id.navigationView)
 
-        bottomNav.selectedItemId = R.id.mapFragment
 
-        setupBottomNavigation(findViewById(R.id.navigationView))
 
         locationService = LocationService(this)
 
@@ -116,6 +117,21 @@ class MapActivity : NavigatableActivity(), OnMapReadyCallback {
 
         lifecycleScope.launch{
             FollowRepository.loadFollowings() // Load followings
+        }
+
+
+        //버튼
+        val centerButton = findViewById<ImageButton>(R.id.centerButton)
+        val profileWrapper = findViewById<FrameLayout>(R.id.profileButtonWrapper)
+        val profileAnim = findViewById<LottieAnimationView>(R.id.profileButtonAnim)
+
+        AnimatedNavButtonHelper.setupProfileOnly(
+            activity = this,
+            centerButton = centerButton,
+            profileWrapper = profileWrapper,
+            profileAnim = profileAnim
+        ) {
+            startActivity(Intent(this, MypageActivity::class.java))
         }
     }
 
