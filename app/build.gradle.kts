@@ -85,4 +85,6 @@ dependencies {
 
     implementation("com.kakao.sdk:v2-user:2.20.6")// 카카오 로그인 API 모듈
 
+    implementation("com.airbnb.android:lottie:6.1.0")// 로띠 애니메이션
+
 }
