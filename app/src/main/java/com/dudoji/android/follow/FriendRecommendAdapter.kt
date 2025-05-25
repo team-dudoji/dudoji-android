@@ -1,11 +1,13 @@
 package com.dudoji.android.follow
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -20,10 +22,11 @@ class FriendRecommendAdapter(val recommendedFriends: List<User>, val activity: M
         parent: ViewGroup,
         viewType: Int
     ): FriendRecommendViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_following, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.following_item, parent, false)
         return FriendRecommendViewHolder(view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(
         holder: FriendRecommendViewHolder,
         position: Int
@@ -56,6 +59,6 @@ class FriendRecommendAdapter(val recommendedFriends: List<User>, val activity: M
     inner class FriendRecommendViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.textName)
         val email: TextView = view.findViewById(R.id.textEmail)
-        val image: ImageView = view.findViewById(R.id.imgProfile)
+        val image: ImageView = view.findViewById(R.id.following_item_image)
     }
 }
