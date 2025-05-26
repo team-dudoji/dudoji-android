@@ -2,7 +2,9 @@ package com.dudoji.android.login.oauth.kakao
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.dudoji.android.map.activity.MapActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -15,8 +17,10 @@ import kotlinx.coroutines.launch
 
 object KakaoLoginUtil {
     val TAG = "KakaoLoginUtilDEBUG"
+    @RequiresApi(Build.VERSION_CODES.O)
     private val userApiService = RetrofitClient.loginApiService
 
+    @RequiresApi(Build.VERSION_CODES.O)
     val callback: (OAuthToken?, Throwable?, Context) -> Unit = { token, error, context ->
         if (error != null) {
             Log.e(TAG, "Unsuccess to kakao login", error)
@@ -27,6 +31,7 @@ object KakaoLoginUtil {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun onLoginSuccess(token: OAuthToken, context: Context) {
         Log.d(TAG, "Success to Kakao login")
         val response = userApiService.kakaoLogin(token.accessToken)
@@ -52,6 +57,7 @@ object KakaoLoginUtil {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun loginWithKakao(context: Context) {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
             UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
@@ -78,12 +84,11 @@ object KakaoLoginUtil {
                 callback(token, error, context)
             }
         }
-    }
 
 //        // TODO: Re-enable the production Kakao login logic before releasing to production.
-//        //테스트용
-//        RetrofitClient.init(context)
-//        val intent = Intent(context, MapActivity::class.java)
-//        context.startActivity(intent)
-//    }
+        //테스트용
+//            RetrofitClient.init(context)
+//            val intent = Intent(context, MapActivity::class.java)
+//            context.startActivity(intent)
+    }
 }
