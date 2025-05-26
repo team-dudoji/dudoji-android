@@ -139,6 +139,90 @@
             android:src="@drawable/ic_profile"/>
     </FrameLayout>
 
+    <FrameLayout
+            android:id="@+id/storeButtonWrapper"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/centerButton"
+            app:layout_constraintEnd_toStartOf="@id/centerButton"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="10dp">
+
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/storeButtonAnim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:lottie_fileName="store_button_animation.json"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false"
+                android:layout_gravity="center"/>
+
+        <ImageView
+                android:id="@+id/storeIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_store"/>
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/myPinButtonWrapper"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/centerButton"
+            app:layout_constraintEnd_toStartOf="@id/centerButton"
+            android:layout_marginBottom="30dp">
+
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/myPinButtonAnim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:lottie_fileName="mypin_button_animation.json"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false"
+                android:layout_gravity="center"/>
+
+        <ImageView
+                android:id="@+id/myPinIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_mypin"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/socialButtonWrapper"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/centerButton"
+            app:layout_constraintStart_toEndOf="@id/centerButton"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="95dp">
+
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/socialButtonAnim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:lottie_fileName="social_button_animation.json"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false" />
+
+        <ImageView
+                android:id="@+id/socialIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_social" />
+    </FrameLayout>
+
+
+
+
+
 
 
 
