@@ -10,21 +10,18 @@
 
     <FrameLayout
         android:id="@+id/outer_drop_zone"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- Map 프래그먼트 -->
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.google.android.gms.maps.SupportMapFragment"/>
-
-
-
+        <!-- Map 프래그먼트 -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
     </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatButton
