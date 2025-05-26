@@ -1,5 +1,6 @@
 package com.dudoji.android.map.activity
 
+import android.animation.Animator
 import android.content.Intent
 import android.location.Location
 import android.net.Uri
@@ -119,20 +120,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             FollowRepository.loadFollowings() // Load followings
         }
 
+        setupAnimatedNavButtons()
 
-        //버튼
-        val centerButton = findViewById<ImageButton>(R.id.centerButton)
-        val profileWrapper = findViewById<FrameLayout>(R.id.profileButtonWrapper)
-        val profileAnim = findViewById<LottieAnimationView>(R.id.profileButtonAnim)
-
-        AnimatedNavButtonHelper.setupProfileOnly(
-            activity = this,
-            centerButton = centerButton,
-            profileWrapper = profileWrapper,
-            profileAnim = profileAnim
-        ) {
-            startActivity(Intent(this, MypageActivity::class.java))
-        }
     }
 
     private fun setupLocationUpdates(){
@@ -255,4 +244,82 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             FriendModal.openFriendFilterModal(this)
         }
     }
+
+    private fun setupAnimatedNavButtons() {
+        val centerButton = findViewById<ImageView>(R.id.centerButton)
+
+        val storeWrapper = findViewById<FrameLayout>(R.id.storeButtonWrapper)
+        val storeAnim = findViewById<LottieAnimationView>(R.id.storeButtonAnim)
+        val storeIcon = findViewById<ImageView>(R.id.storeIcon)
+
+        val profileWrapper = findViewById<FrameLayout>(R.id.profileButtonWrapper)
+        val profileAnim = findViewById<LottieAnimationView>(R.id.profileButtonAnim)
+        val profileIcon = findViewById<ImageView>(R.id.profileIcon)
+
+        val mypinWrapper = findViewById<FrameLayout>(R.id.myPinButtonWrapper)
+        val mypinAnim = findViewById<LottieAnimationView>(R.id.myPinButtonAnim)
+        val mypinIcon = findViewById<ImageView>(R.id.myPinIcon)
+
+        val socialWrapper = findViewById<FrameLayout>(R.id.socialButtonWrapper)
+        val socialAnim = findViewById<LottieAnimationView>(R.id.socialButtonAnim)
+        val socialIcon = findViewById<ImageView>(R.id.socialIcon)
+
+
+        //아이콘이 lottie 애니메이션화가 안되서 대략 애니 동작 20%쯤 icon 동작하게 함
+        fun setupAnimationIcon(animView: LottieAnimationView, iconView: ImageView) {
+            iconView.visibility = View.INVISIBLE
+
+            animView.addAnimatorUpdateListener { animation ->
+                val progress = animation.animatedFraction
+                if (progress >= 0.2f && iconView.visibility != View.VISIBLE) {
+                    iconView.visibility = View.VISIBLE
+                }
+            }
+
+            animView.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {
+                    iconView.visibility = View.INVISIBLE
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    iconView.visibility = View.VISIBLE
+                }
+
+                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+        }
+
+
+        setupAnimationIcon(storeAnim, storeIcon)
+        setupAnimationIcon(profileAnim, profileIcon)
+        setupAnimationIcon(mypinAnim, mypinIcon)
+        setupAnimationIcon(socialAnim, socialIcon)
+
+        AnimatedNavButtonHelper.setup(
+            centerButton = centerButton,
+            storeWrapper = storeWrapper,
+            storeButton = storeAnim,
+            mypinWrapper = mypinWrapper,
+            mypinButton = mypinAnim,
+            socialWrapper = socialWrapper,
+            socialButton = socialAnim,
+            profileWrapper = profileWrapper,
+            profileButton = profileAnim,
+            onStoreClick = {
+                // StoreActivity로 이동
+            },
+            onMyPinClick = {
+                // MyPinActivity로 이동
+            },
+            onSocialClick = {
+                // SocialActivity로 이동
+            },
+            onProfileClick = {
+                startActivity(Intent(this, MypageActivity::class.java))
+            }
+        )
+    }
+
+
 }
