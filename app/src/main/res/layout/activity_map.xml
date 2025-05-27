@@ -24,6 +24,8 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"/>
     </FrameLayout>
 
+
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/myLocationButton"
         android:layout_width="70dp"
@@ -47,16 +49,16 @@
 
 
     <ImageButton
-        android:id="@+id/btnFriend"
+        android:id="@+id/btnFilter"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/orange_background"
-        android:src="@drawable/ic_profile"
+        android:background="null"
+        android:src="@drawable/ic_filter"
         android:scaleType="centerInside"
         android:elevation="6dp"
-        android:contentDescription="친구 목록 버튼"
+        android:contentDescription="filterbutton"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -69,7 +71,7 @@
         android:background="@drawable/orange_background"
         android:scaleType="centerInside"
         android:elevation="6dp"
-        android:contentDescription="나의 핀 필터"
+        android:contentDescription="mypinfilter"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -82,7 +84,7 @@
         android:background="@drawable/orange_background"
         android:scaleType="centerInside"
         android:elevation="6dp"
-        android:contentDescription="친구 핀 필터"
+        android:contentDescription="friendfilter"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -95,7 +97,7 @@
         android:background="@drawable/orange_background"
         android:scaleType="centerInside"
         android:elevation="6dp"
-        android:contentDescription="모르는 사람 핀 필터"
+        android:contentDescription="unknwonfilter"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
