@@ -43,6 +43,7 @@ import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinFilter
 import com.dudoji.android.pin.util.PinSetterController
 import com.dudoji.android.ui.AnimatedNavButtonHelper
+import com.dudoji.android.ui.LottieIconSyncHelper
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlay
@@ -238,7 +239,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
 
     fun setFriendFilterButton() {
-        friendButton = findViewById(R.id.btnFriend)
+        friendButton = findViewById(R.id.btnFilter)
 
         friendButton.setOnClickListener {
             FriendModal.openFriendFilterModal(this)
@@ -264,37 +265,10 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         val socialAnim = findViewById<LottieAnimationView>(R.id.socialButtonAnim)
         val socialIcon = findViewById<ImageView>(R.id.socialIcon)
 
-
-        //아이콘이 lottie 애니메이션화가 안되서 대략 애니 동작 20%쯤 icon 동작하게 함
-        fun setupAnimationIcon(animView: LottieAnimationView, iconView: ImageView) {
-            iconView.visibility = View.INVISIBLE
-
-            animView.addAnimatorUpdateListener { animation ->
-                val progress = animation.animatedFraction
-                if (progress >= 0.2f && iconView.visibility != View.VISIBLE) {
-                    iconView.visibility = View.VISIBLE
-                }
-            }
-
-            animView.addAnimatorListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator) {
-                    iconView.visibility = View.INVISIBLE
-                }
-
-                override fun onAnimationEnd(animation: Animator) {
-                    iconView.visibility = View.VISIBLE
-                }
-
-                override fun onAnimationCancel(animation: Animator) {}
-                override fun onAnimationRepeat(animation: Animator) {}
-            })
-        }
-
-
-        setupAnimationIcon(storeAnim, storeIcon)
-        setupAnimationIcon(profileAnim, profileIcon)
-        setupAnimationIcon(mypinAnim, mypinIcon)
-        setupAnimationIcon(socialAnim, socialIcon)
+        LottieIconSyncHelper.setup(storeAnim, storeIcon)
+        LottieIconSyncHelper.setup(profileAnim, profileIcon)
+        LottieIconSyncHelper.setup(mypinAnim, mypinIcon)
+        LottieIconSyncHelper.setup(socialAnim, socialIcon)
 
         AnimatedNavButtonHelper.setup(
             centerButton = centerButton,
