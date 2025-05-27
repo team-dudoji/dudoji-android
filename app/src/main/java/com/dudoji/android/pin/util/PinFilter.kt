@@ -10,6 +10,10 @@ import com.dudoji.android.pin.domain.Who
 
 class PinFilter(
     private val activity: AppCompatActivity,
+    private var btnMine: ImageButton,
+    private var btnFriend: ImageButton,
+    private var btnStranger: ImageButton
+
 ) {
 
     // 각 who에 대한 가시성 맵
@@ -29,9 +33,9 @@ class PinFilter(
     //3종 필터 버튼 기능 함수, 토글로 껐다 켰다
     @RequiresApi(Build.VERSION_CODES.O)
     fun setupFilterButtons() {
-        val btnMine = activity.findViewById<ImageButton>(R.id.btnFilterMine)
-        val btnFriend = activity.findViewById<ImageButton>(R.id.btnFilterFriend)
-        val btnStranger = activity.findViewById<ImageButton>(R.id.btnFilterStranger)
+        btnMine = activity.findViewById(R.id.btnFilterMine)
+        btnFriend = activity.findViewById(R.id.btnFilterFriend)
+        btnStranger = activity.findViewById(R.id.btnFilterStranger)
 
         btnMine.setOnClickListener {
             toggle(Who.MINE)
@@ -49,8 +53,30 @@ class PinFilter(
     //버튼 토글 함수
     @RequiresApi(Build.VERSION_CODES.O)
     private fun toggle(who: Who) {
-        visibilityMap[who] = !(visibilityMap[who] ?: true)
+        val newState = !(visibilityMap[who] ?: true)
+        visibilityMap[who] = newState
+
+        val iconRes = if (newState) {
+            when (who) {
+                Who.MINE -> R.drawable.ic_mypin_enabled
+                Who.FOLLOWING -> R.drawable.ic_friend_enabled
+                Who.UNKNOWN -> R.drawable.ic_stranger_enabled
+            }
+        } else {
+            when (who) {
+                Who.MINE -> R.drawable.ic_mypin_disabled
+                Who.FOLLOWING -> R.drawable.ic_friend_disabled
+                Who.UNKNOWN -> R.drawable.ic_stranger_disabled
+            }
+        }
+
+        when (who) {
+            Who.MINE -> btnMine.setImageResource(iconRes)
+            Who.FOLLOWING -> btnFriend.setImageResource(iconRes)
+            Who.UNKNOWN -> btnStranger.setImageResource(iconRes)
+        }
     }
+
 
 
 }
