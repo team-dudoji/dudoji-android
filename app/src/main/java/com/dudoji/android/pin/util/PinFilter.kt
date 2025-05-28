@@ -9,12 +9,11 @@ import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
 
 class PinFilter(
-    private val activity: AppCompatActivity,
-    private var btnMine: ImageButton,
-    private var btnFriend: ImageButton,
-    private var btnStranger: ImageButton
-
+    private val activity: AppCompatActivity
 ) {
+    private lateinit var btnMine: ImageButton
+    private lateinit var btnFriend: ImageButton
+    private lateinit var btnStranger: ImageButton
 
     // 각 who에 대한 가시성 맵
     private val visibilityMap = mutableMapOf(
@@ -23,14 +22,14 @@ class PinFilter(
         Who.UNKNOWN to true
     )
 
-    //핀 필터 함수
+    // 핀 필터 함수
     fun filterPins(pins: List<Pin>): List<Pin> {
-        return pins.filter {
-                pin -> visibilityMap[pin.master] == true
+        return pins.filter { pin ->
+            visibilityMap[pin.master] == true
         }
     }
 
-    //3종 필터 버튼 기능 함수, 토글로 껐다 켰다
+    // 3종 필터 버튼 기능 함수, 토글로 껐다 켰다
     @RequiresApi(Build.VERSION_CODES.O)
     fun setupFilterButtons() {
         btnMine = activity.findViewById(R.id.btnFilterMine)
@@ -50,7 +49,7 @@ class PinFilter(
         }
     }
 
-    //버튼 토글 함수
+    // 버튼 토글 함수
     @RequiresApi(Build.VERSION_CODES.O)
     private fun toggle(who: Who) {
         val newState = !(visibilityMap[who] ?: true)
@@ -76,7 +75,4 @@ class PinFilter(
             Who.UNKNOWN -> btnStranger.setImageResource(iconRes)
         }
     }
-
-
-
 }
