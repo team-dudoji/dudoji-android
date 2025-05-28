@@ -74,7 +74,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private lateinit var maskTileMaker: IMaskTileMaker
     private lateinit var mapSectionManager: MapSectionManager
 
-    private lateinit var friendButton :ImageButton
 
     lateinit var directionController: MapDirectionController
 
@@ -84,9 +83,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
 
 
-    private var isExpanded = false
 
-    
+
 
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         this.maskTileMaker = maskTileMaker
@@ -115,13 +113,16 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         setupMyLocationButton()
         setupLocationUpdates() // Setup location updates Callback
 
-        setFriendFilterButton()
+       // setFriendFilterButton()
 
         lifecycleScope.launch{
             FollowRepository.loadFollowings() // Load followings
         }
 
         setupAnimatedNavButtons()
+
+        setupFilterBarToggle()
+
 
     }
 
@@ -221,6 +222,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             pinFilter = PinFilter(this@MapActivity)
             pinApplier = PinApplier(clusterManager, googleMap, this@MapActivity, pinFilter)
 
+
             pinFilter.setupFilterButtons()
         }
 
@@ -237,14 +239,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         setPinSetterController()
     }
 
-
-    fun setFriendFilterButton() {
-        friendButton = findViewById(R.id.btnFilter)
-
-        friendButton.setOnClickListener {
-            FriendModal.openFriendFilterModal(this)
-        }
-    }
 
     private fun setupAnimatedNavButtons() {
         val centerButton = findViewById<ImageView>(R.id.centerButton)
@@ -265,6 +259,13 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         val socialAnim = findViewById<LottieAnimationView>(R.id.socialButtonAnim)
         val socialIcon = findViewById<ImageView>(R.id.socialIcon)
 
+        val btnFriend = findViewById<ImageButton>(R.id.btnFilterFriend)
+        val btnMine = findViewById<ImageButton>(R.id.btnFilterMine)
+        val btnStranger = findViewById<ImageButton>(R.id.btnFilterStranger)
+
+        val pinSetter = findViewById<ImageView>(R.id.pinSetter)
+        val btnFilter = findViewById<ImageButton>(R.id.btnFilter)
+
         LottieIconSyncHelper.setup(storeAnim, storeIcon)
         LottieIconSyncHelper.setup(profileAnim, profileIcon)
         LottieIconSyncHelper.setup(mypinAnim, mypinIcon)
@@ -280,6 +281,11 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             socialButton = socialAnim,
             profileWrapper = profileWrapper,
             profileButton = profileAnim,
+            btnFriend = btnFriend,
+            btnMine = btnMine,
+            btnStranger = btnStranger,
+            pinSetter = pinSetter,
+            btnFilter = btnFilter,
             onStoreClick = {
                 // StoreActivity로 이동
             },
@@ -287,13 +293,33 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 // MyPinActivity로 이동
             },
             onSocialClick = {
-                // SocialActivity로 이동
+                FriendModal.openFriendFilterModal(this)
             },
             onProfileClick = {
                 startActivity(Intent(this, MypageActivity::class.java))
             }
         )
     }
+
+    private fun setupFilterBarToggle() {
+        val btnFilter = findViewById<ImageButton>(R.id.btnFilter)
+        val filterBarWrapper = findViewById<FrameLayout>(R.id.filterBarWrapper)
+        val filterBarAnim = findViewById<LottieAnimationView>(R.id.filterBarAnim)
+
+        var isFilterBarVisible = false
+
+        btnFilter.setOnClickListener {
+            isFilterBarVisible = !isFilterBarVisible
+            if (isFilterBarVisible) {
+                filterBarWrapper.visibility = View.VISIBLE
+                filterBarAnim.progress = 0f
+                filterBarAnim.playAnimation()
+            } else {
+                filterBarWrapper.visibility = View.GONE
+            }
+        }
+    }
+
 
 
 }
