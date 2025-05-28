@@ -2,6 +2,7 @@ package com.dudoji.android.ui
 
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import com.airbnb.lottie.LottieAnimationView
 import com.dudoji.android.R
@@ -20,6 +21,11 @@ object AnimatedNavButtonHelper {
         socialButton: LottieAnimationView,
         mypinWrapper: FrameLayout,
         mypinButton: LottieAnimationView,
+        btnFriend: ImageButton,
+        btnMine: ImageButton,
+        btnStranger: ImageButton,
+        pinSetter: ImageView,
+        btnFilter: ImageButton,
         onCenterClick: (() -> Unit)? = null,
         onStoreClick: () -> Unit,
         onMyPinClick: () -> Unit,
@@ -40,7 +46,14 @@ object AnimatedNavButtonHelper {
                 mypinButton.playAnimation()
                 socialButton.playAnimation()
 
+                pinSetter.visibility = View.VISIBLE
+                btnFilter.visibility = View.VISIBLE
+
                 centerButton.setImageResource(R.drawable.ic_center_button_close)
+
+                btnFriend.visibility = View.VISIBLE
+                btnMine.visibility = View.VISIBLE
+                btnStranger.visibility = View.VISIBLE
             } else {
                 storeButton.cancelAnimation()
                 profileButton.cancelAnimation()
@@ -52,7 +65,15 @@ object AnimatedNavButtonHelper {
                 mypinWrapper.visibility = View.GONE
                 socialWrapper.visibility = View.GONE
 
+                pinSetter.visibility = View.GONE
+                btnFilter.visibility = View.GONE
+
                 centerButton.setImageResource(R.drawable.ic_center_button_open)
+
+                // 필터 바 닫기
+                btnFriend.visibility = View.GONE
+                btnMine.visibility = View.GONE
+                btnStranger.visibility = View.GONE
             }
 
             onCenterClick?.invoke()
