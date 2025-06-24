@@ -39,7 +39,6 @@ import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinFilter
 import com.dudoji.android.pin.util.PinSetterController
 import com.dudoji.android.ui.AnimatedNavButtonHelper
-import com.dudoji.android.ui.LottieIconSyncHelper
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlay
@@ -223,51 +222,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
 
     private fun setupAnimatedNavButtons() {
-        val centerButton = findViewById<ImageView>(R.id.centerButton)
-
-        val storeWrapper = findViewById<FrameLayout>(R.id.storeButtonWrapper)
-        val storeAnim = findViewById<LottieAnimationView>(R.id.storeButtonAnim)
-        val storeIcon = findViewById<ImageView>(R.id.storeIcon)
-
-        val profileWrapper = findViewById<FrameLayout>(R.id.profileButtonWrapper)
-        val profileAnim = findViewById<LottieAnimationView>(R.id.profileButtonAnim)
-        val profileIcon = findViewById<ImageView>(R.id.profileIcon)
-
-        val mypinWrapper = findViewById<FrameLayout>(R.id.myPinButtonWrapper)
-        val mypinAnim = findViewById<LottieAnimationView>(R.id.myPinButtonAnim)
-        val mypinIcon = findViewById<ImageView>(R.id.myPinIcon)
-
-        val socialWrapper = findViewById<FrameLayout>(R.id.socialButtonWrapper)
-        val socialAnim = findViewById<LottieAnimationView>(R.id.socialButtonAnim)
-        val socialIcon = findViewById<ImageView>(R.id.socialIcon)
-
-        val btnFriend = findViewById<ImageButton>(R.id.btnFilterFriend)
-        val btnMine = findViewById<ImageButton>(R.id.btnFilterMine)
-        val btnStranger = findViewById<ImageButton>(R.id.btnFilterStranger)
-
-        val pinSetter = findViewById<ImageView>(R.id.pinSetter)
-        val btnFilter = findViewById<ImageButton>(R.id.btnFilter)
-
-        LottieIconSyncHelper.setup(storeAnim, storeIcon)
-        LottieIconSyncHelper.setup(profileAnim, profileIcon)
-        LottieIconSyncHelper.setup(mypinAnim, mypinIcon)
-        LottieIconSyncHelper.setup(socialAnim, socialIcon)
-
         AnimatedNavButtonHelper.setup(
-            centerButton = centerButton,
-            storeWrapper = storeWrapper,
-            storeButton = storeAnim,
-            mypinWrapper = mypinWrapper,
-            mypinButton = mypinAnim,
-            socialWrapper = socialWrapper,
-            socialButton = socialAnim,
-            profileWrapper = profileWrapper,
-            profileButton = profileAnim,
-            btnFriend = btnFriend,
-            btnMine = btnMine,
-            btnStranger = btnStranger,
-            pinSetter = pinSetter,
-            btnFilter = btnFilter,
+            activity = this,
             onStoreClick = {
                 // StoreActivity로 이동
             },
