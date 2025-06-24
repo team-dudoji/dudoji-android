@@ -31,4 +31,7 @@ interface PinApiService {
 
     @DELETE("/api/user/pin/{pinId}/like")
     suspend fun unlikePin(@Path("pinId") pinId: Long): Response<String>
+
+    @GET("/api/user/pin/mine")
+    suspend fun getMyPins(): Response<List<PinResponseDto>>
 }
