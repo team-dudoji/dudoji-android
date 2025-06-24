@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 interface FollowApiService {
 
-    @GET("/api/user/follows/")
+    @GET("/api/user/follows")
     suspend fun getFriends(): Response<List<User>>
 
     @POST("/api/user/follows/{userId}")

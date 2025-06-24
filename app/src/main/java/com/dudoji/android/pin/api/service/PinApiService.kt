@@ -14,21 +14,21 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface PinApiService {
-    @POST("/api/user/pin/")
+    @POST("/api/user/pins")
     suspend fun createPin(@Body pin: PinRequestDto): Response<PinResponseDto>
 
     @Multipart
     @POST("/api/user/images")
     suspend fun uploadImage(@Part image: MultipartBody.Part): Response<String>
 
-    @GET("/api/user/pin/")
+    @GET("/api/user/pins")
     suspend fun getPins(@Query("radius") radius: Int,
                      @Query("lat") lat: Double,
                      @Query("lng") lng: Double): Response<List<PinResponseDto>>
 
-    @POST("/api/user/pin/{pinId}/like")
+    @POST("/api/user/pins/{pinId}/like")
     suspend fun likePin(@Path("pinId") pinId: Long): Response<String>
 
-    @DELETE("/api/user/pin/{pinId}/like")
+    @DELETE("/api/user/pins/{pinId}/like")
     suspend fun unlikePin(@Path("pinId") pinId: Long): Response<String>
 }
