@@ -104,6 +104,10 @@ class PinMemoInputFragment(
                 calendar.get(Calendar.DAY_OF_MONTH)
             )
 
+            if (selectedImageUri == null) {
+                Toast.makeText(requireContext(), "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             onComplete(
                 PinMakeData(
                     placeName.text.toString(), content, date, selectedImageUri!!, address
