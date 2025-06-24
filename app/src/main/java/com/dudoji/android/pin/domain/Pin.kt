@@ -1,13 +1,13 @@
 package com.dudoji.android.pin.domain
 
-    import android.os.Build
-    import androidx.annotation.RequiresApi
-    import com.dudoji.android.pin.api.dto.PinRequestDto
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.dudoji.android.pin.api.dto.PinRequestDto
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterItem
 import java.time.LocalDate
-    import java.time.LocalDateTime
-    import java.time.LocalTime
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 data class Pin (
     val lat: Double,
@@ -19,7 +19,9 @@ data class Pin (
     val imageUrl: String,
     val createdDate: LocalDate,
     val content: String,
-    val master: Who
+    val master: Who,
+    val placeName: String,
+    val address: String,
 ) : ClusterItem {
     override fun getPosition(): LatLng {
         return LatLng(lat, lng)
@@ -40,7 +42,9 @@ data class Pin (
             lng = lng,
             createdDate = LocalDateTime.of(createdDate, LocalTime.MIDNIGHT),
             content = content,
-            imageUrl = imageUrl
+            imageUrl = imageUrl,
+            placeName = placeName,
+            address = address
         )
     }
 }
