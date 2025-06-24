@@ -38,6 +38,7 @@ import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MypageActivity
+import com.dudoji.android.pin.activity.MypinActivity
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinFilter
@@ -291,6 +292,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             },
             onMyPinClick = {
                 // MyPinActivity로 이동
+                startActivity(Intent(this, MypinActivity::class.java))
             },
             onSocialClick = {
                 FriendModal.openFriendFilterModal(this)
