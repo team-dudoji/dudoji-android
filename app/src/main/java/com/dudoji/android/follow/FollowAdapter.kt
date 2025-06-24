@@ -24,21 +24,21 @@ class FollowAdapter(private val followings: List<User>, private val activity: Ma
     inner class FollowingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name = view.findViewById<TextView>(R.id.textName)
         val desc = view.findViewById<TextView>(R.id.textEmail)
-        val image: ImageView = view.findViewById(R.id.imgProfile)
+        val image: ImageView = view.findViewById(R.id.following_item_image)
         val deleteButton = view.findViewById<Button>(R.id.buttonDelete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowingViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_deletable_following, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.deletable_following_item, parent, false)
         return FollowingViewHolder(view)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: FollowingViewHolder, position: Int) {
         val following = followings[position]
-
         holder.name.text = following.name
         holder.desc.text = following.email
+        var isFollowing = true
         val imageUrl = following.profileImageUrl
         if (!imageUrl.isNullOrBlank()) {
             Glide.with(activity)
@@ -49,10 +49,21 @@ class FollowAdapter(private val followings: List<User>, private val activity: Ma
         }
         holder.deleteButton.setOnClickListener {
             activity.lifecycleScope.launch {
-                if (FollowRepository.deleteFollowing(following))
-                    Toast.makeText(activity, "${following.name}를 언팔로우 합니다.", Toast.LENGTH_SHORT).show()
-                else
-                    Toast.makeText(activity, "언팔로우에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                if (!isFollowing) {
+                    FollowRepository.addFollowing(following)
+                    Toast.makeText(activity, "${following.name}를 팔로우 합니다.", Toast.LENGTH_SHORT).show()
+                    holder.deleteButton.text = "팔로우"
+                    holder.deleteButton.setBackgroundColor(activity.getColor(R.color.orange))
+                    isFollowing = true
+                } else {
+                    if (FollowRepository.deleteFollowing(following)){
+                        Toast.makeText(activity, "${following.name}를 언팔로우 합니다.", Toast.LENGTH_SHORT).show()
+                        holder.deleteButton.text = "팔로잉"
+                        holder.deleteButton.setBackgroundColor(activity.getColor(R.color.orange))
+                        isFollowing = false
+                    } else
+                        Toast.makeText(activity, "언팔로우에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

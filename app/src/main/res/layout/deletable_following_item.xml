@@ -2,25 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingVertical="12dp"
         android:paddingHorizontal="8dp">
 
-    <!-- 프로필 이미지 -->
-    <ImageView
-            android:id="@+id/imgProfile"
+    <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/following_item_image"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="12dp"
             android:src="@drawable/ic_profile"
             android:background="@drawable/ic_circle"
             android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             android:contentDescription="프로필 이미지" />
 
-    <!-- 이름 및 설명 -->
     <LinearLayout
+            android:paddingStart="20dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -43,12 +43,11 @@
                 android:textSize="12sp"
                 android:textColor="#666666" />
     </LinearLayout>
-
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonDelete"
-            android:textColor="@color/black"
-            android:backgroundTint="#00FFFFFF"
-            android:text="삭제하기" />
+            android:textColor="@color/white"
+            android:backgroundTint="@color/orange"
+            android:text="팔로우" />
 </LinearLayout>
