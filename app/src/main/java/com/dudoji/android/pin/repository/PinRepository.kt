@@ -6,10 +6,11 @@ import androidx.annotation.RequiresApi
 import com.dudoji.android.config.PIN_UPDATE_THRESHOLD
 import com.dudoji.android.map.utils.MapUtil
 import com.dudoji.android.pin.api.dto.PinRequestDto
+import com.dudoji.android.pin.api.dto.PinResponseDto
 import com.dudoji.android.pin.domain.Pin
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-
+3
 object PinRepository {
     private val pinList = mutableListOf<Pin>()
     private lateinit var googleMap: GoogleMap
@@ -52,8 +53,15 @@ object PinRepository {
         return false
     }
 
-    fun getPins(): List<Pin> {
-        return pinList
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getPins(): List<Pin> {
+        val response = RetrofitClient.pinApiService.getMyPins()
+        return if (response.isSuccessful) {
+            response.body()?.map { it.toDomain() } ?: emptyList()
+        } else {
+            emptyList()
+        }
     }
+
 
 }
