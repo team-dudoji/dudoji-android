@@ -24,8 +24,6 @@
                 android:name="com.google.android.gms.maps.SupportMapFragment"/>
     </FrameLayout>
 
-
-
     <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/myLocationButton"
             android:layout_width="70dp"
@@ -41,11 +39,11 @@
             android:id="@+id/pinSetter"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="644dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="180dp"
             android:background="@drawable/pin_button"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
 
@@ -54,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -110,7 +108,7 @@
             android:layout_width="66dp"
             android:layout_height="66dp"
             android:layout_marginTop="98dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="10dp"
             android:background="@null"
             android:src="@drawable/ic_filter"
             android:scaleType="centerInside"
