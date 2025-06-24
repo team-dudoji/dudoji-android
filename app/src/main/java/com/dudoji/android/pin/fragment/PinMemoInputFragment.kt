@@ -2,6 +2,7 @@ package com.dudoji.android.pin.fragment
 
 import android.app.DatePickerDialog
 import android.icu.util.Calendar
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,17 +17,22 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.dudoji.android.R
+import com.dudoji.android.pin.util.PinMakeData
 import com.dudoji.android.util.WeekTranslator
 import com.dudoji.android.util.modal.ModalFragment
 import java.time.LocalDate
+import java.util.Locale
 
 class PinMemoInputFragment(
-    private val onComplete: (Triple<String, LocalDate, Uri?>) -> Unit
+    val lat: Double,
+    val lng: Double,
+    private val onComplete: (PinMakeData) -> Unit
 ): ModalFragment() {
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
     private var selectedImageUri: Uri? = null
     private val calendar = Calendar.getInstance()
+    private var address: String = "주소를 가져오는 중..."
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +58,21 @@ class PinMemoInputFragment(
         val imageView = view.findViewById<ImageView>(R.id.pin_memo_image)
         val pinDateEditButton = view.findViewById<ImageView>(R.id.memo_date_edit_button)
         val saveButton = view.findViewById<Button>(R.id.memo_save_button)
+        val placeName = view.findViewById<EditText>(R.id.pin_place_name)
+        val pinAddress = view.findViewById<TextView>(R.id.pin_address)
+
+        Geocoder(requireContext(), Locale.getDefault()).getFromLocation(
+            lat,
+            lng,
+            1
+        ){ addresses ->
+            if (addresses.isNotEmpty()) {
+                address = addresses[0].getAddressLine(0) ?: "주소를 가져올 수 없습니다."
+                pinAddress.text = address
+            } else {
+                pinAddress.text = "주소를 가져올 수 없습니다."
+            }
+        }
 
         val datePicker = DatePickerDialog(
             requireContext(),
@@ -83,7 +104,11 @@ class PinMemoInputFragment(
                 calendar.get(Calendar.DAY_OF_MONTH)
             )
 
-            onComplete(Triple(content, date, selectedImageUri))
+            onComplete(
+                PinMakeData(
+                    placeName.text.toString(), content, date, selectedImageUri!!, address
+                )
+            )
 
             close()
         }
