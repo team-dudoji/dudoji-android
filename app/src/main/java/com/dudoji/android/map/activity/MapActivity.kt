@@ -1,9 +1,7 @@
 package com.dudoji.android.map.activity
 
-import android.animation.Animator
 import android.content.Intent
 import android.location.Location
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -13,8 +11,6 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -81,11 +77,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var pinFilter: PinFilter // 핀 필터 변수
 
-
-
-
-
-
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         this.maskTileMaker = maskTileMaker
         val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
@@ -93,8 +84,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             tileOverlays.add(googleMap.addTileOverlay(tileOverlayOptions)!!)
         }
     }
-
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,15 +94,10 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         mapUtil.requestLocationPermission()
         mapUtil.prepareMap()
 
-
-
-
         locationService = LocationService(this)
 
         setupMyLocationButton()
         setupLocationUpdates() // Setup location updates Callback
-
-       // setFriendFilterButton()
 
         lifecycleScope.launch{
             FollowRepository.loadFollowings() // Load followings
@@ -122,8 +106,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         setupAnimatedNavButtons()
 
         setupFilterBarToggle()
-
-
     }
 
     private fun setupLocationUpdates(){
@@ -319,7 +301,4 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-
-
-
 }

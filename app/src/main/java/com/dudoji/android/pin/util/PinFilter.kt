@@ -5,6 +5,7 @@ import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
+import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
 
@@ -38,14 +39,17 @@ class PinFilter(
 
         btnMine.setOnClickListener {
             toggle(Who.MINE)
+            (activity as MapActivity).pinSetterController.pinApplier.markForReload()
         }
 
         btnFriend.setOnClickListener {
             toggle(Who.FOLLOWING)
+            (activity as MapActivity).pinSetterController.pinApplier.markForReload()
         }
 
         btnStranger.setOnClickListener {
             toggle(Who.UNKNOWN)
+            (activity as MapActivity).pinSetterController.pinApplier.markForReload()
         }
     }
 
@@ -74,5 +78,6 @@ class PinFilter(
             Who.FOLLOWING -> btnFriend.setImageResource(iconRes)
             Who.UNKNOWN -> btnStranger.setImageResource(iconRes)
         }
+
     }
 }
