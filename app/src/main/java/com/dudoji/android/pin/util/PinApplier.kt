@@ -13,9 +13,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dudoji.android.R
+import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.repository.PinRepository
 import com.dudoji.android.util.WeekTranslator
+import com.dudoji.android.util.calculateDistance
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener
 import com.google.maps.android.clustering.ClusterManager
@@ -86,7 +88,7 @@ class PinApplier(val clusterManager: ClusterManager<Pin>,
     }
 }
 
-class PinMemoAdapter(private val itemList: List<Pin>) :
+class PinMemoAdapter(private var itemList: List<Pin>) :
     RecyclerView.Adapter<PinMemoAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -120,5 +122,38 @@ class PinMemoAdapter(private val itemList: List<Pin>) :
             .into(holder.image)
     }
 
+    fun sortBy(type: SortType) {
+        itemList = itemList.sortedWith(Comparator(type.comparator))
+        notifyDataSetChanged()
+    }
+
+
+
     override fun getItemCount() = itemList.size
+}
+
+enum class SortType(val comparator: (Pin, Pin) -> Int) {
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    ENROLL({ pin1, pin2 ->
+        pin1.createdDate.compareTo(pin2.createdDate)
+    }),
+
+    POPULAR({ pin1, pin2 ->
+        pin2.likeCount - pin1.likeCount
+    }),
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    RECENT({ pin1, pin2 ->
+        pin2.createdDate.compareTo(pin1.createdDate)
+    }),
+
+    DISTANCE({ pin1, pin2 ->
+        val(myLat, myLng) = LocationService.getLastLatLng()
+        val d1 = calculateDistance(myLat, myLng, pin1.lat, pin1.lng)
+        val d2 = calculateDistance(myLat, myLng, pin2.lat, pin2.lng)
+        d1.compareTo(d2)
+    });
+
+
 }
