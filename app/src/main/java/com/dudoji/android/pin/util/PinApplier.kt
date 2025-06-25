@@ -2,28 +2,15 @@ package com.dudoji.android.pin.util
 
 import android.os.Build
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.dudoji.android.R
-import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.repository.PinRepository
-import com.dudoji.android.util.WeekTranslator
-import com.dudoji.android.util.calculateDistance
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
-import java.time.format.DateTimeFormatter
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 class PinApplier(val clusterManager: ClusterManager<Pin>,
@@ -86,74 +73,4 @@ class PinApplier(val clusterManager: ClusterManager<Pin>,
             hasToReload = false
         }
     }
-}
-
-class PinMemoAdapter(private var itemList: List<Pin>) :
-    RecyclerView.Adapter<PinMemoAdapter.MyViewHolder>() {
-
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title: TextView = itemView.findViewById(R.id.pin_item_title)
-        val content: TextView = itemView.findViewById(R.id.pin_item_content)
-        val image: ImageView = itemView.findViewById(R.id.pin_image)
-        val date: TextView = itemView.findViewById(R.id.pin_item_date)
-        val likeCount: TextView = itemView.findViewById(R.id.pin_item_like_count)
-
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.pin_memo_item, parent, false)
-        return MyViewHolder(view)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.title.text = itemList[position].title
-        holder.content.text = itemList[position].content
-        val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
-        val formattedDate = "${itemList[position].createdDate.format(formatter)} (${WeekTranslator.translateWeekToKorean(itemList[position].createdDate.dayOfWeek.value)})"
-        holder.date.text = formattedDate
-        holder.likeCount.text = itemList[position].likeCount.toString()
-
-        Glide.with(holder.itemView.context)
-            .load("${RetrofitClient.BASE_URL}${itemList[position].imageUrl}")
-            .placeholder(R.drawable.photo_placeholder)
-            .error(R.drawable.photo_placeholder)
-            .into(holder.image)
-    }
-
-    fun sortBy(type: SortType) {
-        itemList = itemList.sortedWith(Comparator(type.comparator))
-        notifyDataSetChanged()
-    }
-
-
-
-    override fun getItemCount() = itemList.size
-}
-
-enum class SortType(val comparator: (Pin, Pin) -> Int) {
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    ENROLL({ pin1, pin2 ->
-        pin1.createdDate.compareTo(pin2.createdDate)
-    }),
-
-    POPULAR({ pin1, pin2 ->
-        pin2.likeCount - pin1.likeCount
-    }),
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    RECENT({ pin1, pin2 ->
-        pin2.createdDate.compareTo(pin1.createdDate)
-    }),
-
-    DISTANCE({ pin1, pin2 ->
-        val(myLat, myLng) = LocationService.getLastLatLng()
-        val d1 = calculateDistance(myLat, myLng, pin1.lat, pin1.lng)
-        val d2 = calculateDistance(myLat, myLng, pin2.lat, pin2.lng)
-        d1.compareTo(d2)
-    });
-
-
 }
