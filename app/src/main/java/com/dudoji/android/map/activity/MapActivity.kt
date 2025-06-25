@@ -1,9 +1,7 @@
 package com.dudoji.android.map.activity
 
-import android.animation.Animator
 import android.content.Intent
 import android.location.Location
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -13,8 +11,6 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -38,7 +34,7 @@ import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MypageActivity
-import com.dudoji.android.pin.activity.MypinActivity
+import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinFilter
@@ -292,7 +288,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             },
             onMyPinClick = {
                 // MyPinActivity로 이동
-                startActivity(Intent(this, MypinActivity::class.java))
+                startActivity(Intent(this, MyPinActivity::class.java))
             },
             onSocialClick = {
                 FriendModal.openFriendFilterModal(this)
