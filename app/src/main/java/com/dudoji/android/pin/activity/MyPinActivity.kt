@@ -10,16 +10,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dudoji.android.databinding.ActivityMypinBinding
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.repository.PinRepository
-import com.dudoji.android.pin.util.PinMemoAdapter
-import com.dudoji.android.pin.util.SortType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.dudoji.android.pin.model.SortType
+import com.dudoji.android.pin.adapter.PinMemoAdapter
 
-class MypinActivity : AppCompatActivity() {
+class MyPinActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMypinBinding
-    private lateinit var adapter: PinMemoAdapter
     private var pinList: List<Pin> = emptyList()
 
     @RequiresApi(Build.VERSION_CODES.O)
