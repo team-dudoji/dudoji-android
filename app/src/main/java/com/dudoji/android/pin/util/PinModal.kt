@@ -1,6 +1,5 @@
 package com.dudoji.android.pin.util
 
-import android.net.Uri
 import android.os.Build
 import android.view.MotionEvent
 import android.widget.ImageView
@@ -18,7 +17,6 @@ import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.fragment.PinMemoInputFragment
 import com.dudoji.android.util.modal.Modal
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 object PinModal {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -29,6 +27,8 @@ object PinModal {
             val pinDate = view.findViewById<TextView>(R.id.memo_date_output)
             val pinLikeButton = view.findViewById<ImageView>(R.id.memo_like_button)
             val pinLikeCount = view.findViewById<TextView>(R.id.memo_like_count)
+            val pinPlaceName = view.findViewById<TextView>(R.id.pin_place_name)
+            val pinAddress = view.findViewById<TextView>(R.id.pin_address)
             val isLiked = pin.isLiked
 
             Glide.with(activity)
@@ -44,6 +44,8 @@ object PinModal {
             pinLikeCount.text = pin.likeCount.toString()
             pinContent.text = pin.content
             pinDate.text = pin.createdDate.toString()
+            pinPlaceName.text = pin.placeName.ifEmpty { "장소 정보 없음" }
+            pinAddress.text = pin.address.ifEmpty { "주소 정보 없음" }
 
             pinLikeButton.setOnClickListener {
                 if (isLiked) {
@@ -96,7 +98,7 @@ object PinModal {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun openPinDataModal(activity: MapActivity, onComplete: (Triple<String, LocalDate,  Uri?>) -> Unit) {
-        Modal.showCustomModal(activity, PinMemoInputFragment(onComplete))
+    fun openPinDataModal(activity: MapActivity, lat: Double, lng: Double, onComplete: (PinMakeData) -> Unit) {
+        Modal.showCustomModal(activity, PinMemoInputFragment(lat, lng, onComplete))
     }
 }

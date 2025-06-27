@@ -84,15 +84,15 @@
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="부산대학교"
-                            android:id="@+id/memo_location_name"
+                            android:hint="장소 이름"
+                            android:id="@+id/pin_place_name"
                             android:textSize="15sp"
                             android:textStyle="bold"
                             />
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/memo_location_address"
+                            android:id="@+id/pin_address"
                             android:text="부산광역시 금정구 부산대학로"
                             android:textSize="12sp"
                             />
@@ -100,6 +100,7 @@
                 </LinearLayout>
 
             </LinearLayout>
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

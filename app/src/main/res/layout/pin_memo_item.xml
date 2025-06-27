@@ -21,10 +21,10 @@
             android:orientation="vertical">
 
         <TextView
-                android:id="@+id/pin_item_title"
+                android:id="@+id/pin_place_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="메모 제목"
+                android:text="장소 이름"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"/>

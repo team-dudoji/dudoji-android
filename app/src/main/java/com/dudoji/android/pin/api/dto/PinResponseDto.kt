@@ -16,7 +16,9 @@ data class PinResponseDto (
     val liked: Boolean,
     val createdDate: LocalDateTime,
     val content: String,
-    val master: Who
+    val master: Who,
+    val placeName: String,
+    val address: String,
 ) {
     @RequiresApi(Build.VERSION_CODES.O)
     fun toDomain(): Pin {
@@ -30,6 +32,8 @@ data class PinResponseDto (
             createdDate = createdDate.toLocalDate(),
             imageUrl = imageUrl?:"",
             content = content,
-            master = master)
+            master = master,
+            placeName = placeName?:"",
+            address = address?:"")
         }
     }
