@@ -2,26 +2,15 @@ package com.dudoji.android.pin.util
 
 import android.os.Build
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.dudoji.android.R
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.repository.PinRepository
-import com.dudoji.android.util.WeekTranslator
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.launch
-import java.time.format.DateTimeFormatter
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 class PinApplier(val clusterManager: ClusterManager<Pin>,
