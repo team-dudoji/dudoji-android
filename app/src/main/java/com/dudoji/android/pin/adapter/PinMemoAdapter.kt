@@ -18,15 +18,14 @@ import java.time.format.DateTimeFormatter
 class PinMemoAdapter(
     private var itemList: List<Pin>,
     private val onItemClick: ((Pin) -> Unit)? = null
-) : RecyclerView.Adapter<PinMemoAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<PinMemoAdapter.PinViewHolder>() {
 
-    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title: TextView = itemView.findViewById(R.id.pin_item_title)
+    inner class PinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val placeName: TextView = itemView.findViewById(R.id.pin_place_name)
         val content: TextView = itemView.findViewById(R.id.pin_item_content)
         val image: ImageView = itemView.findViewById(R.id.pin_image)
         val date: TextView = itemView.findViewById(R.id.pin_item_date)
         val likeCount: TextView = itemView.findViewById(R.id.pin_item_like_count)
-
         init {
             itemView.setOnClickListener {
                 onItemClick?.invoke(itemList[adapterPosition])
@@ -34,16 +33,16 @@ class PinMemoAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PinViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.pin_memo_item, parent, false)
-        return MyViewHolder(view)
+        return PinViewHolder(view)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PinViewHolder, position: Int) {
         val pin = itemList[position]
-        holder.title.text = pin.title
+        holder.placeName.text = pin.placeName
         holder.content.text = pin.content
 
         val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
