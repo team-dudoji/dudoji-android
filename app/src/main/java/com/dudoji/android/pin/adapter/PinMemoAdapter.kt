@@ -26,6 +26,7 @@ class PinMemoAdapter(
         val image: ImageView = itemView.findViewById(R.id.pin_image)
         val date: TextView = itemView.findViewById(R.id.pin_item_date)
         val likeCount: TextView = itemView.findViewById(R.id.pin_item_like_count)
+
         init {
             itemView.setOnClickListener {
                 onItemClick?.invoke(itemList[adapterPosition])
