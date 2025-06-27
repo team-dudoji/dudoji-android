@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="sort_options">
-        <item>등록순</item>
-        <item>인기순</item>
-        <item>최신순</item>
-        <item>거리순</item>
-    </string-array>
-</resources>

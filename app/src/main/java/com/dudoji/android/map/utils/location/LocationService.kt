@@ -19,11 +19,6 @@ class LocationService { // 위치 서비스 초기화 때문에 context를 priva
         fun isCloseToLastLocation(location: Location, distance: Float): Boolean {
             return lastLocation?.distanceTo(location) ?: Float.MAX_VALUE < distance
         }
-
-        fun getLastLatLng(): Pair<Double, Double> {
-            //마지막 위치 정보(위도, 경도)를 반환하며 없으면 0,0 리턴함
-            return lastLocation?.let {Pair(it.latitude, it.longitude)} ?: Pair(0.0, 0.0)
-        }
     }
 
     private var context: Context //외부에서 전달받은 Context를 저장하는 변수
@@ -65,7 +60,10 @@ class LocationService { // 위치 서비스 초기화 때문에 context를 priva
         )
     }
 
-
+    fun getLastLatLng(): Pair<Double, Double> {
+        //마지막 위치 정보(위도, 경도)를 반환하며 없으면 0,0 리턴함
+         return lastLocation?.let {Pair(it.latitude, it.longitude)} ?: Pair(0.0, 0.0)
+    }
 
     private fun setupLocationComponents() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context) // LocationServices를 사용해 context를 기반으로 초기화

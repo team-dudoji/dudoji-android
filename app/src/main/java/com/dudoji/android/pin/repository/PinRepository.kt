@@ -52,13 +52,8 @@ object PinRepository {
         return false
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun getPins(): List<Pin> {
-        val response = RetrofitClient.pinApiService.getMyPins()
-        return if (response.isSuccessful) {
-            response.body()?.map { it.toDomain() } ?: emptyList()
-        } else {
-            emptyList()
-        }
+    fun getPins(): List<Pin> {
+        return pinList
     }
+
 }

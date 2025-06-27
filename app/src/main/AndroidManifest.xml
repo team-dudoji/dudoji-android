@@ -47,7 +47,6 @@
         <activity android:name=".mypage.activity.MypageActivity" />
         <activity android:name=".mypage.activity.StatisticsActivity" />
         <activity android:name=".mypage.activity.AchievementActivity" />
-        <activity android:name=".pin.activity.MyPinActivity" />
       
         <activity
             android:name=".network.activity.NoNetworkActivity"
