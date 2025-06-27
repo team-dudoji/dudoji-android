@@ -8,5 +8,7 @@ data class PinRequestDto(
     val createdDate: LocalDateTime,
     val imageUrl: String,
     val content: String,
+    val placeName: String,
+    val address: String,
 )
 

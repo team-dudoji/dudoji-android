@@ -90,12 +90,11 @@ class PinMemoAdapter(private val itemList: List<Pin>) :
     RecyclerView.Adapter<PinMemoAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title: TextView = itemView.findViewById(R.id.pin_item_title)
+        val placeName: TextView = itemView.findViewById(R.id.pin_place_name)
         val content: TextView = itemView.findViewById(R.id.pin_item_content)
         val image: ImageView = itemView.findViewById(R.id.pin_image)
         val date: TextView = itemView.findViewById(R.id.pin_item_date)
         val likeCount: TextView = itemView.findViewById(R.id.pin_item_like_count)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -106,7 +105,7 @@ class PinMemoAdapter(private val itemList: List<Pin>) :
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.title.text = itemList[position].title
+        holder.placeName.text = itemList[position].placeName
         holder.content.text = itemList[position].content
         val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
         val formattedDate = "${itemList[position].createdDate.format(formatter)} (${WeekTranslator.translateWeekToKorean(itemList[position].createdDate.dayOfWeek.value)})"

@@ -69,10 +69,10 @@ class PinSetterController{
                             },
                                 REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
                         )) {
-                            openPinDataModal(activity as MapActivity) {
+                            openPinDataModal(activity as MapActivity, lat, lng) {
                                 val image = UriConverter.uriToMultipartBodyPart(
                                     activity,
-                                    it.third!!
+                                    it.imageUri
                                 )
 
                                 activity.lifecycleScope.launch {
@@ -89,11 +89,13 @@ class PinSetterController{
                                     Log.d("PinRepository", "Image uploaded successfully: ${imageResponse.body()}")
                                     val requestDto =
                                         PinRequestDto(
-                                            content = it.first,
-                                            createdDate = LocalDateTime.of(it.second, LocalDateTime.now().toLocalTime()),
+                                            content = it.content,
+                                            createdDate = LocalDateTime.of(it.date, LocalDateTime.now().toLocalTime()),
                                             imageUrl = imageResponse.body()!!,
                                             lat = lat,
                                             lng = lng,
+                                            address = it.address,
+                                            placeName = it.placeName
                                         )
                                     if (PinRepository.addPin(
                                             requestDto)) {
