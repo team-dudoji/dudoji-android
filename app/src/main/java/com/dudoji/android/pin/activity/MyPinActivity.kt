@@ -1,5 +1,6 @@
 package com.dudoji.android.pin.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -40,7 +41,17 @@ class MyPinActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 pins?.let { pins ->
                     pinList = pins
-                    val adapter = PinMemoAdapter(pins)
+                    val adapter = PinMemoAdapter(pins) { pin ->
+                        val intent = Intent(this@MyPinActivity, PinDetailActivity::class.java).apply {
+                            putExtra("imageUrl", pin.imageUrl)
+                            putExtra("placeName", pin.placeName)
+                            putExtra("likeCount", pin.likeCount)
+                            putExtra("content", pin.content)
+                            putExtra("createdDate", pin.createdDate.toString())
+                        }
+                        startActivity(intent)
+                    }
+
                     binding.recyclerView.adapter = adapter
 
                     binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
