@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dudoji.android.R
 import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.pin.adapter.PinMemoAdapter
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.fragment.PinMemoInputFragment
 import com.dudoji.android.util.modal.Modal
