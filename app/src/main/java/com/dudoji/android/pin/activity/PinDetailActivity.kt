@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.dudoji.android.R
 import com.dudoji.android.databinding.ActivityPinDetailBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -25,7 +26,9 @@ class PinDetailActivity : AppCompatActivity() {
         val createdDateStr = intent.getStringExtra("createdDate")
 
         Glide.with(this)
-            .load(imageUrl)
+            .load("${RetrofitClient.BASE_URL}$imageUrl")
+            .placeholder(R.drawable.photo_placeholder)
+            .error(R.drawable.photo_placeholder)
             .into(binding.imageView)
 
         binding.textPlaceName.text = placeName
