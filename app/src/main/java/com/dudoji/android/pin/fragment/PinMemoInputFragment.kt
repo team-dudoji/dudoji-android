@@ -34,6 +34,7 @@ class PinMemoInputFragment(
     private var selectedImageUri: Uri? = null
     private val calendar = Calendar.getInstance()
     private var address: String = "주소를 가져오는 중..."
+    private var pinSkin: String = "pin_orange"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +62,10 @@ class PinMemoInputFragment(
         val saveButton = view.findViewById<Button>(R.id.memo_save_button)
         val placeName = view.findViewById<EditText>(R.id.pin_place_name)
         val pinAddress = view.findViewById<TextView>(R.id.pin_address)
+
+        val skinRed = view.findViewById<ImageView>(R.id.skin_red)
+        val skinOrange = view.findViewById<ImageView>(R.id.skin_orange)
+        val skinBlue = view.findViewById<ImageView>(R.id.skin_blue)
 
         Geocoder(requireContext(), Locale.getDefault()).getFromLocation(
             lat,
@@ -111,13 +116,40 @@ class PinMemoInputFragment(
             }
             onComplete(
                 PinMakeData(
-                    placeName.text.toString(), content, date, selectedImageUri!!, address
+                    placeName.text.toString(), content, date, selectedImageUri!!, address, pinSkin
                 )
             )
 
             close()
         }
 
+        //선택시 검은색 테두리 넣기
+        fun updateSelectedSkinUI(selected: String) {
+            val selectedBorder = R.drawable.selected_border
+            skinRed.setBackgroundResource(if (selected == "pin_red") selectedBorder else 0)
+            skinOrange.setBackgroundResource(if (selected == "pin_orange") selectedBorder else 0)
+            skinBlue.setBackgroundResource(if (selected == "pin_blue") selectedBorder else 0)
+        }
+
+        skinRed.setOnClickListener {
+            pinSkin = "pin_red"
+            updateSelectedSkinUI(pinSkin)
+        }
+
+        skinOrange.setOnClickListener {
+            pinSkin = "pin_orange"
+            updateSelectedSkinUI(pinSkin)
+        }
+
+        skinBlue.setOnClickListener {
+            pinSkin = "pin_blue"
+            updateSelectedSkinUI(pinSkin)
+        }
+
         return view
+
+
     }
+
+
 }
