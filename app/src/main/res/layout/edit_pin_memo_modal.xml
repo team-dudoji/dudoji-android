@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="350dp"
-    android:layout_height="600dp"
-    android:orientation="vertical"
-    android:gravity="center">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="350dp"
+        android:layout_height="600dp"
+        android:orientation="vertical"
+        android:gravity="center">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -37,20 +37,26 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginHorizontal="10dp"
             android:orientation="horizontal">
-        <com.google.android.material.imageview.ShapeableImageView
+
+        <FrameLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:src="@drawable/photo_placeholder"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
-                android:id="@+id/pin_memo_image"/>
+                android:layout_height="match_parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/pin_memo_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/photo_placeholder"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+
+        </FrameLayout>
 
         <LinearLayout
                 android:layout_width="0dp"
@@ -60,6 +66,7 @@
                 android:layout_marginVertical="20dp"
                 android:gravity="center"
                 android:layout_marginHorizontal="20dp">
+
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -78,8 +85,7 @@
                         android:id="@+id/memo_date"
                         android:text="yyyy.mm.dd (w)"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -101,22 +107,128 @@
                             android:text="부산대학교"
                             android:id="@+id/pin_place_name"
                             android:textSize="15sp"
-                            android:textStyle="bold"
-                            />
+                            android:textStyle="bold" />
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/pin_address"
                             android:text="부산광역시 금정구 부산대학로"
-                            android:textSize="12sp"
-                            />
-
+                            android:textSize="12sp" />
                 </LinearLayout>
-
             </LinearLayout>
 
         </LinearLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="핀 색상 선택"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+                android:id="@+id/pin_color_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="start">
+
+            <LinearLayout
+                    android:id="@+id/color_skin_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:padding="8dp"
+                    android:layout_marginEnd="20dp">
+
+                <ImageView
+                        android:id="@+id/skin_red"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/pin_red" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="빨강"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/skin_orange_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:padding="8dp"
+                    android:layout_marginEnd="20dp">
+
+                <ImageView
+                        android:id="@+id/skin_orange"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/pin_orange" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="주황"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/skin_blue_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:padding="8dp"
+                    android:layout_marginEnd="20dp">
+
+                <ImageView
+                        android:id="@+id/skin_blue"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/pin_blue" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="파랑"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/skin_save_button"
+                    android:text="저장"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -127,9 +239,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-
             android:hint="여러분의 핀을 남겨주세요."
             android:gravity="top|start"
             android:id="@+id/memo_content_input"
             android:textSize="20sp" />
+
 </LinearLayout>
