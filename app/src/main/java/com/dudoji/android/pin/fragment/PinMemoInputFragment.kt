@@ -17,7 +17,11 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
+import com.dudoji.android.pin.adapter.PinColorAdapter
+import com.dudoji.android.pin.color.PinColor
 import com.dudoji.android.pin.util.PinMakeData
 import com.dudoji.android.util.WeekTranslator
 import com.dudoji.android.util.modal.ModalFragment
@@ -34,6 +38,8 @@ class PinMemoInputFragment(
     private var selectedImageUri: Uri? = null
     private val calendar = Calendar.getInstance()
     private var address: String = "주소를 가져오는 중..."
+    private lateinit var pinColorAdapter: PinColorAdapter
+    private var selectedPinColor: PinColor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +67,31 @@ class PinMemoInputFragment(
         val saveButton = view.findViewById<Button>(R.id.memo_save_button)
         val placeName = view.findViewById<EditText>(R.id.pin_place_name)
         val pinAddress = view.findViewById<TextView>(R.id.pin_address)
+
+        val pinColorRecyclerView = view.findViewById<RecyclerView>(R.id.pin_color_recycler_view)
+
+        val pinColors = listOf(
+            PinColor(1, "빨강", R.drawable.pin_red),
+            PinColor(2, "주황", R.drawable.pin_orange),
+            PinColor(3, "파랑", R.drawable.pin_blue),
+        )
+
+        pinColorAdapter = PinColorAdapter(pinColors) { pinColor ->
+            selectedPinColor = pinColor
+            Toast.makeText(requireContext(), "${pinColor.name} 핀이 선택되었습니다.", Toast.LENGTH_SHORT).show()
+        }
+
+        pinColorRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = pinColorAdapter
+        }
+
+        val defaultPinColor = pinColors.find { it.id == 2 } // 주황색의 ID가 2
+        defaultPinColor?.let {
+            selectedPinColor = it
+            pinColorAdapter.setSelectedColor(it.id) // 어댑터에 선택된 아이템을 UI로 표시
+        }
+
 
         Geocoder(requireContext(), Locale.getDefault()).getFromLocation(
             lat,
@@ -109,9 +140,13 @@ class PinMemoInputFragment(
                 Toast.makeText(requireContext(), "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            val pinSkin = selectedPinColor?.let {
+                // 리소스 ID에서 리소스 이름 추출
+                resources.getResourceEntryName(it.imageResId)
+            } ?: "pin_orange" //기본값
             onComplete(
                 PinMakeData(
-                    placeName.text.toString(), content, date, selectedImageUri!!, address
+                    placeName.text.toString(), content, date, selectedImageUri!!, address, pinSkin
                 )
             )
 

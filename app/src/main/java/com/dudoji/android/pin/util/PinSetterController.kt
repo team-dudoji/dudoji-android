@@ -95,7 +95,8 @@ class PinSetterController{
                                             lat = lat,
                                             lng = lng,
                                             address = it.address,
-                                            placeName = it.placeName
+                                            placeName = it.placeName,
+                                            pinSkin = it.pinSkin
                                         )
                                     if (PinRepository.addPin(
                                             requestDto)) {

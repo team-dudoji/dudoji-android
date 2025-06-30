@@ -22,6 +22,7 @@ data class Pin (
     val master: Who,
     val placeName: String,
     val address: String,
+    var pinSkin: String
 ) : ClusterItem {
     override fun getPosition(): LatLng {
         return LatLng(lat, lng)
@@ -44,7 +45,8 @@ data class Pin (
             content = content,
             imageUrl = imageUrl,
             placeName = placeName,
-            address = address
+            address = address,
+            pinSkin = pinSkin
         )
     }
 }

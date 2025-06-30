@@ -27,13 +27,13 @@ class PinApplier(val clusterManager: ClusterManager<Pin>,
     init {
         clusterManager.setOnClusterItemClickListener{
                 pin ->
-            PinModal.openPinMemoModal(activity, pin)
+            PinModal.openPinMemoModal(activity, pin, clusterManager)
             true
         }
         clusterManager.setOnClusterClickListener {
             if (it.size >= 1) {
                 Log.d("PinApplier", "onClusterClick: $it")
-                PinModal.openPinMemosModal(activity, it.items.toList())
+                PinModal.openPinMemosModal(activity, it.items.toList(), clusterManager)
             }
             true
         }
