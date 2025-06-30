@@ -71,7 +71,7 @@ class PinMemoInputFragment(
                 address = addresses[0].getAddressLine(0) ?: "주소를 가져올 수 없습니다."
                 pinAddress.text = address
             } else {
-                pinAddress.text = "주소를 가져올 수 없습니다. x"
+                pinAddress.text = "주소를 가져올 수 없습니다."
             }
         }
 
