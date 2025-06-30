@@ -137,100 +137,21 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
-        <LinearLayout
-                android:id="@+id/pin_color_selector"
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/pin_color_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="start">
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <LinearLayout
-                    android:id="@+id/color_skin_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:padding="8dp"
-                    android:layout_marginEnd="20dp">
-
-                <ImageView
-                        android:id="@+id/skin_red"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/pin_red" />
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="빨강"
-                        android:textSize="12sp"
-                        android:layout_marginTop="4dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                    android:id="@+id/skin_orange_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:padding="8dp"
-                    android:layout_marginEnd="20dp">
-
-                <ImageView
-                        android:id="@+id/skin_orange"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/pin_orange" />
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="주황"
-                        android:textSize="12sp"
-                        android:layout_marginTop="4dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                    android:id="@+id/skin_blue_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:padding="8dp"
-                    android:layout_marginEnd="20dp">
-
-                <ImageView
-                        android:id="@+id/skin_blue"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/pin_blue" />
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="파랑"
-                        android:textSize="12sp"
-                        android:layout_marginTop="4dp" />
-
-            </LinearLayout>
-
-            <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/skin_save_button"
-                    android:text="저장"
-                    android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:layout_gravity="center_vertical" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/skin_save_button"
+                android:text="적용" android:textStyle="bold"
+                android:textSize="15sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="8dp"/> </LinearLayout>
 
     <EditText
             android:layout_margin="15dp"
