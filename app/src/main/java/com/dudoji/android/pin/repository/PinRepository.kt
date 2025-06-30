@@ -6,12 +6,13 @@ import androidx.annotation.RequiresApi
 import com.dudoji.android.config.PIN_UPDATE_THRESHOLD
 import com.dudoji.android.map.utils.MapUtil
 import com.dudoji.android.pin.api.dto.PinRequestDto
+import com.dudoji.android.pin.api.dto.PinSkinUpdateRequestDto
 import com.dudoji.android.pin.domain.Pin
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 
 object PinRepository {
-    private val pinList = mutableListOf<Pin>()
+    val pinList = mutableListOf<Pin>()
     private lateinit var googleMap: GoogleMap
 
     private var lastPinUpdatedLatLng: LatLng? = null
@@ -45,6 +46,7 @@ object PinRepository {
     suspend fun addPin(pin: PinRequestDto): Boolean {
         val response = RetrofitClient.pinApiService.createPin(pin)
         if (response.isSuccessful) {
+            Log.d("PinRepository", "Pin added successfully: ${response.body()?.pinSkin}")
             pinList.add(response.body()?.toDomain()!!)
             return true
         }
@@ -60,5 +62,14 @@ object PinRepository {
         } else {
             emptyList()
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun updatePinSkin(pinId: Long, newSkin: String): Boolean {
+        val response = RetrofitClient.pinApiService.updatePinSkin(
+            pinId,
+            PinSkinUpdateRequestDto(newSkin)
+        )
+        return response.isSuccessful
     }
 }

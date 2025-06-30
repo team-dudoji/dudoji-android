@@ -19,6 +19,7 @@ data class PinResponseDto (
     val master: Who,
     val placeName: String,
     val address: String,
+    val pinSkin: String
 ) {
     @RequiresApi(Build.VERSION_CODES.O)
     fun toDomain(): Pin {
@@ -34,6 +35,7 @@ data class PinResponseDto (
             content = content,
             master = master,
             placeName = placeName?:"",
-            address = address?:"")
+            address = address?:"",
+            pinSkin = pinSkin?:"")
         }
     }

@@ -6,6 +6,7 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
+import com.dudoji.android.pin.domain.PinColor
 import com.dudoji.android.pin.util.PinMakeData
 import com.dudoji.android.util.WeekTranslator
 import com.dudoji.android.util.modal.ModalFragment
@@ -27,6 +30,7 @@ import java.util.Locale
 class PinMemoInputFragment(
     val lat: Double,
     val lng: Double,
+    val activity: AppCompatActivity,
     private val onComplete: (PinMakeData) -> Unit
 ): ModalFragment() {
 
@@ -34,6 +38,7 @@ class PinMemoInputFragment(
     private var selectedImageUri: Uri? = null
     private val calendar = Calendar.getInstance()
     private var address: String = "주소를 가져오는 중..."
+    private var selectedPinColor: PinColor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +66,26 @@ class PinMemoInputFragment(
         val saveButton = view.findViewById<Button>(R.id.memo_save_button)
         val placeName = view.findViewById<EditText>(R.id.pin_place_name)
         val pinAddress = view.findViewById<TextView>(R.id.pin_address)
+
+        val pinSkinSelectButton = view.findViewById<ImageView>(R.id.pin_color_select_button)
+
+        pinSkinSelectButton.setOnClickListener {
+            val pinColors = listOf(
+                PinColor(1, "빨강", R.drawable.pin_red),
+                PinColor(2, "주황", R.drawable.pin_orange),
+                PinColor(3, "파랑", R.drawable.pin_blue),
+            )
+            val dialog = PinColorChoiceDialogFragment(pinColors) {
+                    selectedPinColor ->
+                this.selectedPinColor = selectedPinColor
+                Toast.makeText(
+                    requireContext(),
+                    "${selectedPinColor.name} 핀이 선택되었습니다.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            dialog.show(parentFragmentManager, "MyChoiceDialog")
+        }
 
         Geocoder(requireContext(), Locale.getDefault()).getFromLocation(
             lat,
@@ -109,12 +134,15 @@ class PinMemoInputFragment(
                 Toast.makeText(requireContext(), "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            val pinSkin = selectedPinColor?.let {
+                resources.getResourceEntryName(it.imageResId)
+            } ?: "pin_orange"
+            Log.d("PinMemoInputFragment", "Selected pin skin: $pinSkin")
             onComplete(
                 PinMakeData(
-                    placeName.text.toString(), content, date, selectedImageUri!!, address
+                    placeName.text.toString(), content, date, selectedImageUri!!, address, pinSkin
                 )
             )
-
             close()
         }
 

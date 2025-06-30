@@ -19,6 +19,7 @@ import com.dudoji.android.util.modal.Modal
 import kotlinx.coroutines.launch
 
 object PinModal {
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun openPinMemoModal(activity: AppCompatActivity, pin: Pin) {
         Modal.showCustomModal(activity, R.layout.show_pin_memo_modal) { view ->
@@ -99,6 +100,6 @@ object PinModal {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun openPinDataModal(activity: MapActivity, lat: Double, lng: Double, onComplete: (PinMakeData) -> Unit) {
-        Modal.showCustomModal(activity, PinMemoInputFragment(lat, lng, onComplete))
+        Modal.showCustomModal(activity, PinMemoInputFragment(lat, lng, activity,  onComplete))
     }
 }

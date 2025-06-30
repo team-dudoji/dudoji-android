@@ -10,5 +10,6 @@ data class PinRequestDto(
     val content: String,
     val placeName: String,
     val address: String,
+    val pinSkin: String
 )
 

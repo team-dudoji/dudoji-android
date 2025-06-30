@@ -31,6 +31,7 @@
             android:layout_height="150dp"
             android:layout_marginHorizontal="10dp"
             android:orientation="horizontal">
+
         <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -47,6 +48,7 @@
                 android:layout_marginVertical="20dp"
                 android:gravity="center"
                 android:layout_marginHorizontal="20dp">
+
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -64,8 +66,7 @@
                         android:id="@+id/memo_date_output"
                         android:text="yyyy.mm.dd (w)"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -87,18 +88,14 @@
                             android:hint="장소 이름"
                             android:id="@+id/pin_place_name"
                             android:textSize="15sp"
-                            android:textStyle="bold"
-                            />
+                            android:textStyle="bold" />
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/pin_address"
                             android:text="부산광역시 금정구 부산대학로"
-                            android:textSize="12sp"
-                            />
-
+                            android:textSize="12sp" />
                 </LinearLayout>
-
             </LinearLayout>
 
             <TextView
@@ -111,22 +108,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/memo_like_button"
-                    android:src="@drawable/heart_like"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/memo_like_count"
-                    android:textColor="#FF0044"
-                    android:text="0"/>
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/memo_like_button"
+                        android:src="@drawable/heart_like"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/memo_like_count"
+                        android:textColor="#FF0044"
+                        android:text="0"/>
             </LinearLayout>
 
         </LinearLayout>
-
-
 
     </LinearLayout>
 
@@ -140,4 +135,5 @@
             android:gravity="top|start"
             android:id="@+id/memo_content_output"
             android:textSize="20sp" />
+
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.dudoji.android.util.modal
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
 
 object Modal {
-    fun showCustomModal(activity: AppCompatActivity,
+    fun showCustomModal(activity: Activity,
                         contentLayoutRes: Int,
                         onBind: (View) -> Unit) {
         val inflater = LayoutInflater.from(activity)
