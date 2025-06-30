@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dudoji.android.R
 import com.dudoji.android.pin.domain.Pin
-import com.dudoji.android.pin.model.SortType
 import com.dudoji.android.util.WeekTranslator
 import java.time.format.DateTimeFormatter
 

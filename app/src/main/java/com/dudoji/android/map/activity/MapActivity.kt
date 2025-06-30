@@ -36,7 +36,7 @@ import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MypageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
-import com.dudoji.android.pin.render.CustomPinRenderer
+import com.dudoji.android.pin.util.PinRenderer
 import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinFilter
 import com.dudoji.android.pin.util.PinSetterController
@@ -204,7 +204,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             clusterManager = ClusterManager(this@MapActivity, googleMap)
 
             //맵 액티비티에 스킨 씌우기
-            clusterManager.renderer = CustomPinRenderer(
+            clusterManager.renderer = PinRenderer(
                 this@MapActivity,
                 googleMap,
                 clusterManager

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
 import com.dudoji.android.pin.adapter.PinColorAdapter
-import com.dudoji.android.pin.color.PinColor
+import com.dudoji.android.pin.domain.PinColor
 
 class PinColorChoiceDialogFragment(val pinSkins: List<PinColor>, val listener: (PinColor) -> Unit) : DialogFragment() {
 

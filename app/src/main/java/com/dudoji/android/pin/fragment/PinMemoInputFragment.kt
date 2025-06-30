@@ -20,7 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
-import com.dudoji.android.pin.color.PinColor
+import com.dudoji.android.pin.domain.PinColor
 import com.dudoji.android.pin.util.PinMakeData
 import com.dudoji.android.util.WeekTranslator
 import com.dudoji.android.util.modal.ModalFragment

@@ -14,7 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.dudoji.android.pin.model.SortType
+import com.dudoji.android.pin.adapter.SortType
 import com.dudoji.android.pin.adapter.PinMemoAdapter
 
 class MyPinActivity : AppCompatActivity() {

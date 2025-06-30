@@ -1,4 +1,4 @@
-package com.dudoji.android.pin.render
+package com.dudoji.android.pin.util
 
 import android.content.Context
 import com.dudoji.android.R
@@ -9,7 +9,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 
-class CustomPinRenderer(
+class PinRenderer(
     context: Context,
     map: GoogleMap,
     clusterManager: ClusterManager<Pin>

@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.pin.color.PinColor
+import com.dudoji.android.pin.domain.PinColor
 
 class PinColorAdapter(
     private val pinColors: List<PinColor>,

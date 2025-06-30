@@ -1,4 +1,4 @@
-package com.dudoji.android.pin.model
+package com.dudoji.android.pin.adapter
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -19,7 +19,7 @@ enum class SortType(val comparator: (Pin, Pin) -> Int) {
 
     DISTANCE({ p1, p2 ->
         val (myLat, myLng) = LocationService.getLastLatLng()
-        val myLatLng = com.google.android.gms.maps.model.LatLng(myLat, myLng)
+        val myLatLng = LatLng(myLat, myLng)
         val d1 = SphericalUtil.computeDistanceBetween(myLatLng, LatLng(p1.lat, p1.lng))
         val d2 = SphericalUtil.computeDistanceBetween(myLatLng, LatLng(p2.lat, p2.lng))
         d1.compareTo(d2)
