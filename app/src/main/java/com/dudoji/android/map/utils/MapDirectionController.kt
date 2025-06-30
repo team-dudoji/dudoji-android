@@ -43,8 +43,6 @@ class MapDirectionController(
         val azimuth = Math.toDegrees(orientationAngles[0].toDouble()).toFloat()
         val bearing = (azimuth + 360) % 360
 
-        Log.d("MapDirection", "${bearing}")
-
         mapCameraController.setBearing(bearing)
     }
 

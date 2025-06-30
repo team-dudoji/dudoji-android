@@ -10,7 +10,6 @@ import com.dudoji.android.pin.api.dto.PinSkinUpdateRequestDto
 import com.dudoji.android.pin.domain.Pin
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.clustering.ClusterManager
 
 object PinRepository {
     val pinList = mutableListOf<Pin>()
@@ -47,6 +46,7 @@ object PinRepository {
     suspend fun addPin(pin: PinRequestDto): Boolean {
         val response = RetrofitClient.pinApiService.createPin(pin)
         if (response.isSuccessful) {
+            Log.d("PinRepository", "Pin added successfully: ${response.body()?.pinSkin}")
             pinList.add(response.body()?.toDomain()!!)
             return true
         }

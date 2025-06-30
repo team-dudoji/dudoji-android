@@ -87,6 +87,7 @@ class PinSetterController{
                                         return@launch
                                     }
                                     Log.d("PinRepository", "Image uploaded successfully: ${imageResponse.body()}")
+                                    Log.d("PinRepository", "Pin skin: ${it.pinSkin}")
                                     val requestDto =
                                         PinRequestDto(
                                             content = it.content,

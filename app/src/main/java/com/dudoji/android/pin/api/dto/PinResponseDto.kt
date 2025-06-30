@@ -38,6 +38,4 @@ data class PinResponseDto (
             address = address?:"",
             pinSkin = pinSkin?:"")
         }
-
-
     }

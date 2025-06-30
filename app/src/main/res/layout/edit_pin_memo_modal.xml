@@ -121,37 +121,13 @@
 
     </LinearLayout>
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="12dp">
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="핀 색상 선택"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/pin_color_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/skin_save_button"
-                android:text="적용" android:textStyle="bold"
-                android:textSize="15sp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="8dp"/> </LinearLayout>
+    <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/pin_blue"
+            android:id="@+id/pin_color_select_button"
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp"/>
 
     <EditText
             android:layout_margin="15dp"

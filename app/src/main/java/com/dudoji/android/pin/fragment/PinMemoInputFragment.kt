@@ -6,6 +6,7 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +18,8 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
-import com.dudoji.android.pin.adapter.PinColorAdapter
 import com.dudoji.android.pin.color.PinColor
 import com.dudoji.android.pin.util.PinMakeData
 import com.dudoji.android.util.WeekTranslator
@@ -31,6 +30,7 @@ import java.util.Locale
 class PinMemoInputFragment(
     val lat: Double,
     val lng: Double,
+    val activity: AppCompatActivity,
     private val onComplete: (PinMakeData) -> Unit
 ): ModalFragment() {
 
@@ -38,7 +38,6 @@ class PinMemoInputFragment(
     private var selectedImageUri: Uri? = null
     private val calendar = Calendar.getInstance()
     private var address: String = "주소를 가져오는 중..."
-    private lateinit var pinColorAdapter: PinColorAdapter
     private var selectedPinColor: PinColor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,30 +67,25 @@ class PinMemoInputFragment(
         val placeName = view.findViewById<EditText>(R.id.pin_place_name)
         val pinAddress = view.findViewById<TextView>(R.id.pin_address)
 
-        val pinColorRecyclerView = view.findViewById<RecyclerView>(R.id.pin_color_recycler_view)
+        val pinSkinSelectButton = view.findViewById<ImageView>(R.id.pin_color_select_button)
 
-        val pinColors = listOf(
-            PinColor(1, "빨강", R.drawable.pin_red),
-            PinColor(2, "주황", R.drawable.pin_orange),
-            PinColor(3, "파랑", R.drawable.pin_blue),
-        )
-
-        pinColorAdapter = PinColorAdapter(pinColors) { pinColor ->
-            selectedPinColor = pinColor
-            Toast.makeText(requireContext(), "${pinColor.name} 핀이 선택되었습니다.", Toast.LENGTH_SHORT).show()
+        pinSkinSelectButton.setOnClickListener {
+            val pinColors = listOf(
+                PinColor(1, "빨강", R.drawable.pin_red),
+                PinColor(2, "주황", R.drawable.pin_orange),
+                PinColor(3, "파랑", R.drawable.pin_blue),
+            )
+            val dialog = PinColorChoiceDialogFragment(pinColors) {
+                    selectedPinColor ->
+                this.selectedPinColor = selectedPinColor
+                Toast.makeText(
+                    requireContext(),
+                    "${selectedPinColor.name} 핀이 선택되었습니다.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            dialog.show(parentFragmentManager, "MyChoiceDialog")
         }
-
-        pinColorRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = pinColorAdapter
-        }
-
-        val defaultPinColor = pinColors.find { it.id == 2 } // 주황색의 ID가 2
-        defaultPinColor?.let {
-            selectedPinColor = it
-            pinColorAdapter.setSelectedColor(it.id) // 어댑터에 선택된 아이템을 UI로 표시
-        }
-
 
         Geocoder(requireContext(), Locale.getDefault()).getFromLocation(
             lat,
@@ -141,15 +135,14 @@ class PinMemoInputFragment(
                 return@setOnClickListener
             }
             val pinSkin = selectedPinColor?.let {
-                // 리소스 ID에서 리소스 이름 추출
                 resources.getResourceEntryName(it.imageResId)
-            } ?: "pin_orange" //기본값
+            } ?: "pin_orange"
+            Log.d("PinMemoInputFragment", "Selected pin skin: $pinSkin")
             onComplete(
                 PinMakeData(
                     placeName.text.toString(), content, date, selectedImageUri!!, address, pinSkin
                 )
             )
-
             close()
         }
 
