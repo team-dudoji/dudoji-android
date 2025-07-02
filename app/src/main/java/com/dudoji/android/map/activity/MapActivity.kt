@@ -38,6 +38,7 @@ import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinFilter
 import com.dudoji.android.pin.util.PinSetterController
+import com.dudoji.android.shop.activity.ShopActivity
 import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -225,7 +226,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         AnimatedNavButtonHelper.setup(
             activity = this,
             onStoreClick = {
-                // StoreActivity로 이동
+                startActivity(Intent(this, ShopActivity::class.java))
             },
             onMyPinClick = {
                 // MyPinActivity로 이동
