@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="350dp"
-    android:layout_height="600dp"
-    android:orientation="vertical"
-    android:gravity="center">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="350dp"
+        android:layout_height="600dp"
+        android:orientation="vertical"
+        android:gravity="center">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -37,20 +37,26 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginHorizontal="10dp"
             android:orientation="horizontal">
-        <com.google.android.material.imageview.ShapeableImageView
+
+        <FrameLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:src="@drawable/photo_placeholder"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
-                android:id="@+id/pin_memo_image"/>
+                android:layout_height="match_parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/pin_memo_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/photo_placeholder"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+
+        </FrameLayout>
 
         <LinearLayout
                 android:layout_width="0dp"
@@ -60,6 +66,7 @@
                 android:layout_marginVertical="20dp"
                 android:gravity="center"
                 android:layout_marginHorizontal="20dp">
+
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -78,8 +85,7 @@
                         android:id="@+id/memo_date"
                         android:text="yyyy.mm.dd (w)"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -101,24 +107,27 @@
                             android:text="부산대학교"
                             android:id="@+id/pin_place_name"
                             android:textSize="15sp"
-                            android:textStyle="bold"
-                            />
+                            android:textStyle="bold" />
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/pin_address"
                             android:text="부산광역시 금정구 부산대학로"
-                            android:textSize="12sp"
-                            />
-
+                            android:textSize="12sp" />
                 </LinearLayout>
-
             </LinearLayout>
 
         </LinearLayout>
 
-
     </LinearLayout>
+
+    <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/pin_blue"
+            android:id="@+id/pin_color_select_button"
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp"/>
 
     <EditText
             android:layout_margin="15dp"
@@ -127,9 +136,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-
             android:hint="여러분의 핀을 남겨주세요."
             android:gravity="top|start"
             android:id="@+id/memo_content_input"
             android:textSize="20sp" />
+
 </LinearLayout>

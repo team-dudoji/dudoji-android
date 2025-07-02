@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dudoji.android.R
 import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.pin.adapter.PinMemoAdapter
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.fragment.PinMemoInputFragment
 import com.dudoji.android.util.modal.Modal
 import kotlinx.coroutines.launch
 
 object PinModal {
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun openPinMemoModal(activity: AppCompatActivity, pin: Pin) {
         Modal.showCustomModal(activity, R.layout.show_pin_memo_modal) { view ->
@@ -98,6 +100,6 @@ object PinModal {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun openPinDataModal(activity: MapActivity, lat: Double, lng: Double, onComplete: (PinMakeData) -> Unit) {
-        Modal.showCustomModal(activity, PinMemoInputFragment(lat, lng, onComplete))
+        Modal.showCustomModal(activity, PinMemoInputFragment(lat, lng, activity,  onComplete))
     }
 }
