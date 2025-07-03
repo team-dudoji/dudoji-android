@@ -17,8 +17,8 @@ class DatabaseMapSectionManager(context: Context): MapSectionManager(), IRevealC
 
     init {
         RevealCircleRepository.revealCircleListenerCaller.addListener(this)
+        mapSectionDao.deleteAllMapSections()
     }
-
 
     override fun getMapSection(coordinate: TileCoordinate): MapSection {
         return mapSections[coordinate] ?:
@@ -40,7 +40,11 @@ class DatabaseMapSectionManager(context: Context): MapSectionManager(), IRevealC
 
         for (coord in coordinates) {
             if (!mapSections.containsKey(coord)) {
-                mapSections[coord] = getMapSection(coord)
+                mapSections[coord] = mapSectionDao.getMapSection(coord.x, coord.y) ?:
+                MapSection.Builder()
+                    .setXY(coord.x, coord.y)
+                    .setBitmap(fullBitmap)
+                    .build()
             }
             mapSections[coord]!!.applyPosition(
                 revealCircle.toWorldPosition()
