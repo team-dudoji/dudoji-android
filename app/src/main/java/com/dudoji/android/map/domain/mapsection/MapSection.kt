@@ -6,8 +6,11 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
+import android.graphics.RadialGradient
+import android.graphics.Shader
 import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.config.FOG_COLOR
+import com.dudoji.android.config.GRADIENT_RADIUS_RATE
 import com.dudoji.android.map.domain.TileCoordinate
 import com.dudoji.android.map.domain.WorldPosition
 import com.dudoji.android.map.utils.tile.TILE_SIZE
@@ -42,9 +45,34 @@ open class MapSection {
         val pixelCoordinate = TileCoordinateUtil.Companion.worldToPixel(xOfWold, yOfWorld, tileCoordinate.zoom)
         val pixelInTile = TileCoordinateUtil.Companion.pixelToPixelInTile(pixelCoordinate.first, pixelCoordinate.second, tileCoordinate)
         val paint = Paint()
-        paint.color = Color.TRANSPARENT
-        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_OUT)
         paint.style = Paint.Style.FILL
+        paint.isAntiAlias = true
+        val centerX = pixelInTile.first.toFloat()
+        val centerY = pixelInTile.second.toFloat()
+
+        val radiusPx = TileCoordinateUtil.meterToPixel(
+            radius.toDouble(),
+            TileCoordinateUtil.yOfWorldToLat(yOfWorld),
+            tileCoordinate.zoom
+        ).toFloat()
+
+        paint.shader = RadialGradient(
+                centerX,
+                centerY,
+                radiusPx,
+                intArrayOf(
+                    FOG_COLOR,
+                    FOG_COLOR,
+                    Color.TRANSPARENT,
+                ),
+                floatArrayOf(
+                    0f,
+                    GRADIENT_RADIUS_RATE,
+                    1f
+                ),
+                Shader.TileMode.CLAMP
+            )
 
         drawCircle(
             pixelInTile.first.toFloat(),
