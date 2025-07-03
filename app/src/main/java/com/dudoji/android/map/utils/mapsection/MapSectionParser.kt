@@ -68,8 +68,6 @@ class MapSectionParser {
                         val isFilled = (byteArray[byteIndex].toInt() shr bitIndex) and 1 == 1
                         pixels[y * TILE_SIZE + x] = if (isFilled) Color.BLACK else Color.TRANSPARENT
                     }
-
-
                 }
             }
 
