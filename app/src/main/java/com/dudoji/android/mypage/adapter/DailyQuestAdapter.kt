@@ -50,6 +50,7 @@ class DailyQuestAdapter(
             val displayUnit = when (quest.unit) {
                 MissionUnit.DISTANCE -> "km"
                 MissionUnit.COUNT -> "회"
+                MissionUnit.PERCENTAGE -> TODO()
             }
             unit.text = displayUnit
             targetUnit.text = displayUnit
