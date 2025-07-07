@@ -7,11 +7,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.mypage.domain.Landmark
-import com.dudoji.android.mypage.type.LandmarkType
+import com.dudoji.android.mypage.domain.Quest
+import com.dudoji.android.mypage.type.MissionUnit
 
 class LandmarkAdapter(
-    private val landmarks: List<Landmark>
+    private val quests: List<Quest>
 ) : RecyclerView.Adapter<LandmarkAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -20,10 +20,10 @@ class LandmarkAdapter(
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = landmarks.size
+    override fun getItemCount(): Int = quests.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(landmarks[position])
+        holder.bind(quests[position])
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,27 +35,23 @@ class LandmarkAdapter(
         private val targetValue: TextView = itemView.findViewById(R.id.landmark_target_value)
         private val targetUnit: TextView = itemView.findViewById(R.id.landmark_target_unit)
 
-        fun bind(landmark: Landmark) {
-            title.text = landmark.title
+        fun bind(quest: Quest) {
+            title.text = quest.title
 
-            val progressPercent = if (landmark.goalValue == 0) 0 else
-                (landmark.currentValue.toFloat() / landmark.goalValue * 100).toInt()
+            val progressPercent = if (quest.goalValue == 0) 0 else
+                (quest.currentValue.toFloat() / quest.goalValue * 100).toInt()
 
             progressBar.progress = progressPercent
 
-            currentValue.text = landmark.currentValue.toString()
-            targetValue.text = landmark.goalValue.toString()
+            currentValue.text = quest.currentValue.toString()
+            targetValue.text = quest.goalValue.toString()
 
-            when (landmark.type) {
-                LandmarkType.DISTANCE -> {
-                    unit.text = "km"
-                    targetUnit.text = "km"
-                }
-                LandmarkType.COUNT -> {
-                    unit.text = "회"
-                    targetUnit.text = "회"
-                }
+            val displayUnit = when (quest.unit) {
+                MissionUnit.DISTANCE -> "km"
+                MissionUnit.COUNT ->  "개"
             }
+            unit.text = displayUnit
+            targetUnit.text = displayUnit
         }
     }
 }
