@@ -27,7 +27,7 @@ import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
 import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapUtil
-import com.dudoji.android.map.utils.location.DemoLocationService
+import com.dudoji.android.map.utils.location.GPSLocationService
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.map.utils.tile.MaskTileProvider
@@ -92,7 +92,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         mapUtil.requestLocationPermission()
         mapUtil.prepareMap()
 
-        locationService = DemoLocationService(this)
+        locationService = GPSLocationService(this)
 
         setupMyLocationButton()
         setupLocationUpdates() // Setup location updates Callback
@@ -183,7 +183,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
         mapCameraPositionController = MapCameraPositionController(googleMap, myLocationButton)
 
-        (locationService as DemoLocationService).googleMap = googleMap
+//        (locationService as DemoLocationService).googleMap = googleMap
 
         lifecycleScope.launch {
             mapSectionManager = DatabaseMapSectionManager(this@MapActivity)

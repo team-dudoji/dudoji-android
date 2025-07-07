@@ -17,7 +17,6 @@ class DatabaseMapSectionManager(context: Context): MapSectionManager(), IRevealC
 
     init {
         RevealCircleRepository.revealCircleListenerCaller.addListener(this)
-        mapSectionDao.deleteAllMapSections()
     }
 
     override fun getMapSection(coordinate: TileCoordinate): MapSection {
