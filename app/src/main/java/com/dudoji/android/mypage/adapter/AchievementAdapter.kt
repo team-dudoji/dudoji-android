@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
 import com.dudoji.android.mypage.domain.Achievement
-import com.dudoji.android.mypage.type.AchievementType
+import com.dudoji.android.mypage.type.MissionUnit
 
 class AchievementAdapter(
     private val achievements: List<Achievement>
@@ -33,12 +33,12 @@ class AchievementAdapter(
         fun bind(achievement: Achievement) {
             title.text = achievement.title
 
-            value.text = achievement.totalValue.toString()
+            value.text = achievement.value.toString()
 
             when (achievement.type) {
-                AchievementType.PERCENTAGE -> unit.text = "%"
-                AchievementType.DISTANCE -> unit.text = "km"
-                AchievementType.COUNT -> unit.text = "회"
+                MissionUnit.PERCENTAGE -> unit.text = "%"
+                MissionUnit.DISTANCE -> unit.text = "km"
+                MissionUnit.COUNT -> unit.text = "회"
             }
         }
     }
