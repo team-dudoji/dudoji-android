@@ -49,6 +49,7 @@ class LandmarkAdapter(
             val displayUnit = when (quest.unit) {
                 MissionUnit.DISTANCE -> "km"
                 MissionUnit.COUNT ->  "개"
+                MissionUnit.PERCENTAGE -> TODO()
             }
             unit.text = displayUnit
             targetUnit.text = displayUnit
