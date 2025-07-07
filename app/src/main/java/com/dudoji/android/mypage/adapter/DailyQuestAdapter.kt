@@ -7,11 +7,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.mypage.domain.DailyQuest
-import com.dudoji.android.mypage.type.DailyQuestType
+import com.dudoji.android.mypage.domain.Quest
+import com.dudoji.android.mypage.type.MissionUnit
 
 class DailyQuestAdapter(
-    private val quests: List<DailyQuest>
+    private val quests: List<Quest>
 ) : RecyclerView.Adapter<DailyQuestAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,7 +35,8 @@ class DailyQuestAdapter(
         private val targetValue: TextView = itemView.findViewById(R.id.quest_target_value)
         private val targetUnit: TextView = itemView.findViewById(R.id.quest_target_unit)
 
-        fun bind(quest: DailyQuest) {
+
+        fun bind(quest: Quest) {
             title.text = quest.title
 
             val progressPercent = if (quest.goalValue == 0) 0 else
@@ -46,16 +47,12 @@ class DailyQuestAdapter(
             currentValue.text = quest.currentValue.toString()
             targetValue.text = quest.goalValue.toString()
 
-            when (quest.type) {
-                DailyQuestType.DISTANCE -> {
-                    unit.text = "km"
-                    targetUnit.text = "km"
-                }
-                DailyQuestType.COUNT -> {
-                    unit.text = "회"
-                    targetUnit.text = "회"
-                }
+            val displayUnit = when (quest.unit) {
+                MissionUnit.DISTANCE -> "km"
+                MissionUnit.COUNT -> "회"
             }
+            unit.text = displayUnit
+            targetUnit.text = displayUnit
         }
     }
 }
