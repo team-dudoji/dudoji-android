@@ -12,9 +12,6 @@ data class User (
     val provider : String ,
     val providerId: String ,
     val profileImageUrl: String,
-    val pinnedCount : Int,
-    val followerCount: Int,
-    val followingCount: Int
 ){
     constructor(name: String, email: String) : this(
         id = 0,
@@ -25,9 +22,6 @@ data class User (
         createAt = Date(),
         provider = "",
         providerId = "",
-        profileImageUrl = "",
-        pinnedCount = 0,
-        followerCount = 0,
-        followingCount = 0
+        profileImageUrl = ""
     )
 }
