@@ -3,7 +3,10 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.BuildConfig
+import com.dudoji.android.network.api.service.AchievementApiService
+import com.dudoji.android.network.api.service.DailyQuestApiService
 import com.dudoji.android.network.api.service.FollowApiService
+import com.dudoji.android.network.api.service.LandmarkApiService
 import com.dudoji.android.network.api.service.LoginApiService
 import com.dudoji.android.network.api.service.MapApiService
 import com.dudoji.android.network.api.service.UserApiService
@@ -90,4 +93,7 @@ object RetrofitClient {
     lateinit var mapApiService: MapApiService
     lateinit var followApiService: FollowApiService
     lateinit var pinApiService: PinApiService
+    lateinit var dailyQuestApiService: DailyQuestApiService
+    lateinit var landmarkApiService: LandmarkApiService
+    lateinit var achievementApiService: AchievementApiService
 }
