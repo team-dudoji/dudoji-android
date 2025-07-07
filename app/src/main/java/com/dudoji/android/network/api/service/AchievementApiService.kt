@@ -5,6 +5,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface AchievementApiService {
-    @GET("/api/achievements")
+    @GET("/api/user/achievements")
     suspend fun getAchievements(): Response<List<AchievementDto>>
 }
