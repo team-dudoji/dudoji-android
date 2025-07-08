@@ -15,11 +15,12 @@ import com.dudoji.android.R
 import com.dudoji.android.mypage.adapter.AchievementAdapter
 import com.dudoji.android.mypage.adapter.DailyQuestAdapter
 import com.dudoji.android.mypage.adapter.LandmarkAdapter
-import com.dudoji.android.mypage.repository.MypageRepository
+import com.dudoji.android.mypage.repository.MyPageRepository
+import com.dudoji.android.mypage.type.QuestType
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.launch
 
-class MypageActivity : AppCompatActivity() {
+class MyPageActivity : AppCompatActivity() {
     private val TAG = "MypageActivityDEBUG"
     private lateinit var dailyQuestRecycler: RecyclerView
     private lateinit var landmarkRecycler: RecyclerView
@@ -54,7 +55,7 @@ class MypageActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
-                val userProfile = MypageRepository.getUserProfile()
+                val userProfile = MyPageRepository.getUserProfile()
                 userProfile?.let { profile ->
                     nameTv.text = profile.name
                     email.text = profile.email
@@ -62,22 +63,25 @@ class MypageActivity : AppCompatActivity() {
                     followerCount.text = profile.followerCount.toString()
                     followingCount.text = profile.followingCount.toString()
 
-                    Glide.with(this@MypageActivity)
+                    Glide.with(this@MyPageActivity)
                         .load(profile.profileImageUrl)
                         .error(R.drawable.ic_profile)
                         .placeholder(R.drawable.ic_profile)
                         .into(profileImage)
                 }
 
-                val dailyQuests = MypageRepository.getDailyQuests()
-                dailyQuestAdapter = DailyQuestAdapter(dailyQuests)
+                val quests = MyPageRepository.getDailyQuests()
+                dailyQuestAdapter = DailyQuestAdapter(
+                    quests.stream().filter({ it.questType == QuestType.DAILY }).toList()
+                )
                 dailyQuestRecycler.adapter = dailyQuestAdapter
 
-                val landmarks = MypageRepository.getLandmarkQuests()
-                landmarkAdapter = LandmarkAdapter(landmarks)
+                landmarkAdapter = LandmarkAdapter(
+                    quests.stream().filter({ it.questType == QuestType.LANDMARK }).toList()
+                )
                 landmarkRecycler.adapter = landmarkAdapter
 
-                val achievements = MypageRepository.getAchievements()
+                val achievements = MyPageRepository.getAchievements()
                 achievementAdapter = AchievementAdapter(achievements)
                 achievementRecycler.adapter = achievementAdapter
 
