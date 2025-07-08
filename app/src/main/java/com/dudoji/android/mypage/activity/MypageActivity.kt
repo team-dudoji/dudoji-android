@@ -1,8 +1,10 @@
 package com.dudoji.android.mypage.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +49,7 @@ class MypageActivity : AppCompatActivity() {
         dailyQuestRecycler = findViewById(R.id.daily_quest_recycler)
         landmarkRecycler = findViewById(R.id.landmark_recycler)
         achievementRecycler = findViewById(R.id.achievement_recycler)
+        val settingsButton = findViewById<ImageButton>(R.id.settings_button)
 
         dailyQuestRecycler.layoutManager = LinearLayoutManager(this)
         landmarkRecycler.layoutManager = LinearLayoutManager(this)
@@ -84,6 +87,12 @@ class MypageActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Log.e(TAG, "오류 발생: ${e.message}", e)
             }
-        }
+
+            settingsButton.setOnClickListener {
+                val intent = Intent(this@MypageActivity, AccountManageActivity::class.java)
+                startActivity(intent)
+            }}
     }
+
+
 }
