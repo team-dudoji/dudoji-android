@@ -21,12 +21,13 @@ import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.follow.FriendModal
 import com.dudoji.android.follow.repository.FollowRepository
+import com.dudoji.android.map.manager.DatabaseMapSectionManager
 import com.dudoji.android.map.manager.MapSectionManager
-import com.dudoji.android.map.repository.MapSectionRepository
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
 import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapUtil
+import com.dudoji.android.map.utils.location.GPSLocationService
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.map.utils.tile.MaskTileProvider
@@ -36,9 +37,9 @@ import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
 import com.dudoji.android.mypage.activity.MyPageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
-import com.dudoji.android.pin.util.PinRenderer
 import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinFilter
+import com.dudoji.android.pin.util.PinRenderer
 import com.dudoji.android.pin.util.PinSetterController
 import com.dudoji.android.shop.activity.ShopActivity
 import com.dudoji.android.ui.AnimatedNavButtonHelper
@@ -70,7 +71,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private lateinit var maskTileMaker: IMaskTileMaker
     private lateinit var mapSectionManager: MapSectionManager
 
-
     lateinit var directionController: MapDirectionController
 
     private lateinit var clusterManager: ClusterManager<Pin>
@@ -94,7 +94,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         mapUtil.requestLocationPermission()
         mapUtil.prepareMap()
 
-        locationService = LocationService(this)
+        locationService = GPSLocationService(this)
 
         setupMyLocationButton()
         setupLocationUpdates() // Setup location updates Callback
@@ -144,6 +144,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         Handler().postDelayed({
             tileOverlays[indexOfTileOverlay].clearTileCache()
             indexOfTileOverlay = (indexOfTileOverlay + 1) % numOfTileOverlay
+
         }, TILE_OVERLAY_LOADING_TIME)
     }
 
@@ -163,13 +164,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        lifecycleScope.launch {
-            RevealCircleRepository.saveRevealCirclesToDatabase(this@MapActivity, mapSectionManager, maskTileMaker)
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         directionController.stop()
@@ -183,20 +177,20 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onMapReady(p0: GoogleMap) {
-        googleMap = p0
-        mapUtil.setGoogleMap(p0)
-        p0.setMinZoomPreference(MIN_ZOOM)
-        p0.setMaxZoomPreference(MAX_ZOOM)
+    override fun onMapReady(googleMap: GoogleMap) {
+        this.googleMap = googleMap
+        mapUtil.setGoogleMap(googleMap)
+        googleMap.setMinZoomPreference(MIN_ZOOM)
+        googleMap.setMaxZoomPreference(MAX_ZOOM)
 
-        mapCameraPositionController = MapCameraPositionController(p0, myLocationButton)
+        mapCameraPositionController = MapCameraPositionController(googleMap, myLocationButton)
+
+//        (locationService as DemoLocationService).googleMap = googleMap
 
         lifecycleScope.launch {
-            mapSectionManager = MapSectionRepository.getMapSectionManager(this@MapActivity)
+            mapSectionManager = DatabaseMapSectionManager(this@MapActivity)
             setTileMaskTileMaker(
-                PositionsMaskTileMaker(
-                    MapSectionMaskTileMaker(mapSectionManager)
-                )
+                MapSectionMaskTileMaker(mapSectionManager)
             )
             startLocationUpdates()
 

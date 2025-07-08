@@ -64,15 +64,17 @@ class BitmapUtil {
             return transparentCount.toFloat() / totalPixels
         }
 
-        fun createBitmapWithColor(width: Int, height: Int, color: Int): Bitmap {
+        fun createBitmapWithColor(width: Int, height: Int, color: Int, mutable: Boolean): Bitmap {
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-
             val canvas = Canvas(bitmap)
             val paint = Paint().apply {
                 this.color = color
                 style = Paint.Style.FILL
             }
             canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+            if (!mutable) {
+                return bitmap.copy(Bitmap.Config.ARGB_8888, false)
+            }
             return bitmap
         }
     }

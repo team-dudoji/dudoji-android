@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.*
 import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
 
-const val TILE_SIZE = 256
+const val TILE_SIZE = 512
 
 // Mask Tile Provider for Map Activity
 class MaskTileProvider(private val maskTileMaker: IMaskTileMaker) : TileProvider {

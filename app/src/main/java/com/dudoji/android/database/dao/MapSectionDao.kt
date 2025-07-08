@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.dudoji.android.database.DataBaseHelper
-import com.dudoji.android.map.domain.mapsection.DetailedMapSection
 import com.dudoji.android.map.domain.mapsection.MapSection
 import com.dudoji.android.map.utils.mapsection.BitmapUtil
 
@@ -15,12 +14,25 @@ class MapSectionDao(val context: Context) {
             "from MapSection as m " +
             "LEFT JOIN MapSectionStateBitmap as mb " +
             "on (m.x = mb.x and m.y = mb.y);"
+
+    val DELETE_ALL_MAP_SECTIONS =
+        "delete from MapSection;"
+    val DELETE_ALL_MAP_SECTION_STATE_BITMAP =
+        "delete from MapSectionStateBitmap;"
+
     val GET_MAP_SECTIONS =
         "select m.x, m.y, mb.bitmap " +
                 "from MapSection as m " +
                 "LEFT JOIN MapSectionStateBitmap as mb " +
                 "on (m.x = mb.x and m.y = mb.y) " +
                 "where (? <= m.x and m.x <= ? and ? <= m.y and m.y <= ?);"
+    val GET_MAP_SECTION = """
+        select m.x, m.y, mb.bitmap 
+        from MapSection as m 
+        LEFT JOIN MapSectionStateBitmap as mb 
+        on (m.x = mb.x and m.y = mb.y) 
+        where (m.x = ? and m.y = ?);
+    """
     val INSERT_MAP_SECTION =
         "insert into MapSection (x, y, explored) values (?, ?, ?);"
     val INSERT_MAP_SECTION_STATE_BITMAP =
@@ -34,6 +46,26 @@ class MapSectionDao(val context: Context) {
         "update MapSectionStateBitmap set bitmap = ? where x = ? and y = ?;"
 
     val dataBaseHelper = DataBaseHelper(context)
+
+    fun deleteAllMapSections() {
+        val db = dataBaseHelper.writableDatabase
+        db.execSQL(DELETE_ALL_MAP_SECTIONS)
+        db.execSQL(DELETE_ALL_MAP_SECTION_STATE_BITMAP)
+    }
+
+    fun getMapSection(x: Int, y: Int): MapSection? {
+        val db = dataBaseHelper.readableDatabase
+        val cursor = db.rawQuery(GET_MAP_SECTION, arrayOf(x.toString(), y.toString()))
+        if (cursor.moveToFirst()) {
+            val bitmapBlob = cursor.getBlob(2)
+            val bitmap = BitmapFactory.decodeByteArray(bitmapBlob, 0, bitmapBlob.size)
+            return MapSection.Builder()
+                .setXY(cursor.getInt(0), cursor.getInt(1))
+                .setBitmap(bitmap)
+                .build()
+        }
+        return null
+    }
 
     @SuppressLint("Recycle")
     fun getMapSections(): List<MapSection> {
@@ -78,45 +110,52 @@ class MapSectionDao(val context: Context) {
     }
 
     fun updateMapSection(mapSection: MapSection){
-        if (mapSection is DetailedMapSection) {
+        if (mapSection.bitmap != null) {
             val db = dataBaseHelper.writableDatabase
             val statement = db.compileStatement(UPATE_MAP_SECTION_STATE_BITMAP)
             statement.bindBlob(1,
-                BitmapUtil.bitmapToByteArray(mapSection.getBitmap())
+                BitmapUtil.bitmapToByteArray(mapSection.bitmap!!)
             )
-            statement.executeUpdateDelete()
+            statement.bindLong(2, mapSection.x.toLong())
+            statement.bindLong(3, mapSection.y.toLong())
+            statement.execute()
         } else {
             val db = dataBaseHelper.writableDatabase
             val statement1 = db.compileStatement(DELETE_MAP_SECTION_STATE_BITMAP)
             statement1.bindLong(1, mapSection.x.toLong())
             statement1.bindLong(2, mapSection.y.toLong())
-            statement1.executeUpdateDelete()
+            statement1.execute()
 
             val statement2 = db.compileStatement(UPATE_MAP_SECTION_EXPLOED)
             statement2.bindLong(1, 1L)
             statement2.bindLong(2, mapSection.x.toLong())
             statement2.bindLong(3, mapSection.y.toLong())
-            statement2.executeUpdateDelete()
+            statement2.execute()
         }
-
     }
 
     fun insertMapSection(mapSection: MapSection) {
         val db = dataBaseHelper.writableDatabase
-        if (mapSection is DetailedMapSection) {
+        if (mapSection.bitmap != null) {
             val statement1 = db.compileStatement(INSERT_MAP_SECTION)
             statement1.bindLong(1, mapSection.x.toLong())
             statement1.bindLong(2, mapSection.y.toLong())
             statement1.bindLong(3, 0L)
             statement1.executeInsert()
 
+
             val statement2 = db.compileStatement(INSERT_MAP_SECTION_STATE_BITMAP)
             statement2.bindLong(1, mapSection.x.toLong())
             statement2.bindLong(2, mapSection.y.toLong())
-            val bitmap = mapSection.getBitmap()
+            val bitmap = mapSection.bitmap!!
             val byteArray: ByteArray = BitmapUtil.bitmapToByteArray(bitmap)
             statement2.bindBlob(3, byteArray)
-            statement2.executeInsert()
+            try {
+                statement2.executeInsert()
+            }
+            catch (e: Exception) {
+                Log.e("MapSectionDao", "insertMapSection: Error inserting map section state bitmap", e)
+            }
 
         } else {
             val statement = db.compileStatement(INSERT_MAP_SECTION)
