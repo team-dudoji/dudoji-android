@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -18,7 +20,7 @@ import com.dudoji.android.follow.repository.FollowRepository
 import com.dudoji.android.map.activity.MapActivity
 import kotlinx.coroutines.launch
 
-class FollowAdapter(private val followings: List<User>, private val activity: MapActivity) :
+class FollowAdapter(private val followings: List<User>, private val activity: AppCompatActivity) :
     RecyclerView.Adapter<FollowAdapter.FollowingViewHolder>() {
 
     inner class FollowingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -69,4 +71,15 @@ class FollowAdapter(private val followings: List<User>, private val activity: Ma
     }
 
     override fun getItemCount() = followings.size
+
+    //버튼 상태에 따른 이미지 변경
+    private fun updateFollowButtonState(button: Button, isFollowing: Boolean) {
+        if (isFollowing) {
+            button.setBackgroundResource(R.drawable.following_button)
+            button.setTextColor(ContextCompat.getColor(button.context, android.R.color.white))
+        } else {
+            button.setBackgroundResource(R.drawable.follow_button)
+            button.setTextColor(ContextCompat.getColor(button.context, android.R.color.black))
+        }
+    }
 }
