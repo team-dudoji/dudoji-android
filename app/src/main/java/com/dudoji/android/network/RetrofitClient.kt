@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.BuildConfig
 import com.dudoji.android.network.api.service.AchievementApiService
-import com.dudoji.android.network.api.service.FollowApiService
+import com.dudoji.android.network.api.service.FriendApiService
 import com.dudoji.android.network.api.service.LoginApiService
 import com.dudoji.android.network.api.service.MapApiService
 import com.dudoji.android.network.api.service.QuestApiService
@@ -45,7 +45,7 @@ object RetrofitClient {
 
         mapApiService = retrofit.create(MapApiService::class.java)
         userApiService = retrofit.create(UserApiService::class.java)
-        followApiService = retrofit.create(FollowApiService::class.java)
+        friendApiService = retrofit.create(FriendApiService::class.java)
         pinApiService = retrofit.create(PinApiService::class.java)
         Log.d("MapApiService", "Retrofit client initialized")
     }
@@ -90,7 +90,7 @@ object RetrofitClient {
 
     lateinit var userApiService: UserApiService
     lateinit var mapApiService: MapApiService
-    lateinit var followApiService: FollowApiService
+    lateinit var friendApiService: FriendApiService
     lateinit var pinApiService: PinApiService
     lateinit var questApiService: QuestApiService
     lateinit var achievementApiService: AchievementApiService
