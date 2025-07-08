@@ -33,13 +33,13 @@ object FollowRepository {
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun addFollowing(user: User): Boolean {
         followings.add(user)
-        return RetrofitClient.followApiService.addFriend(user.id).isSuccessful
+        return RetrofitClient.friendApiService.addFriend(user.id).isSuccessful
     }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getRecommendedUsers(email: String): List<User> {
-        val response = RetrofitClient.followApiService.getRecommendedUsers(email)
+        val response = RetrofitClient.friendApiService.getRecommendedUsers(email)
         if (response.isSuccessful) {
             return response.body() ?: emptyList();
         }
@@ -52,7 +52,7 @@ object FollowRepository {
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun deleteFollowing(user: User): Boolean {
-        val isSuccessful = RetrofitClient.followApiService.deleteFriend(user.id).isSuccessful
+        val isSuccessful = RetrofitClient.friendApiService.deleteFriend(user.id).isSuccessful
         if (isSuccessful) {
             followings.remove(user)
             return true
@@ -62,7 +62,7 @@ object FollowRepository {
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun loadFollowings() {
-        val response = RetrofitClient.followApiService.getFollowers()
+        val response = RetrofitClient.friendApiService.getFollowings()
         if (response.isSuccessful) {
             response.body()?.let { users ->
                 followings.clear()
@@ -76,7 +76,7 @@ object FollowRepository {
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun loadFollowers() {
-        val response = RetrofitClient.followApiService.getFollowers()
+        val response = RetrofitClient.friendApiService.getFollowers()
         if (response.isSuccessful) {
             response.body()?.let { users ->
                 followers.clear()
