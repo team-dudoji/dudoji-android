@@ -66,6 +66,8 @@ class FollowAdapter(private val followings: List<User>, private val activity: Ap
                     } else
                         Toast.makeText(activity, "언팔로우에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
+                updateFollowButtonState(holder.deleteButton, isFollowing)
+                holder.deleteButton.text = if (isFollowing) "팔로잉" else "팔로우"
             }
         }
     }
