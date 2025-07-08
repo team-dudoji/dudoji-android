@@ -8,24 +8,18 @@ data class QuestDto (
     val title: String,
     val currentValue: Int,
     val goalValue: Int,
-    val unit: String,
-    val type: String
+    val unit: MissionUnit,
+    val type: QuestType
 ) {
-    fun toDomain(questTypeString: String): Quest {
+    fun toDomain(): Quest {
         val isCompleted = this.currentValue >= this.goalValue
-
-        val missonUnit = when (this.unit) {
-            "km" -> MissionUnit.DISTANCE
-            "개수" -> MissionUnit.COUNT
-            else -> throw IllegalArgumentException("단위 오류: ${this.unit}")
-        }
 
         return Quest(
             title = this.title,
             currentValue = this.currentValue,
             goalValue = this.goalValue,
-            unit = missonUnit,
-            questType = QuestType.valueOf(questTypeString.uppercase()),
+            unit = unit,
+            questType = type,
             isCompleted = isCompleted
         )
     }

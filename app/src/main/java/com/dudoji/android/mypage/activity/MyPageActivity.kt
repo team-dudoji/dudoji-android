@@ -70,7 +70,7 @@ class MyPageActivity : AppCompatActivity() {
                         .into(profileImage)
                 }
 
-                val quests = MyPageRepository.getDailyQuests()
+                val quests = MyPageRepository.getQuests()
                 dailyQuestAdapter = DailyQuestAdapter(
                     quests.stream().filter({ it.questType == QuestType.DAILY }).toList()
                 )

@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi
 import com.dudoji.android.mypage.domain.Achievement
 import com.dudoji.android.mypage.domain.Quest
 import com.dudoji.android.mypage.domain.UserProfile
-import com.dudoji.android.mypage.mapper.toDomain
 
 object MyPageRepository {
 
@@ -29,11 +28,12 @@ object MyPageRepository {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun getDailyQuests(): List<Quest> {
+    suspend fun getQuests(): List<Quest> {
         return try {
             val response = RetrofitClient.missionApiService.getQuests()
             if (response.isSuccessful) {
-                response.body()?.map { it.toDomain("DAILY") } ?: emptyList()
+                Log.d(TAG, "quests loaded successfully: ${response.body()}")
+                response.body()?.map { it.toDomain() } ?: emptyList()
             } else {
                 Log.e(TAG, "Failed to load daily quests: ${response.message()}")
                 emptyList()
@@ -49,6 +49,7 @@ object MyPageRepository {
         return try {
             val response = RetrofitClient.missionApiService.getAchievements()
             if (response.isSuccessful) {
+                Log.d(TAG, "Achievements loaded successfully: ${response.body()}")
                 response.body()?.map { it.toDomain() } ?: emptyList() // Achievement DTO to Domain 매퍼는 별도로 필요
             } else {
                 Log.e(TAG, "Failed to load achievements: ${response.message()}")
