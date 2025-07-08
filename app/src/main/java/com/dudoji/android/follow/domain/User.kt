@@ -11,7 +11,7 @@ data class User (
     val createAt: Date ,
     val provider : String ,
     val providerId: String ,
-    val profileImageUrl: String
+    val profileImageUrl: String,
 ){
     constructor(name: String, email: String) : this(
         id = 0,

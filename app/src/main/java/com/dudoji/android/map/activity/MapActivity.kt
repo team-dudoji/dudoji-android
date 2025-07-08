@@ -33,7 +33,8 @@ import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.map.utils.tile.MaskTileProvider
 import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
-import com.dudoji.android.mypage.activity.MypageActivity
+import com.dudoji.android.map.utils.tile.mask.PositionsMaskTileMaker
+import com.dudoji.android.mypage.activity.MyPageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.util.PinApplier
@@ -237,7 +238,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 FriendModal.openFriendFilterModal(this)
             },
             onProfileClick = {
-                startActivity(Intent(this, MypageActivity::class.java))
+                startActivity(Intent(this, MyPageActivity::class.java))
             }
         )
     }

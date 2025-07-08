@@ -6,6 +6,7 @@ import com.dudoji.android.BuildConfig
 import com.dudoji.android.network.api.service.FollowApiService
 import com.dudoji.android.network.api.service.LoginApiService
 import com.dudoji.android.network.api.service.MapApiService
+import com.dudoji.android.network.api.service.MissionApiService
 import com.dudoji.android.network.api.service.UserApiService
 import com.dudoji.android.network.utils.LocalDateTimeAdapter
 import com.dudoji.android.pin.api.service.PinApiService
@@ -45,6 +46,7 @@ object RetrofitClient {
         userApiService = retrofit.create(UserApiService::class.java)
         followApiService = retrofit.create(FollowApiService::class.java)
         pinApiService = retrofit.create(PinApiService::class.java)
+        missionApiService = retrofit.create(MissionApiService::class.java)
         Log.d("MapApiService", "Retrofit client initialized")
     }
 
@@ -90,4 +92,5 @@ object RetrofitClient {
     lateinit var mapApiService: MapApiService
     lateinit var followApiService: FollowApiService
     lateinit var pinApiService: PinApiService
+    lateinit var missionApiService: MissionApiService
 }
