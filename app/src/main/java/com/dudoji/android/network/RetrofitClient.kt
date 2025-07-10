@@ -3,6 +3,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.BuildConfig
+import com.dudoji.android.login.util.getEncryptedPrefs
 import com.dudoji.android.network.api.service.FollowApiService
 import com.dudoji.android.network.api.service.LoginApiService
 import com.dudoji.android.network.api.service.MapApiService
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit
 // REST API client
 @RequiresApi(Build.VERSION_CODES.O)
 object RetrofitClient {
-    public const val BASE_URL = "http://${BuildConfig.HOST_IP_ADDRESS}/"
+    const val BASE_URL = "http://${BuildConfig.HOST_IP_ADDRESS}/"
 
     @RequiresApi(Build.VERSION_CODES.O)
     val gson = GsonBuilder()
@@ -61,7 +62,7 @@ object RetrofitClient {
 
     fun provideAuthInterceptor(context: Context): Interceptor {
         return Interceptor { chain ->
-            val prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+            val prefs = getEncryptedPrefs(context)
             val token = prefs.getString("jwt", null)
 
             val newRequest = if (token != null) {
