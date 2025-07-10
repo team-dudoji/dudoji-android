@@ -263,7 +263,9 @@
                         android:id="@+id/switch_camera"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="false" />
+                        android:checked="false"
+                        android:track="@drawable/custom_switch_style"
+                        android:thumb="@drawable/custom_switch_button" />
 
             </LinearLayout>
 
@@ -287,7 +289,9 @@
                         android:id="@+id/switch_photo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="false" />
+                        android:checked="false"
+                        android:track="@drawable/custom_switch_style"
+                        android:thumb="@drawable/custom_switch_button" />
 
             </LinearLayout>
 
