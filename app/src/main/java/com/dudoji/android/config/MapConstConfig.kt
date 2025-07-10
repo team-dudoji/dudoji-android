@@ -3,8 +3,8 @@ package com.dudoji.android.config
 import android.graphics.Color
 
 // location diff threshold for update
-const val LOCATION_UPDATE_THRESHOLD = 1 // meter
-const val GRADIENT_RADIUS_RATE = 0.3f // rate of gradient radius to tile size
+const val LOCATION_UPDATE_THRESHOLD = 10 // meter
+const val GRADIENT_RADIUS_RATE = 0.8f // rate of gradient radius to tile size
 
 const val PIN_UPDATE_THRESHOLD = 200.0 // meter
 

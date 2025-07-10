@@ -3,8 +3,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.BuildConfig
-import com.dudoji.android.network.api.service.AchievementApiService
-import com.dudoji.android.network.api.service.FriendApiService
+import com.dudoji.android.network.api.service.FollowApiService
 import com.dudoji.android.network.api.service.LoginApiService
 import com.dudoji.android.network.api.service.MapApiService
 import com.dudoji.android.network.api.service.MissionApiService

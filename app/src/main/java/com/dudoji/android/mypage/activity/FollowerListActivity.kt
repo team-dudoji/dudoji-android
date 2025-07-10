@@ -2,7 +2,6 @@ package com.dudoji.android.mypage.activity
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -36,7 +35,6 @@ class FollowerListActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-
         followerRecyclerView = findViewById(R.id.follower_recycler_view)
         followerRecyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -54,7 +52,6 @@ class FollowerListActivity : AppCompatActivity() {
                 followersList.clear()
                 followersList.addAll(fetchedFollowers)
                 followerAdapter.notifyDataSetChanged()
-
             } catch (e: Exception) {
                 Toast.makeText(this@FollowerListActivity, "팔로워 목록을 불러오기 실패", Toast.LENGTH_SHORT).show()
             }
