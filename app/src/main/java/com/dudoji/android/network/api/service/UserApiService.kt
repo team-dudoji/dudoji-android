@@ -1,5 +1,6 @@
 package com.dudoji.android.network.api.service
 
+import com.dudoji.android.mypage.dto.UserProfileDto
 import retrofit2.Response
 import retrofit2.http.GET
 
