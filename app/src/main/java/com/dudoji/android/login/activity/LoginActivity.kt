@@ -3,6 +3,7 @@ package com.dudoji.android.login.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -65,15 +66,19 @@ class LoginActivity : AppCompatActivity() {
         val prefs = getEncryptedPrefs(this)
         val jwt = prefs.getString("jwt", null)
         if (jwt != null) {
+            try {
+                val response = RetrofitClient.loginApiService.validateJwt("Bearer $jwt")
+                if (response.isSuccessful) {
+                    RetrofitClient.init(this)
 
-            val response = RetrofitClient.loginApiService.validateJwt("Bearer $jwt")
-
-            if (response.code() == 200) {
-                RetrofitClient.init(this)
-
-                val intent = Intent(this, MapActivity::class.java)
-                startActivity(intent)
-                finish()
+                    val intent = Intent(this, MapActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Log.e("JWT", "Invalid JWT: ${response.code()}")
+                }
+            } catch (e: Exception) {
+                Log.e("JWT", "Network error: ${e.message}")
             }
         }
     }
