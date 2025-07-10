@@ -8,12 +8,12 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface FriendApiService {
+interface FollowApiService {
 
-    @GET("/api/user/follows/following")
+    @GET("/api/user/follows")
     suspend fun getFollowings(): Response<List<User>>
 
-    @GET("/api/user/follows/followers")
+    @GET("/api/user/follows/follwer")
     suspend fun getFollowers(): Response<List<User>>
 
     @POST("/api/user/follows/{userId}")
