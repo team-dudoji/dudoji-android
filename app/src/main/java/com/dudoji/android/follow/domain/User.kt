@@ -12,7 +12,6 @@ data class User (
     val provider : String ,
     val providerId: String ,
     val profileImageUrl: String,
-    var isFollowing: Boolean
 ){
     constructor(name: String, email: String) : this(
         id = 0,
@@ -23,7 +22,6 @@ data class User (
         createAt = Date(),
         provider = "",
         providerId = "",
-        profileImageUrl = "",
-        isFollowing = false
+        profileImageUrl = ""
     )
 }

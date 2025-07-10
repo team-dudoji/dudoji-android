@@ -35,7 +35,7 @@ class AchievementAdapter(
 
             value.text = achievement.value.toString()
 
-            when (achievement.type) {
+            when (achievement.unit) {
                 MissionUnit.PERCENTAGE -> unit.text = "%"
                 MissionUnit.DISTANCE -> unit.text = "km"
                 MissionUnit.COUNT -> unit.text = "회"

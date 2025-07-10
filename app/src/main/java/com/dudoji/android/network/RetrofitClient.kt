@@ -7,7 +7,7 @@ import com.dudoji.android.network.api.service.AchievementApiService
 import com.dudoji.android.network.api.service.FriendApiService
 import com.dudoji.android.network.api.service.LoginApiService
 import com.dudoji.android.network.api.service.MapApiService
-import com.dudoji.android.network.api.service.QuestApiService
+import com.dudoji.android.network.api.service.MissionApiService
 import com.dudoji.android.network.api.service.UserApiService
 import com.dudoji.android.network.utils.LocalDateTimeAdapter
 import com.dudoji.android.pin.api.service.PinApiService
@@ -45,8 +45,9 @@ object RetrofitClient {
 
         mapApiService = retrofit.create(MapApiService::class.java)
         userApiService = retrofit.create(UserApiService::class.java)
-        friendApiService = retrofit.create(FriendApiService::class.java)
+        followApiService = retrofit.create(FollowApiService::class.java)
         pinApiService = retrofit.create(PinApiService::class.java)
+        missionApiService = retrofit.create(MissionApiService::class.java)
         Log.d("MapApiService", "Retrofit client initialized")
     }
 
@@ -90,8 +91,7 @@ object RetrofitClient {
 
     lateinit var userApiService: UserApiService
     lateinit var mapApiService: MapApiService
-    lateinit var friendApiService: FriendApiService
+    lateinit var followApiService: FollowApiService
     lateinit var pinApiService: PinApiService
-    lateinit var questApiService: QuestApiService
-    lateinit var achievementApiService: AchievementApiService
+    lateinit var missionApiService: MissionApiService
 }
