@@ -48,6 +48,10 @@
         <activity android:name=".shop.activity.ShopActivity" />
         <activity android:name=".pin.activity.MyPinActivity" />
         <activity android:name=".pin.activity.PinDetailActivity" />
+        <activity android:name=".mypage.activity.FollowerListActivity" />
+        <activity android:name=".mypage.activity.FollowingListActivity" />
+        <activity android:name=".mypage.activity.AccountManageActivity"/>
+
         <activity
             android:name=".network.activity.NoNetworkActivity"
             android:launchMode="singleTop" />

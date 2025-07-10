@@ -7,16 +7,27 @@ import com.dudoji.android.follow.domain.User
 
 object FollowRepository {
     private val followings = mutableListOf<User>()
+    private val followers = mutableListOf<User>()
 
-    private var isLoaded = false
+    private var isFollowingsLoaded = false
+    private var isFollowersLoaded = false
 
      @RequiresApi(Build.VERSION_CODES.O)
      suspend fun getFollowings(): List<User> {
-        if (!isLoaded) {
+        if (!isFollowingsLoaded) {
             loadFollowings()
-            isLoaded = true
+            isFollowingsLoaded = true
         }
         return followings
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getFollowers(): List<User> {
+        if (!isFollowersLoaded) {
+            loadFollowers()
+            isFollowersLoaded = true
+        }
+        return followers
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -51,7 +62,7 @@ object FollowRepository {
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun loadFollowings() {
-        val response = RetrofitClient.followApiService.getFriends()
+        val response = RetrofitClient.followApiService.getFollowings()
         if (response.isSuccessful) {
             response.body()?.let { users ->
                 followings.clear()
@@ -60,6 +71,20 @@ object FollowRepository {
             Log.d("FollowRepository", "Followings loaded successfully: $followings")
         } else {
             Log.e("FollowRepository", "Failed to load followings: ${response.errorBody()?.string()}")
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun loadFollowers() {
+        val response = RetrofitClient.followApiService.getFollowers()
+        if (response.isSuccessful) {
+            response.body()?.let { users ->
+                followers.clear()
+                followers.addAll(users)
+            }
+            Log.d("FollowRepository", "Followers loaded successfully: $followers")
+        } else {
+            Log.e("FollowRepository", "Failed to load followers: ${response.errorBody()?.string()}")
         }
     }
 

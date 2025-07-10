@@ -1,8 +1,10 @@
 package com.dudoji.android.mypage.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -44,6 +46,7 @@ class MyPageActivity : AppCompatActivity() {
         val pinCount = findViewById<TextView>(R.id.pin_count)
         val followerCount = findViewById<TextView>(R.id.follower_count)
         val followingCount = findViewById<TextView>(R.id.following_count)
+        val settingsButton = findViewById<ImageButton>(R.id.settings_button)
 
         dailyQuestRecycler = findViewById(R.id.daily_quest_recycler)
         landmarkRecycler = findViewById(R.id.landmark_recycler)
@@ -87,6 +90,21 @@ class MyPageActivity : AppCompatActivity() {
 
             } catch (e: Exception) {
                 Log.e(TAG, "오류 발생: ${e.message}", e)
+            }
+
+            followerCount.setOnClickListener {
+                val intent = Intent(this@MyPageActivity, FollowerListActivity::class.java)
+                startActivity(intent)
+            }
+
+            followingCount.setOnClickListener {
+                val intent = Intent(this@MyPageActivity, FollowingListActivity::class.java)
+                startActivity(intent)
+            }
+
+            settingsButton.setOnClickListener {
+                val intent = Intent(this@MyPageActivity, AccountManageActivity::class.java)
+                startActivity(intent)
             }
         }
     }
