@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.dudoji.android.login.util.getEncryptedPrefs
 import com.dudoji.android.map.activity.MapActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -40,14 +41,13 @@ object KakaoLoginUtil {
             Log.d(TAG, "Success to dudoji login ${response.body()}")
             val accessToken = response.body()?.token?.accessToken
 
-            val prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+            val prefs = getEncryptedPrefs(context)
             prefs.edit().putString("jwt", accessToken).apply()
             RetrofitClient.init(context)
             val intent = Intent(context, MapActivity::class.java)
             context.startActivity(intent)
         } else {
             Log.e(TAG, "Unsuccess to dudoji login ${response.code()}")
-
 
             // for debug =====================================
             RetrofitClient.init(context)
