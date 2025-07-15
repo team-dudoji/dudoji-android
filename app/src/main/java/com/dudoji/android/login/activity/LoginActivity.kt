@@ -9,17 +9,20 @@ import androidx.core.view.WindowInsetsCompat
 import com.dudoji.android.R
 import com.dudoji.android.databinding.ActivityLoginBinding
 import com.dudoji.android.login.oauth.kakao.KakaoLoginUtil
+import com.dudoji.android.login.permission.MandatoryPermissionHandler
 import com.dudoji.android.login.permission.RequestPermissionsUtil
 import com.dudoji.android.network.utils.NoNetWorkUtil
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.PermissionResultListener {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var kakaoLoginButton: Button
+    private lateinit var requestPermissionsUtil: RequestPermissionsUtil
+    private lateinit var permissionHandler: MandatoryPermissionHandler
 
     override fun onStart() {
         super.onStart()
-        RequestPermissionsUtil(this).requestLocation() // 위치 권한 요청
+        requestPermissionsUtil.requestInitialPermissions() //초기 권한 값 한꺼번에(위치, 카메라, 사진)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +31,8 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        requestPermissionsUtil = RequestPermissionsUtil(this)
+        permissionHandler = MandatoryPermissionHandler(this, this)
 
         // Edge-to-edge 설정
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -36,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
         NoNetWorkUtil(this).checkNetworkAndNavigate()
-
         setKakaoLoginButton()
     }
 
@@ -45,5 +49,18 @@ class LoginActivity : AppCompatActivity() {
         kakaoLoginButton.setOnClickListener(){
             KakaoLoginUtil.loginWithKakao(this)
         }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionHandler.handlePermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onAppShouldBeTerminated() {
+        finish()
     }
 }
