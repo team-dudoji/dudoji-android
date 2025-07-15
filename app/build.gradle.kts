@@ -62,30 +62,29 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.protolite.well.known.types)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("com.google.android.gms:play-services-location:21.3.0")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation("com.google.maps.android:android-maps-utils:2.3.0")
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
+    implementation(libs.android.maps.utils)
 
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // for rest api
-    implementation("com.squareup.retrofit2:retrofit:2.9.0") // Retrofit 기본 라이브러리
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation(libs.retrofit) // Retrofit 기본 라이브러리
+    implementation(libs.converter.gson)
+    implementation(libs.converter.scalars)
 
-    implementation("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
 
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation("com.google.code.gson:gson:2.8.8")
+    implementation(libs.v2.user) // 카카오 로그인 API 모듈
 
-    implementation("com.kakao.sdk:v2-user:2.20.6")// 카카오 로그인 API 모듈
+    implementation(libs.lottie) // 로띠 애니메이션
 
-    implementation("com.airbnb.android:lottie:6.1.0")// 로띠 애니메이션
+    implementation(libs.androidx.security.crypto) // 암호화 라이브러리
 
+    implementation(libs.androidx.biometric.ktx) // 생체 인식 라이브러리
 }
