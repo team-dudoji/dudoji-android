@@ -36,7 +36,7 @@ object PinRepository {
                 lastPinUpdatedLatLng = latLng
                 return true
             } else {
-                Log.e("PinRepository", "Failed to fetch pins: ${response.errorBody()?.string()}")
+                Log.e("PinRepository", "Failed to fetch pins: ${response.message()}, error: ${response.errorBody()?.string()}")
             }
         }
         return false
