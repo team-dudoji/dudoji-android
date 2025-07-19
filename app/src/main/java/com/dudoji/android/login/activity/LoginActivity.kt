@@ -18,6 +18,7 @@ import com.dudoji.android.login.permission.MandatoryPermissionHandler
 import com.dudoji.android.login.permission.RequestPermissionsUtil
 import com.dudoji.android.login.util.getEncryptedPrefs
 import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.network.NetworkInitializer
 import com.dudoji.android.network.utils.NoNetWorkUtil
 import kotlinx.coroutines.launch
 
@@ -86,7 +87,7 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
             try {
                 val response = RetrofitClient.loginApiService.validateJwt("Bearer $jwt")
                 if (response.isSuccessful) {
-                    RetrofitClient.init(this)
+                    NetworkInitializer.init(this)
 
                     val intent = Intent(this, MapActivity::class.java)
                     startActivity(intent)

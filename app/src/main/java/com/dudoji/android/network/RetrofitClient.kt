@@ -1,3 +1,4 @@
+
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -18,7 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
-
 
 // REST API client
 @RequiresApi(Build.VERSION_CODES.O)
@@ -64,6 +64,7 @@ object RetrofitClient {
             val prefs = getEncryptedPrefs(context)
             val token = prefs.getString("jwt", null)
             TOKEN = token ?: ""
+
             val newRequest = if (token != null) {
                 chain.request().newBuilder()
                     .addHeader("Authorization", "Bearer $token")
