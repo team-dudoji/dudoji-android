@@ -1,4 +1,4 @@
-package com.dudoji.android.network.api.service
+package com.dudoji.android.mypage.api.service
 
 import com.dudoji.android.mypage.dto.UserProfileDto
 import retrofit2.Response

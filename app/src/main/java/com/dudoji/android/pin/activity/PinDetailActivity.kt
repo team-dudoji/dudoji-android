@@ -4,7 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.databinding.ActivityPinDetailBinding
 import java.time.LocalDate
@@ -25,11 +25,11 @@ class PinDetailActivity : AppCompatActivity() {
         val content = intent.getStringExtra("content")
         val createdDateStr = intent.getStringExtra("createdDate")
 
-        Glide.with(this)
-            .load("${RetrofitClient.BASE_URL}$imageUrl")
-            .placeholder(R.drawable.photo_placeholder)
-            .error(R.drawable.photo_placeholder)
-            .into(binding.imageView)
+        binding.imageView.load("${RetrofitClient.BASE_URL}/$imageUrl") {
+            crossfade(true)
+            error(R.drawable.photo_placeholder)
+            placeholder(R.drawable.photo_placeholder)
+        }
 
         binding.textPlaceName.text = placeName
         binding.textLikeCount.text = likeCount.toString()

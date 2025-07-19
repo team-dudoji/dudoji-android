@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.util.WeekTranslator
@@ -50,11 +50,11 @@ class PinMemoAdapter(
         holder.date.text = formattedDate
         holder.likeCount.text = pin.likeCount.toString()
 
-        Glide.with(holder.itemView.context)
-            .load("${RetrofitClient.BASE_URL}${pin.imageUrl}")
-            .placeholder(R.drawable.photo_placeholder)
-            .error(R.drawable.photo_placeholder)
-            .into(holder.image)
+        holder.image.load("${RetrofitClient.BASE_URL}/${pin.imageUrl}") {
+            crossfade(true)
+            error(R.drawable.photo_placeholder)
+            placeholder(R.drawable.photo_placeholder)
+        }
     }
 
     override fun getItemCount(): Int = itemList.size

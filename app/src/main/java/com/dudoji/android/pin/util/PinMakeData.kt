@@ -9,5 +9,5 @@ data class PinMakeData(
     val date: LocalDate,
     val imageUri: Uri,
     val address: String,
-    val pinSkin: String
+    val pinSkinId: Long
 )

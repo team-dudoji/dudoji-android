@@ -5,8 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.config.FOG_COLOR
+import com.dudoji.android.map.domain.MapSection
 import com.dudoji.android.map.domain.TileCoordinate
-import com.dudoji.android.map.domain.mapsection.MapSection
 import com.dudoji.android.map.utils.mapsection.BitmapUtil
 import com.dudoji.android.map.utils.mapsection.BitmapUtil.Companion.combineBitmapInGrid
 import com.dudoji.android.map.utils.tile.TILE_SIZE

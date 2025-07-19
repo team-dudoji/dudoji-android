@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.mypage.adapter.AchievementAdapter
 import com.dudoji.android.mypage.adapter.DailyQuestAdapter
@@ -66,11 +66,11 @@ class MyPageActivity : AppCompatActivity() {
                     followerCount.text = profile.followerCount.toString()
                     followingCount.text = profile.followingCount.toString()
 
-                    Glide.with(this@MyPageActivity)
-                        .load(profile.profileImageUrl)
-                        .error(R.drawable.ic_profile)
-                        .placeholder(R.drawable.ic_profile)
-                        .into(profileImage)
+                    profileImage.load(profile.profileImageUrl) {
+                        crossfade(true)
+                        error(R.drawable.ic_profile)
+                        placeholder(R.drawable.ic_profile)
+                    }
                 }
 
                 val quests = MyPageRepository.getQuests()

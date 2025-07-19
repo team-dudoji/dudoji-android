@@ -124,9 +124,10 @@
     <ImageButton
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/pin_blue"
+            android:background="@drawable/pin_button"
             android:id="@+id/pin_color_select_button"
             android:layout_gravity="left"
+            android:scaleType="fitCenter"
             android:layout_marginLeft="20dp"/>
 
     <EditText

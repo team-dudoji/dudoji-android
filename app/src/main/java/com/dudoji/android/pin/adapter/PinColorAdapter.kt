@@ -1,30 +1,38 @@
 package com.dudoji.android.pin.adapter
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.pin.domain.PinColor
+import com.dudoji.android.pin.domain.PinSkin
+import com.dudoji.android.pin.repository.PinSkinRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class PinColorAdapter(
-    private val pinColors: List<PinColor>,
-    private val onItemClick: (PinColor) -> Unit
-) : RecyclerView.Adapter<PinColorAdapter.PinColorViewHolder>() {
+class PinSkinAdapter(
+    private val pinSkins: List<PinSkin>,
+    private val onItemClick: (PinSkin) -> Unit,
+) : RecyclerView.Adapter<PinSkinAdapter.PinSkinViewHolder>() {
 
     private var selectedPosition = RecyclerView.NO_POSITION
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PinColorViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PinSkinViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.pin_color_item, parent, false)
-        return PinColorViewHolder(view)
+        return PinSkinViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: PinColorViewHolder, position: Int) {
-        val pinColor = pinColors[position]
-        holder.bind(pinColor)
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onBindViewHolder(holder: PinSkinViewHolder, position: Int) {
+        val pinSkin = pinSkins[position]
+        holder.bind(pinSkin)
 
         holder.itemView.isSelected = (position == selectedPosition)
         holder.itemView.setOnClickListener {
@@ -33,31 +41,29 @@ class PinColorAdapter(
             }
             selectedPosition = holder.adapterPosition
             notifyItemChanged(selectedPosition)
-            onItemClick(pinColor)
+            onItemClick(pinSkin)
         }
     }
 
-    override fun getItemCount(): Int = pinColors.size
+    override fun getItemCount(): Int = pinSkins.size
 
-    fun setSelectedColor(pinColorId: Int) {
-        val index = pinColors.indexOfFirst { it.id == pinColorId }
-        if (index != -1) {
-            val oldSelectedPosition = selectedPosition
-            selectedPosition = index
-            if (oldSelectedPosition != RecyclerView.NO_POSITION) {
-                notifyItemChanged(oldSelectedPosition)
+    class PinSkinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val pinSkinImage: ImageView = itemView.findViewById(R.id.pin_color_image)
+        private val pinSkinName: TextView = itemView.findViewById(R.id.pin_color_name)
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun bind(pinSkin: PinSkin) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val bitmap = PinSkinRepository.getPinSkinBitmapById(pinSkin.id, itemView.context)
+                withContext(Dispatchers.Main) {
+                    if (bitmap != null) {
+                        pinSkinImage.setImageBitmap(bitmap)
+                    } else {
+                        pinSkinImage.setImageResource(R.drawable.pin_button)
+                    }
+                }
             }
-            notifyItemChanged(selectedPosition)
-        }
-    }
-
-    class PinColorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val pinColorImage: ImageView = itemView.findViewById(R.id.pin_color_image)
-        private val pinColorName: TextView = itemView.findViewById(R.id.pin_color_name)
-
-        fun bind(pinColor: PinColor) {
-            pinColorImage.setImageResource(pinColor.imageResId)
-            pinColorName.text = pinColor.name
+            pinSkinName.text = pinSkin.name
         }
     }
 }

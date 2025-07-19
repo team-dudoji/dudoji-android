@@ -6,7 +6,6 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +18,14 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.R
-import com.dudoji.android.pin.domain.PinColor
+import com.dudoji.android.pin.domain.PinSkin
+import com.dudoji.android.pin.repository.PinSkinRepository
 import com.dudoji.android.pin.util.PinMakeData
 import com.dudoji.android.util.WeekTranslator
 import com.dudoji.android.util.modal.ModalFragment
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Locale
 
@@ -38,7 +40,7 @@ class PinMemoInputFragment(
     private var selectedImageUri: Uri? = null
     private val calendar = Calendar.getInstance()
     private var address: String = "주소를 가져오는 중..."
-    private var selectedPinColor: PinColor? = null
+    private var selectedPinColor: PinSkin? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,14 +72,15 @@ class PinMemoInputFragment(
         val pinSkinSelectButton = view.findViewById<ImageView>(R.id.pin_color_select_button)
 
         pinSkinSelectButton.setOnClickListener {
-            val pinColors = listOf(
-                PinColor(1, "빨강", R.drawable.pin_red),
-                PinColor(2, "주황", R.drawable.pin_orange),
-                PinColor(3, "파랑", R.drawable.pin_blue),
-            )
-            val dialog = PinColorChoiceDialogFragment(pinColors) {
+            val dialog = PinColorChoiceDialogFragment(PinSkinRepository.pinSkinList?.values?.toList() ?: emptyList()) {
                     selectedPinColor ->
                 this.selectedPinColor = selectedPinColor
+                lifecycleScope.launch {
+                    pinSkinSelectButton.background = PinSkinRepository.getPinSkinDrawableById(
+                        selectedPinColor.id, requireContext()
+                    )
+                }
+
                 Toast.makeText(
                     requireContext(),
                     "${selectedPinColor.name} 핀이 선택되었습니다.",
@@ -134,13 +137,10 @@ class PinMemoInputFragment(
                 Toast.makeText(requireContext(), "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val pinSkin = selectedPinColor?.let {
-                resources.getResourceEntryName(it.imageResId)
-            } ?: "pin_orange"
-            Log.d("PinMemoInputFragment", "Selected pin skin: $pinSkin")
+
             onComplete(
                 PinMakeData(
-                    placeName.text.toString(), content, date, selectedImageUri!!, address, pinSkin
+                    placeName.text.toString(), content, date, selectedImageUri!!, address, selectedPinColor?.id ?: 1L
                 )
             )
             close()

@@ -2,6 +2,7 @@ package com.dudoji.android.pin.api.service
 
 import com.dudoji.android.pin.api.dto.PinRequestDto
 import com.dudoji.android.pin.api.dto.PinResponseDto
+import com.dudoji.android.pin.api.dto.PinSkinDto
 import com.dudoji.android.pin.api.dto.PinSkinUpdateRequestDto
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -42,4 +43,6 @@ interface PinApiService {
         @Body request: PinSkinUpdateRequestDto
     ): Response<String>
 
+    @GET("/api/user/pin-skins")
+    suspend fun getPinSkins(): Response<List<PinSkinDto>>
 }

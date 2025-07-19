@@ -3,9 +3,9 @@ package com.dudoji.android.map.manager
 import android.content.Context
 import android.util.Log
 import com.dudoji.android.database.dao.MapSectionDao
+import com.dudoji.android.map.domain.MapSection
 import com.dudoji.android.map.domain.RevealCircle
 import com.dudoji.android.map.domain.TileCoordinate
-import com.dudoji.android.map.domain.mapsection.MapSection
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.location.IRevealCircleListener
 import com.dudoji.android.map.utils.tile.TileCoordinateUtil

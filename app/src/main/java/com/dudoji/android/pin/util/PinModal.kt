@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.pin.adapter.PinMemoAdapter
@@ -32,10 +32,11 @@ object PinModal {
             val pinAddress = view.findViewById<TextView>(R.id.pin_address)
             val isLiked = pin.isLiked
 
-            Glide.with(activity)
-                .load("${RetrofitClient.BASE_URL}${pin.imageUrl}")
-                .placeholder(R.drawable.photo_placeholder)
-                .into(pinImage)
+            pinImage.load("${RetrofitClient.BASE_URL}/${pin.imageUrl}") {
+                crossfade(true)
+                error(R.drawable.photo_placeholder)
+                placeholder(R.drawable.photo_placeholder)
+            }
 
             pinLikeButton.setImageDrawable(
                 activity.getDrawable(
