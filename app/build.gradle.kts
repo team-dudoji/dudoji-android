@@ -31,6 +31,7 @@ android {
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${getApiKey("GOOGLE_MAPS_API_KEY")}\"")
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"${getApiKey("KAKAO_NATIVE_APP_KEY")}\"")
         buildConfigField("String", "HOST_IP_ADDRESS", "\"${getApiKey("HOST_IP_ADDRESS")}\"")
+        buildConfigField("String", "HOST_PORT", "\"${getApiKey("HOST_PORT")}\"")
 
         addManifestPlaceholders(mapOf("GOOGLE_MAPS_API_KEY" to getApiKey("GOOGLE_MAPS_API_KEY")))
         addManifestPlaceholders(mapOf("KAKAO_NATIVE_APP_KEY" to getApiKey("KAKAO_NATIVE_APP_KEY")))
