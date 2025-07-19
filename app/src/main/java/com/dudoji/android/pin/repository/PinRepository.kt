@@ -46,7 +46,6 @@ object PinRepository {
     suspend fun addPin(pin: PinRequestDto): Boolean {
         val response = RetrofitClient.pinApiService.createPin(pin)
         if (response.isSuccessful) {
-            Log.d("PinRepository", "Pin added successfully: ${response.body()?.pinSkin}")
             pinList.add(response.body()?.toDomain()!!)
             return true
         }
@@ -65,7 +64,7 @@ object PinRepository {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun updatePinSkin(pinId: Long, newSkin: String): Boolean {
+    suspend fun updatePinSkin(pinId: Long, newSkin: Long): Boolean {
         val response = RetrofitClient.pinApiService.updatePinSkin(
             pinId,
             PinSkinUpdateRequestDto(newSkin)

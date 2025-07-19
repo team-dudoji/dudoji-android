@@ -24,7 +24,8 @@ import java.util.concurrent.TimeUnit
 // REST API client
 @RequiresApi(Build.VERSION_CODES.O)
 object RetrofitClient {
-    const val BASE_URL = "http://${BuildConfig.HOST_IP_ADDRESS}/"
+    const val BASE_URL = "http://${BuildConfig.HOST_IP_ADDRESS}"
+    lateinit var TOKEN: String
 
     @RequiresApi(Build.VERSION_CODES.O)
     val gson = GsonBuilder()
@@ -63,7 +64,7 @@ object RetrofitClient {
         return Interceptor { chain ->
             val prefs = getEncryptedPrefs(context)
             val token = prefs.getString("jwt", null)
-
+            TOKEN = token ?: ""
             val newRequest = if (token != null) {
                 chain.request().newBuilder()
                     .addHeader("Authorization", "Bearer $token")
