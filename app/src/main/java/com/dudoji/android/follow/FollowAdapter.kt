@@ -13,11 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.follow.domain.User
 import com.dudoji.android.follow.repository.FollowRepository
-import com.dudoji.android.map.activity.MapActivity
 import kotlinx.coroutines.launch
 
 class FollowAdapter(private val followings: List<User>, private val activity: AppCompatActivity) :
@@ -43,11 +42,11 @@ class FollowAdapter(private val followings: List<User>, private val activity: Ap
         var isFollowing = true
         val imageUrl = following.profileImageUrl
         if (!imageUrl.isNullOrBlank()) {
-            Glide.with(activity)
-                .load(imageUrl)
-                .error(R.drawable.ic_profile)
-                .placeholder(R.drawable.ic_profile)
-                .into(holder.image)
+            holder.image.load(imageUrl) {
+                crossfade(true)
+                error(R.drawable.ic_profile)
+                placeholder(R.drawable.ic_profile)
+            }
         }
         holder.deleteButton.setOnClickListener {
             activity.lifecycleScope.launch {

@@ -77,8 +77,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.converter.scalars)
 
-    implementation(libs.glide)
-    annotationProcessor(libs.compiler)
+    implementation("io.coil-kt:coil:2.4.0")
 
     implementation(libs.v2.user) // 카카오 로그인 API 모듈
 

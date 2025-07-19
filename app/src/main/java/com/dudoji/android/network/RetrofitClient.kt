@@ -1,14 +1,14 @@
+
 import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.BuildConfig
+import com.dudoji.android.login.api.service.LoginApiService
 import com.dudoji.android.login.util.getEncryptedPrefs
-import com.dudoji.android.network.api.service.FollowApiService
-import com.dudoji.android.network.api.service.LoginApiService
-import com.dudoji.android.network.api.service.MapApiService
-import com.dudoji.android.network.api.service.MissionApiService
-import com.dudoji.android.network.api.service.UserApiService
+import com.dudoji.android.mypage.api.service.FollowApiService
+import com.dudoji.android.mypage.api.service.MissionApiService
+import com.dudoji.android.mypage.api.service.UserApiService
 import com.dudoji.android.network.utils.LocalDateTimeAdapter
 import com.dudoji.android.pin.api.service.PinApiService
 import com.google.gson.GsonBuilder
@@ -43,7 +43,6 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
-        mapApiService = retrofit.create(MapApiService::class.java)
         userApiService = retrofit.create(UserApiService::class.java)
         followApiService = retrofit.create(FollowApiService::class.java)
         pinApiService = retrofit.create(PinApiService::class.java)
@@ -90,7 +89,6 @@ object RetrofitClient {
     }
 
     lateinit var userApiService: UserApiService
-    lateinit var mapApiService: MapApiService
     lateinit var followApiService: FollowApiService
     lateinit var pinApiService: PinApiService
     lateinit var missionApiService: MissionApiService
