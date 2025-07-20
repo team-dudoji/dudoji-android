@@ -184,8 +184,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
         mapCameraPositionController = MapCameraPositionController(googleMap, myLocationButton)
 
-//        (locationService as DemoLocationService).googleMap = googleMap
-
         lifecycleScope.launch {
             mapSectionManager = DatabaseMapSectionManager(this@MapActivity)
             setTileMaskTileMaker(
@@ -230,7 +228,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 startActivity(Intent(this, ShopActivity::class.java))
             },
             onMyPinClick = {
-                // MyPinActivity로 이동
                 startActivity(Intent(this, MyPinActivity::class.java))
             },
             onSocialClick = {

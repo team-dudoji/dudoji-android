@@ -1,4 +1,4 @@
-package com.dudoji.android.map.domain.mapsection
+package com.dudoji.android.map.domain
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -11,8 +11,6 @@ import android.graphics.Shader
 import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.config.FOG_COLOR
 import com.dudoji.android.config.GRADIENT_RADIUS_RATE
-import com.dudoji.android.map.domain.TileCoordinate
-import com.dudoji.android.map.domain.WorldPosition
 import com.dudoji.android.map.utils.tile.TILE_SIZE
 import com.dudoji.android.map.utils.tile.TileCoordinateUtil
 

@@ -1,4 +1,4 @@
-package com.dudoji.android.network.api.service
+package com.dudoji.android.mypage.api.service
 
 import com.dudoji.android.mypage.dto.AchievementDto
 import com.dudoji.android.mypage.dto.QuestDto

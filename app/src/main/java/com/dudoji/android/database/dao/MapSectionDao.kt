@@ -5,7 +5,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.dudoji.android.database.DataBaseHelper
-import com.dudoji.android.map.domain.mapsection.MapSection
+import com.dudoji.android.map.domain.MapSection
 import com.dudoji.android.map.utils.mapsection.BitmapUtil
 
 class MapSectionDao(val context: Context) {

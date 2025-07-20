@@ -8,17 +8,17 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.pin.adapter.PinColorAdapter
-import com.dudoji.android.pin.domain.PinColor
+import com.dudoji.android.pin.adapter.PinSkinAdapter
+import com.dudoji.android.pin.domain.PinSkin
 
-class PinColorChoiceDialogFragment(val pinSkins: List<PinColor>, val listener: (PinColor) -> Unit) : DialogFragment() {
+class PinColorChoiceDialogFragment(val pinSkins: List<PinSkin>, val listener: (PinSkin) -> Unit) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?):Dialog {
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.pin_select_modal, null)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.pin_color_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = PinColorAdapter(pinSkins) { selected ->
+        recyclerView.adapter = PinSkinAdapter(pinSkins) { selected ->
             listener(selected)
             dismiss()
         }
