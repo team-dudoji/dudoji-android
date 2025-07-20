@@ -44,14 +44,14 @@ object KakaoLoginUtil {
 
             val prefs = getEncryptedPrefs(context)
             prefs.edit().putString("jwt", accessToken).apply()
-            NetworkInitializer.init(context)
+            NetworkInitializer.initAuthed(context)
             val intent = Intent(context, MapActivity::class.java)
             context.startActivity(intent)
         } else {
             Log.e(TAG, "Unsuccess to dudoji login ${response.code()}")
 
             // for debug =====================================
-            NetworkInitializer.init(context)
+            NetworkInitializer.initAuthed(context)
             val intent = Intent(context, MapActivity::class.java)
             context.startActivity(intent)
             // ============================================

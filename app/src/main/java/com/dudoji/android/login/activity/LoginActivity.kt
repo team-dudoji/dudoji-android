@@ -51,6 +51,9 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
             insets
         }
         NoNetWorkUtil(this).checkNetworkAndNavigate()
+
+        NetworkInitializer.initNonAuthed(this@LoginActivity)
+
         setKakaoLoginButton()
 
         lifecycleScope.launch{
@@ -87,7 +90,7 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
             try {
                 val response = RetrofitClient.loginApiService.validateJwt("Bearer $jwt")
                 if (response.isSuccessful) {
-                    NetworkInitializer.init(this)
+                    NetworkInitializer.initAuthed(this)
 
                     val intent = Intent(this, MapActivity::class.java)
                     startActivity(intent)
