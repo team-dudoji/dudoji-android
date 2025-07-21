@@ -90,7 +90,7 @@ object KakaoLoginUtil {
                 loginWithKakaoAccount(context)
             }
 
-            if (token == null ) {
+            if (token == null) {
                 return@loginWithKakaoTalk
             }
 
