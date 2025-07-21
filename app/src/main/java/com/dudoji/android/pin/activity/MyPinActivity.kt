@@ -50,6 +50,7 @@ class MyPinActivity : AppCompatActivity() {
 
     private fun openPinDetailPage(pin: Pin) {
         val intent = Intent(this, PinDetailActivity::class.java).apply {
+            putExtra("userId", pin.userId)
             putExtra("imageUrl", pin.imageUrl)
             putExtra("placeName", pin.placeName)
             putExtra("likeCount", pin.likeCount)
