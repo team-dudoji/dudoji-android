@@ -1,7 +1,7 @@
 package com.dudoji.android.mypage.dto
 
 import com.dudoji.android.mypage.domain.Achievement
-import com.dudoji.android.mypage.type.MissionUnit
+import com.dudoji.android.mypage.domain.MissionUnit
 
 data class AchievementDto (
     val title: String,
