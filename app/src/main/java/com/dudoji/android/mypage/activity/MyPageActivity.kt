@@ -18,7 +18,7 @@ import com.dudoji.android.mypage.adapter.AchievementAdapter
 import com.dudoji.android.mypage.adapter.DailyQuestAdapter
 import com.dudoji.android.mypage.adapter.LandmarkAdapter
 import com.dudoji.android.mypage.repository.MyPageRepository
-import com.dudoji.android.mypage.type.QuestType
+import com.dudoji.android.mypage.domain.QuestType
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.launch
 

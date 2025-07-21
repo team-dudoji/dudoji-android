@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
 import com.dudoji.android.mypage.domain.Quest
-import com.dudoji.android.mypage.type.MissionUnit
+import com.dudoji.android.mypage.domain.MissionUnit
 
 class DailyQuestAdapter(
     private val quests: List<Quest>

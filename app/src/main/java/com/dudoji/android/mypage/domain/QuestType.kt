@@ -1,4 +1,4 @@
-package com.dudoji.android.mypage.type
+package com.dudoji.android.mypage.domain
 
 enum class QuestType {
     DAILY,

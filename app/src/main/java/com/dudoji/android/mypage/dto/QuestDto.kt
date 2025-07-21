@@ -1,8 +1,8 @@
 package com.dudoji.android.mypage.dto
 
 import com.dudoji.android.mypage.domain.Quest
-import com.dudoji.android.mypage.type.MissionUnit
-import com.dudoji.android.mypage.type.QuestType
+import com.dudoji.android.mypage.domain.MissionUnit
+import com.dudoji.android.mypage.domain.QuestType
 
 data class QuestDto (
     val title: String,
