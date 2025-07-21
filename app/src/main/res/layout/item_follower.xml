@@ -17,7 +17,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_profile" android:background="@android:color/white"
+            android:src="@drawable/user_placeholder" android:background="@android:color/white"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             android:layout_marginEnd="12dp" />
 

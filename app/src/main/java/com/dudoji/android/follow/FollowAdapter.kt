@@ -44,8 +44,8 @@ class FollowAdapter(private val followings: List<User>, private val activity: Ap
         if (!imageUrl.isNullOrBlank()) {
             holder.image.load(imageUrl) {
                 crossfade(true)
-                error(R.drawable.ic_profile)
-                placeholder(R.drawable.ic_profile)
+                error(R.drawable.user_placeholder)
+                placeholder(R.drawable.user_placeholder)
             }
         }
         holder.deleteButton.setOnClickListener {
