@@ -55,7 +55,7 @@ object PinSkinRepository {
         mutex.withLock {
             val loader = Coil.imageLoader
             val request = ImageRequest.Builder(context)
-                .addHeader("Authorization", "Bearer ${RetrofitClient.TOKEN}")
+                .data("${RetrofitClient.BASE_URL}/${url}")
                 .build()
 
             return (loader.execute(request) as SuccessResult).drawable
