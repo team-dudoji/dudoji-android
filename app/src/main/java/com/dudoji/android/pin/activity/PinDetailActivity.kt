@@ -47,7 +47,7 @@ class PinDetailActivity : AppCompatActivity() {
             with(binding) {
                 binding.btnFollow.visibility = View.GONE
                 binding.textProfileName.text = it.name
-                binding.imageProfile.load("${RetrofitClient.BASE_URL}/${it.profileImageUrl}") {
+                binding.imageProfile.load(it.profileImageUrl) {
                     crossfade(true)
                     placeholder(R.drawable.user_placeholder)
                     error(R.drawable.user_placeholder)
