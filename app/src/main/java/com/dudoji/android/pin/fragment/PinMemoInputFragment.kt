@@ -72,7 +72,7 @@ class PinMemoInputFragment(
         val pinSkinSelectButton = view.findViewById<ImageView>(R.id.pin_color_select_button)
 
         pinSkinSelectButton.setOnClickListener {
-            val dialog = PinColorChoiceDialogFragment(PinSkinRepository.pinSkinList?.values?.toList() ?: emptyList()) {
+            val dialog = PinSkinChoiceDialogFragment(PinSkinRepository.pinSkinList?.values?.toList() ?: emptyList()) {
                     selectedPinColor ->
                 this.selectedPinColor = selectedPinColor
                 lifecycleScope.launch {
