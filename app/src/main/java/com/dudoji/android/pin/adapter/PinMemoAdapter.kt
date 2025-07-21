@@ -19,6 +19,7 @@ class PinMemoAdapter(
     private val onItemClick: ((Pin) -> Unit)? = null
 ) : RecyclerView.Adapter<PinMemoAdapter.PinViewHolder>() {
 
+
     inner class PinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val placeName: TextView = itemView.findViewById(R.id.pin_place_name)
         val content: TextView = itemView.findViewById(R.id.pin_item_content)
@@ -58,6 +59,11 @@ class PinMemoAdapter(
     }
 
     override fun getItemCount(): Int = itemList.size
+
+    fun updateItems(newItems: List<Pin>) {
+        itemList = newItems
+        notifyDataSetChanged()
+    }
 
     fun sortBy(type: SortType) {
         itemList = itemList.sortedWith(Comparator(type.comparator))
