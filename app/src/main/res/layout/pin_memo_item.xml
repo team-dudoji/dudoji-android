@@ -1,61 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="400dp"
-        android:layout_height="100dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="horizontal">
-    <com.google.android.material.imageview.ShapeableImageView
-            android:layout_margin="16dp"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/photo_placeholder"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
-            android:id="@+id/pin_image"/>
-    <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:gravity="center_vertical"
-            android:paddingStart="20dp"
-            android:orientation="vertical">
 
-        <TextView
-                android:id="@+id/pin_place_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="장소 이름"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
+
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="350dp"
+        android:layout_height="120dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal">
+
+        <com.google.android.material.imageview.ShapeableImageView
+                android:layout_margin="16dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/photo_placeholder"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
+                android:id="@+id/pin_image"/>
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-            <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/heart_like"/>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
             <TextView
-                    android:layout_width="30dp"
+                    android:id="@+id/pin_place_name"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#FF0044"
-                    android:text="0"
-                    android:id="@+id/pin_item_like_count"/>
+                    android:text="장소 이름"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/heart_like"/>
+                <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FF0044"
+                        android:text="0"
+                        android:id="@+id/pin_item_like_count"/>
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="20dp"
+                        android:textColor="#32323266"
+                        android:id="@+id/pin_item_date"
+                        android:text="yyyy.ww.dd (w)"/>
+            </LinearLayout>
             <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="20dp"
-                    android:textColor="#32323266"
-                    android:id="@+id/pin_item_date"
-                    android:text="yyyy.ww.dd (w)"/>
+                    android:id="@+id/pin_item_content"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="내용"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"/>
+
         </LinearLayout>
-        <TextView
-                android:id="@+id/pin_item_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="내용"
-                android:textColor="@color/black"
-                android:textSize="12sp"/>
     </LinearLayout>
+
+    <View
+            android:layout_width="300dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="2dp"
+            android:background="#CCCCCC"
+            android:layout_marginVertical="11dp" />
 </androidx.appcompat.widget.LinearLayoutCompat>
+
