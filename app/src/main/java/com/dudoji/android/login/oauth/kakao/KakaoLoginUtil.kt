@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 
 object KakaoLoginUtil {
     val TAG = "KakaoLoginUtilDEBUG"
+
     @RequiresApi(Build.VERSION_CODES.O)
     private val userApiService = RetrofitClient.loginApiService
 
@@ -44,7 +45,9 @@ object KakaoLoginUtil {
 
             val prefs = getEncryptedPrefs(context)
             prefs.edit().putString("jwt", accessToken).apply()
+
             NetworkInitializer.initAuthed(context)
+
             val intent = Intent(context, MapActivity::class.java)
             context.startActivity(intent)
         } else {
@@ -59,37 +62,41 @@ object KakaoLoginUtil {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun loginWithKakao(context: Context) {
+    fun tryLoginWithKakao(context: Context) {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-            UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-                if (error != null) {
-                    Log.e(TAG, "Unsuccess to kakao login ", error)
-
-                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                        return@loginWithKakaoTalk
-                    }
-
-                    UserApiClient.instance.loginWithKakaoAccount(context) {
-                        token, error ->
-                        callback(token, error, context)
-                    }
-                } else if (token != null) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        onLoginSuccess(token, context)
-                    }
-                }
-            }
+            loginWithKakaoTalk(context)
         } else {
-            UserApiClient.instance.loginWithKakaoAccount(context) {
-                    token, error ->
-                callback(token, error, context)
+            loginWithKakaoAccount(context)
+        }
+    }
+
+    fun loginWithKakaoAccount(context: Context) {
+        UserApiClient.instance.loginWithKakaoAccount(context) {
+                token, error ->
+            callback(token, error, context)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun loginWithKakaoTalk(context: Context) {
+        UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+            if (error != null) {
+                Log.e(TAG, "Unsuccess to login with Kakao Talk ", error)
+
+                if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                    return@loginWithKakaoTalk
+                }
+
+                loginWithKakaoAccount(context)
+            }
+
+            if (token == null ) {
+                return@loginWithKakaoTalk
+            }
+
+            CoroutineScope(Dispatchers.Main).launch {
+                onLoginSuccess(token, context)
             }
         }
-
-//        // TODO: Re-enable the production Kakao login logic before releasing to production.
-        //테스트용
-//            RetrofitClient.init(context)
-//            val intent = Intent(context, MapActivity::class.java)
-//            context.startActivity(intent)
     }
 }
