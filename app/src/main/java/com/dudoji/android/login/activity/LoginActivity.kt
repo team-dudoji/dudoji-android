@@ -14,8 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.R
 import com.dudoji.android.databinding.ActivityLoginBinding
 import com.dudoji.android.login.oauth.kakao.KakaoLoginUtil
-import com.dudoji.android.login.permission.MandatoryPermissionHandler
-import com.dudoji.android.login.permission.RequestPermissionsUtil
+import com.dudoji.android.login.util.MandatoryPermissionHandler
+import com.dudoji.android.login.util.RequestPermissionsUtil
 import com.dudoji.android.login.util.getEncryptedPrefs
 import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.network.NetworkInitializer
@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
     fun setKakaoLoginButton() {
         kakaoLoginButton = findViewById<Button>(R.id.kakao_login_button)
         kakaoLoginButton.setOnClickListener(){
-            KakaoLoginUtil.loginWithKakao(this)
+            KakaoLoginUtil.tryLoginWithKakao(this)
         }
     }
 

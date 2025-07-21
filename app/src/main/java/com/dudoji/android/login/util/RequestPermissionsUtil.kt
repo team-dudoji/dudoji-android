@@ -1,4 +1,4 @@
-package com.dudoji.android.login.permission
+package com.dudoji.android.login.util
 
 import android.Manifest
 import android.app.Activity
