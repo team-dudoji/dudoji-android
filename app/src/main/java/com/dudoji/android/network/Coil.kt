@@ -5,11 +5,13 @@ import coil.Coil
 import coil.ImageLoader
 import okhttp3.OkHttpClient
 
-object CoilConfigurer {
+object Coil {
+
+    lateinit var imageLoader: ImageLoader
 
     fun init(context: Context, client: OkHttpClient) {
 
-        val imageLoader = ImageLoader.Builder(context)
+        imageLoader = ImageLoader.Builder(context)
             .okHttpClient { client }
             .build()
 

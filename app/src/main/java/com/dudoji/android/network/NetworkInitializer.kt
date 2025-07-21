@@ -28,7 +28,7 @@ object NetworkInitializer {
         RetrofitClient.initAuthed(client)
 
         // Initialize Coil image loader
-        CoilConfigurer.init(context, client)
+        Coil.init(context, client)
     }
 
     fun provideNonAuthedOkHttpClient(context: Context): OkHttpClient {
