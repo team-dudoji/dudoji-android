@@ -18,8 +18,8 @@ import com.dudoji.android.R
 import com.dudoji.android.mypage.adapter.AchievementAdapter
 import com.dudoji.android.mypage.adapter.DailyQuestAdapter
 import com.dudoji.android.mypage.adapter.LandmarkAdapter
-import com.dudoji.android.mypage.repository.MyPageRepository
-import com.dudoji.android.mypage.type.QuestType
+import com.dudoji.android.mypage.repository.MyPageRemoteDataSource
+import com.dudoji.android.mypage.domain.QuestType
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.launch
 
@@ -62,7 +62,7 @@ class MyPageActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
-                val userProfile = MyPageRepository.getUserProfile()
+                val userProfile = MyPageRemoteDataSource.getUserProfile()
                 userProfile?.let { profile ->
                     nameTv.text = profile.name
                     email.text = profile.email
@@ -72,12 +72,12 @@ class MyPageActivity : AppCompatActivity() {
 
                     profileImage.load(profile.profileImageUrl) {
                         crossfade(true)
-                        error(R.drawable.ic_profile)
-                        placeholder(R.drawable.ic_profile)
+                        error(R.drawable.user_placeholder)
+                        placeholder(R.drawable.user_placeholder)
                     }
                 }
 
-                val quests = MyPageRepository.getQuests()
+                val quests = MyPageRemoteDataSource.getQuests()
                 dailyQuestAdapter = DailyQuestAdapter(
                     quests.stream().filter({ it.questType == QuestType.DAILY }).toList()
                 )
@@ -88,7 +88,7 @@ class MyPageActivity : AppCompatActivity() {
                 )
                 landmarkRecycler.adapter = landmarkAdapter
 
-                val achievements = MyPageRepository.getAchievements()
+                val achievements = MyPageRemoteDataSource.getAchievements()
                 achievementAdapter = AchievementAdapter(achievements)
                 achievementRecycler.adapter = achievementAdapter
 

@@ -1,7 +1,6 @@
 package com.dudoji.android.pin.util
 
 import android.os.Build
-import android.view.MotionEvent
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -71,31 +70,15 @@ object PinModal {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun openPinMemosModal(activity: AppCompatActivity, pins: List<Pin>) {
         Modal.showCustomModal(activity, R.layout.show_pin_memos_modal) { view ->
             val memos = view.findViewById<RecyclerView>(R.id.memos_recycler_view)
             memos.layoutManager = LinearLayoutManager(activity)
-            val memoAdapter = PinMemoAdapter(pins.toList())
-            memos.adapter = memoAdapter
-            val touchListener = object : RecyclerView.OnItemTouchListener {
-                @RequiresApi(Build.VERSION_CODES.O)
-                override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                    val childView = rv.findChildViewUnder(e.x, e.y)
-                    if (childView != null && e.action == MotionEvent.ACTION_UP) {
-                        val position = rv.getChildAdapterPosition(childView)
-                        val pin = pins.elementAt(position)
+            val memoAdapter = PinMemoAdapter(pins.toList()) { pin ->
                         openPinMemoModal(activity, pin)
-                        return true
-                    }
-                    return false
-                }
-
-                override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
-
-                override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
-            }
-
-            memos.addOnItemTouchListener(touchListener)
+                   }
+            memos.adapter = memoAdapter
         }
     }
 

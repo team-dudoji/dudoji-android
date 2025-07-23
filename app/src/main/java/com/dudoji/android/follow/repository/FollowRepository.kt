@@ -87,7 +87,4 @@ object FollowRepository {
             Log.e("FollowRepository", "Failed to load followers: ${response.errorBody()?.string()}")
         }
     }
-
-
-
 }
