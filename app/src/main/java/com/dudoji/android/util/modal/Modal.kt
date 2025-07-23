@@ -41,15 +41,17 @@ object Modal {
         val rootView = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
         rootView.addView(modalRoot)
 
-        modalRoot.setOnClickListener {
-            activity.supportFragmentManager.beginTransaction().remove(fragment).commit()
-            rootView.removeView(modalRoot)
+        fragment.setCloseFun{
+            activity.runOnUiThread {
+                (modalRoot.parent as? ViewGroup)?.removeView(modalRoot)
+                activity.supportFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
+            }
         }
 
-        fragment.setCloseFun{
-            activity.supportFragmentManager.beginTransaction().remove(fragment).commit()
-            rootView.removeView(modalRoot)
+        modalRoot.setOnClickListener {
+            fragment.close()
         }
+
         activity.supportFragmentManager
             .beginTransaction()
             .replace(R.id.modal_content, fragment, "modal_fragment")

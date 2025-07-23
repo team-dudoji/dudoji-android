@@ -8,17 +8,17 @@
         android:paddingVertical="12dp"
         android:paddingHorizontal="8dp">
 
-    <!-- 프로필 이미지 -->
     <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/following_item_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="12dp"
-            android:src="@drawable/user_placeholder"
-            android:background="@drawable/ic_circle"
-            android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-            android:contentDescription="프로필 이미지" />
+        android:id="@+id/following_item_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/user_placeholder"
+        android:background="@drawable/ic_circle"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+        android:contentDescription="프로필 이미지" />
+
 
     <LinearLayout
             android:paddingStart="20dp"

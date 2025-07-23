@@ -28,7 +28,7 @@ object NetworkInitializer {
         RetrofitClient.initAuthed(client)
 
         // Initialize Coil image loader
-        CoilConfigurer.init(context, client)
+        Coil.init(context, client)
     }
 
     fun provideNonAuthedOkHttpClient(context: Context): OkHttpClient {
@@ -68,7 +68,11 @@ object NetworkInitializer {
         return okhttp3.Interceptor { chain ->
             val prefs = getEncryptedPrefs(context)
             val token = prefs.getString("jwt", null)
-                ?: throw IllegalStateException("JWT token not found in preferences")
+
+            if (token.isNullOrEmpty()) {
+                Log.w("NetworkInitializer", "No JWT token found in preferences")
+                return@Interceptor chain.proceed(chain.request())
+            }
 
             val request = chain.request().newBuilder()
                 .addHeader(AUTHORIZATION, "Bearer $token")

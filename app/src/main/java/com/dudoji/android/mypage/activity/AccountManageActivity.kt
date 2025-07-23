@@ -6,7 +6,7 @@ import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
-import com.dudoji.android.login.permission.RequestPermissionsUtil
+import com.dudoji.android.login.util.RequestPermissionsUtil
 class AccountManageActivity : AppCompatActivity() {
 
     private lateinit var switchCamera: Switch

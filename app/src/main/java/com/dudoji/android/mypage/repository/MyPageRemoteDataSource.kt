@@ -7,7 +7,7 @@ import com.dudoji.android.mypage.domain.Achievement
 import com.dudoji.android.mypage.domain.Quest
 import com.dudoji.android.mypage.domain.UserProfile
 
-object MyPageRepository {
+object MyPageRemoteDataSource {
 
     private const val TAG = "MypageRepositoryDEBUG"
 

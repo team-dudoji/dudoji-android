@@ -104,7 +104,7 @@
                     <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="부산대학교"
+                            android:hint="장소 이름"
                             android:id="@+id/pin_place_name"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -112,7 +112,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/pin_address"
-                            android:text="부산광역시 금정구 부산대학로"
+                            android:text="두도지시 두도지동"
                             android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -132,7 +132,7 @@
 
     <EditText
             android:layout_margin="15dp"
-            android:padding="40dp"
+            android:padding="20dp"
             android:background="@drawable/rounded_edittext"
             android:layout_width="match_parent"
             android:layout_height="0dp"

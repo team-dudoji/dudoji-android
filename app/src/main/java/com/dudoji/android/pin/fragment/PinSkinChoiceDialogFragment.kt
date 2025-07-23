@@ -11,7 +11,7 @@ import com.dudoji.android.R
 import com.dudoji.android.pin.adapter.PinSkinAdapter
 import com.dudoji.android.pin.domain.PinSkin
 
-class PinColorChoiceDialogFragment(val pinSkins: List<PinSkin>, val listener: (PinSkin) -> Unit) : DialogFragment() {
+class PinSkinChoiceDialogFragment(val pinSkins: List<PinSkin>, val listener: (PinSkin) -> Unit) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?):Dialog {
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.pin_select_modal, null)
