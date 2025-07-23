@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.follow.adapter.FollowAdapter
+import com.dudoji.android.follow.FollowAdapter
 import com.dudoji.android.follow.activity.FriendAddActivity
 import com.dudoji.android.follow.domain.User
 import com.dudoji.android.follow.repository.FollowRepository
