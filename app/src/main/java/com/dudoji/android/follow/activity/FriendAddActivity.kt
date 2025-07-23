@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.follow.adapter.FollowSearchAdapter
+import com.dudoji.android.follow.FollowSearchAdapter
 import com.dudoji.android.follow.domain.User
 import com.dudoji.android.follow.repository.FollowRepository
 import kotlinx.coroutines.launch
