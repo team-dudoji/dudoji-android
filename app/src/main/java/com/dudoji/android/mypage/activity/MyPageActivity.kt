@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +48,9 @@ class MyPageActivity : AppCompatActivity() {
         val followerCount = findViewById<TextView>(R.id.follower_count)
         val followingCount = findViewById<TextView>(R.id.following_count)
         val settingsButton = findViewById<ImageButton>(R.id.settings_button)
+
+        val followerSection = findViewById<LinearLayout>(R.id.follower_section_clickable)
+        val followingSection = findViewById<LinearLayout>(R.id.following_section_clickable)
 
         dailyQuestRecycler = findViewById(R.id.daily_quest_recycler)
         landmarkRecycler = findViewById(R.id.landmark_recycler)
@@ -92,17 +96,22 @@ class MyPageActivity : AppCompatActivity() {
                 Log.e(TAG, "오류 발생: ${e.message}", e)
             }
 
-            followerCount.setOnClickListener {
-                val intent = Intent(this@MyPageActivity, FollowerListActivity::class.java)
+            followerSection.setOnClickListener {
+                val intent = Intent(this@MyPageActivity, FollowListActivity::class.java)
+                intent.putExtra(FollowListActivity.EXTRA_TYPE, FollowListActivity.TYPE_FOLLOWER)
                 startActivity(intent)
             }
 
-            followingCount.setOnClickListener {
-                val intent = Intent(this@MyPageActivity, FollowingListActivity::class.java)
+            followingSection.setOnClickListener {
+                Log.d("MyPageDEBUG", "팔로워 섹션 클릭됨")
+                val intent = Intent(this@MyPageActivity, FollowListActivity::class.java)
+                intent.putExtra(FollowListActivity.EXTRA_TYPE, FollowListActivity.TYPE_FOLLOWING)
                 startActivity(intent)
             }
+
 
             settingsButton.setOnClickListener {
+                Log.d("MyPageDEBUG", "팔로잉 섹션 클릭됨")
                 val intent = Intent(this@MyPageActivity, AccountManageActivity::class.java)
                 startActivity(intent)
             }

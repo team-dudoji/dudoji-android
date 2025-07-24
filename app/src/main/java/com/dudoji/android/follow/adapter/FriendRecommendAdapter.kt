@@ -1,4 +1,4 @@
-package com.dudoji.android.follow
+package com.dudoji.android.follow.adapter
 
 import android.os.Build
 import android.view.LayoutInflater

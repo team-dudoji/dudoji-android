@@ -19,7 +19,6 @@ import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
-import com.dudoji.android.follow.FriendModal
 import com.dudoji.android.follow.repository.FollowRepository
 import com.dudoji.android.map.manager.DatabaseMapSectionManager
 import com.dudoji.android.map.manager.MapSectionManager
@@ -33,6 +32,7 @@ import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.map.utils.tile.MaskTileProvider
 import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
+import com.dudoji.android.mypage.activity.FollowListActivity
 import com.dudoji.android.mypage.activity.MyPageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
@@ -231,7 +231,9 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 startActivity(Intent(this, MyPinActivity::class.java))
             },
             onSocialClick = {
-                FriendModal.openFriendFilterModal(this)
+                val intent = Intent(this, FollowListActivity::class.java)
+                intent.putExtra(FollowListActivity.EXTRA_TYPE, FollowListActivity.TYPE_FOLLOWER) // 기본으로 팔로워 페이지 이동
+                startActivity(intent)
             },
             onProfileClick = {
                 startActivity(Intent(this, MyPageActivity::class.java))
