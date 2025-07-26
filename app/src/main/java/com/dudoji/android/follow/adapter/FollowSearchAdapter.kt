@@ -1,6 +1,7 @@
 package com.dudoji.android.follow.adapter
 
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,7 @@ import com.dudoji.android.follow.repository.FollowRepository
 import kotlinx.coroutines.launch
 
 class FollowSearchAdapter(
-    private val users: List<User>,
+    private var users: List<User>,
     private val activity: AppCompatActivity
 ) : RecyclerView.Adapter<FollowSearchAdapter.SearchViewHolder>() {
 
@@ -33,7 +34,7 @@ class FollowSearchAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.following_item, parent, false)
+            .inflate(R.layout.deletable_following_item, parent, false)
         return SearchViewHolder(view)
     }
 
@@ -45,9 +46,12 @@ class FollowSearchAdapter(
         holder.email.text = user.email
         holder.image.load(user.profileImageUrl) {
             crossfade(true)
-            error(R.drawable.ic_profile)
-            placeholder(R.drawable.ic_profile)
+            error(R.drawable.user_placeholder)
+            placeholder(R.drawable.user_placeholder)
         }
+
+        val imageUrl = user.profileImageUrl
+        Log.d("skr", "유저: ${user.name}, 이미지 URL: $imageUrl")
 
         activity.lifecycleScope.launch {
             val isFollowing = FollowRepository.getFollowings().any { it.id == user.id }
@@ -58,17 +62,18 @@ class FollowSearchAdapter(
             activity.lifecycleScope.launch {
                 val isNowFollowing = FollowRepository.getFollowings().any { it.id == user.id }
 
-                val result = if (isNowFollowing)
+                val result = if (isNowFollowing) {
                     FollowRepository.deleteFollowing(user)
-                else
+                } else {
                     FollowRepository.addFollowing(user)
+                }
 
                 if (result) {
                     val msg = if (isNowFollowing) "언팔로우" else "팔로우"
-                    Toast.makeText(activity, "${user.name} $msg 완료", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "${user.name} 님을 ${msg}했습니다.", Toast.LENGTH_SHORT).show()
                     updateFollowButtonState(holder.followButton, !isNowFollowing)
                 } else {
-                    Toast.makeText(activity, "요청 실패", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "요청에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -76,13 +81,16 @@ class FollowSearchAdapter(
 
     override fun getItemCount(): Int = users.size
 
+    fun updateUserList(newUsers: List<User>) {
+        this.users = newUsers
+        notifyDataSetChanged()
+    }
+
     private fun updateFollowButtonState(button: Button, isFollowing: Boolean) {
         if (isFollowing) {
             button.setBackgroundResource(R.drawable.following_button)
-            button.setTextColor(ContextCompat.getColor(button.context, android.R.color.white))
         } else {
             button.setBackgroundResource(R.drawable.follow_button)
-            button.setTextColor(ContextCompat.getColor(button.context, android.R.color.black))
         }
     }
 }
