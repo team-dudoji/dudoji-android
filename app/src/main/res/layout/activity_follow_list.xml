@@ -158,6 +158,6 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:clipToPadding="false"
-            tools:listitem="@layout/following_item" />
+            tools:listitem="@layout/deletable_following_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
