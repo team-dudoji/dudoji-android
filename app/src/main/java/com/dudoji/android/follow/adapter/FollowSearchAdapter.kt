@@ -83,6 +83,9 @@ class FollowSearchAdapter(
 
     fun updateUserList(newUsers: List<User>) {
         this.users = newUsers
+        newUsers.forEach { user ->
+            Log.d("skrskr", "사용자: ${user.name}, 프로필 이미지 URL: ${user.profileImageUrl}")
+        }
         notifyDataSetChanged()
     }
 
