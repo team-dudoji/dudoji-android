@@ -19,68 +19,81 @@ import com.dudoji.android.follow.domain.User
 import com.dudoji.android.follow.repository.FollowRepository
 import kotlinx.coroutines.launch
 
-class FollowAdapter(private val followings: List<User>, private val activity: AppCompatActivity) :
-    RecyclerView.Adapter<FollowAdapter.FollowingViewHolder>() {
+@RequiresApi(Build.VERSION_CODES.O)
+class FollowAdapter(
+    private val users: List<User>,
+    private val activity: AppCompatActivity
+) : RecyclerView.Adapter<FollowAdapter.FollowViewHolder>() {
 
-    inner class FollowingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val name = view.findViewById<TextView>(R.id.textName)
-        val desc = view.findViewById<TextView>(R.id.textEmail)
+    inner class FollowViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val name: TextView = view.findViewById(R.id.textName)
+        val email: TextView = view.findViewById(R.id.textEmail)
         val image: ImageView = view.findViewById(R.id.following_item_image)
-        val deleteButton = view.findViewById<Button>(R.id.buttonDelete)
+        val actionButton: Button = view.findViewById(R.id.buttonDelete)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowingViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.deletable_following_item, parent, false)
-        return FollowingViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.deletable_following_item, parent, false)
+        return FollowViewHolder(view)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onBindViewHolder(holder: FollowingViewHolder, position: Int) {
-        val following = followings[position]
-        holder.name.text = following.name
-        holder.desc.text = following.email
-        var isFollowing = true
-        val imageUrl = following.profileImageUrl
-        if (!imageUrl.isNullOrBlank()) {
-            holder.image.load(imageUrl) {
-                crossfade(true)
-                error(R.drawable.user_placeholder)
-                placeholder(R.drawable.user_placeholder)
+    override fun onBindViewHolder(holder: FollowViewHolder, position: Int) {
+        val user = users[position]
+
+        holder.name.text = user.name
+        holder.email.text = user.email
+        holder.image.load(user.profileImageUrl) {
+            crossfade(true)
+            error(R.drawable.user_placeholder)
+            placeholder(R.drawable.user_placeholder)
+        }
+
+        activity.lifecycleScope.launch {
+            val followings = FollowRepository.getFollowings()
+            val isFollowing = followings.any { it.id == user.id }
+
+            updateFollowButtonState(holder.actionButton, isFollowing)
+
+            holder.actionButton.setOnClickListener {
+                handleFollowAction(user, holder.actionButton)
             }
         }
-        holder.deleteButton.setOnClickListener {
-            activity.lifecycleScope.launch {
-                if (!isFollowing) {
-                    FollowRepository.addFollowing(following)
-                    Toast.makeText(activity, "${following.name}를 팔로우 합니다.", Toast.LENGTH_SHORT).show()
-                    holder.deleteButton.text = "팔로우"
-                    holder.deleteButton.setBackgroundColor(activity.getColor(R.color.orange))
-                    isFollowing = true
-                } else {
-                    if (FollowRepository.deleteFollowing(following)){
-                        Toast.makeText(activity, "${following.name}를 언팔로우 합니다.", Toast.LENGTH_SHORT).show()
-                        holder.deleteButton.text = "팔로잉"
-                        holder.deleteButton.setBackgroundColor(activity.getColor(R.color.orange))
-                        isFollowing = false
-                    } else
-                        Toast.makeText(activity, "언팔로우에 실패했습니다.", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun handleFollowAction(user: User, button: Button) {
+        activity.lifecycleScope.launch {
+            val isFollowingNow = FollowRepository.getFollowings().any { it.id == user.id }
+
+            val result: Boolean
+            if (isFollowingNow) {
+                result = FollowRepository.deleteFollowing(user)
+                if (result) {
+                    Toast.makeText(activity, "${user.name}님을 언팔로우했습니다.", Toast.LENGTH_SHORT).show()
                 }
-                updateFollowButtonState(holder.deleteButton, isFollowing)
-                holder.deleteButton.text = if (isFollowing) "팔로잉" else "팔로우"
+            } else {
+                result = FollowRepository.addFollowing(user)
+                if (result) {
+                    Toast.makeText(activity, "${user.name}님을 팔로우했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            if (result) {
+                updateFollowButtonState(button, !isFollowingNow)
+            } else {
+                Toast.makeText(activity, "요청에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    override fun getItemCount() = followings.size
-
-    //버튼 상태에 따른 이미지 변경
     private fun updateFollowButtonState(button: Button, isFollowing: Boolean) {
         if (isFollowing) {
             button.setBackgroundResource(R.drawable.following_button)
-            button.setTextColor(ContextCompat.getColor(button.context, android.R.color.white))
         } else {
             button.setBackgroundResource(R.drawable.follow_button)
-            button.setTextColor(ContextCompat.getColor(button.context, android.R.color.black))
         }
+        button.backgroundTintList = null
     }
+
+    override fun getItemCount(): Int = users.size
 }
