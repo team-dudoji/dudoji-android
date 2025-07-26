@@ -92,5 +92,6 @@ class FollowSearchAdapter(
         } else {
             button.setBackgroundResource(R.drawable.follow_button)
         }
+        button.backgroundTintList = null
     }
 }
