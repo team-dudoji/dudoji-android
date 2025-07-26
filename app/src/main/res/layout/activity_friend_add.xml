@@ -83,9 +83,12 @@
                     android:textColorHint="#999999"
                     android:textSize="14sp"
                     android:textColor="@android:color/black"
-                    android:inputType="textEmailAddress"
                     android:paddingStart="12dp"
-                    android:paddingEnd="12dp" />
+                    android:paddingEnd="12dp"
+
+                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionSearch"
+                    android:maxLines="1" />
 
         </LinearLayout>
 
@@ -106,6 +109,6 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:clipToPadding="false"
-            tools:listitem="@layout/following_item" />
+            tools:listitem="@layout/deletable_following_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
