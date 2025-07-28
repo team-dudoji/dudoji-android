@@ -45,8 +45,8 @@ class FollowSearchAdapter(
         holder.email.text = user.email
         holder.image.load(user.profileImageUrl) {
             crossfade(true)
-            error(R.drawable.ic_profile)
-            placeholder(R.drawable.ic_profile)
+            error(R.drawable.user_placeholder)
+            placeholder(R.drawable.user_placeholder)
         }
 
         activity.lifecycleScope.launch {
