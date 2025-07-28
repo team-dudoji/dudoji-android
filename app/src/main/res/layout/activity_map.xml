@@ -1,247 +1,258 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/mapRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".map.activity.MapActivity">
 
-    <FrameLayout
-            android:id="@+id/outer_drop_zone"
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mapRoot"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-        <!-- Map 프래그먼트 -->
-        <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/mapView"
+            android:layout_height="match_parent">
+        <FrameLayout
+                android:id="@+id/outer_drop_zone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:name="com.google.android.gms.maps.SupportMapFragment"/>
-    </FrameLayout>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-    <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/myLocationButton"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="124dp"
-            android:visibility="gone"
-            android:background="@drawable/my_location_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <!-- Map 프래그먼트 -->
+            <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        </FrameLayout>
 
-    <ImageView
-            android:id="@+id/pinSetter"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="180dp"
-            android:background="@drawable/pin_button"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/myLocationButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="124dp"
+                android:visibility="gone"
+                android:background="@drawable/my_location_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+                android:id="@+id/pinSetter"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="180dp"
+                android:background="@drawable/pin_button"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
 
-    <FrameLayout
-            android:id="@+id/filterBarWrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_marginEnd="10dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+        <FrameLayout
+                android:id="@+id/filterBarWrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- 필터 바 Lottie 애니메이션 -->
-        <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/filterBarAnim"
-                android:layout_width="221dp"
-                android:layout_height="56dp"
-                app:lottie_fileName="filter_bar_background.json"
-                app:lottie_autoPlay="false"
-                app:lottie_loop="false" />
+            <!-- 필터 바 Lottie 애니메이션 -->
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/filterBarAnim"
+                    android:layout_width="221dp"
+                    android:layout_height="56dp"
+                    app:lottie_fileName="filter_bar_background.json"
+                    app:lottie_autoPlay="false"
+                    app:lottie_loop="false" />
 
-        <!-- 버튼: 모두 -->
+            <!-- 버튼: 모두 -->
+            <ImageButton
+                    android:id="@+id/btnFilterStranger"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_stranger_enabled"
+                    android:contentDescription="모두"
+                    android:layout_gravity="top|start" />
+
+            <!-- 버튼: 친구 -->
+            <ImageButton
+                    android:id="@+id/btnFilterFriend"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="72dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_friend_enabled"
+                    android:contentDescription="친구"
+                    android:layout_gravity="top|start" />
+
+            <ImageButton
+                    android:id="@+id/btnFilterMine"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="120dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_mypin_enabled"
+                    android:contentDescription="나"
+                    android:layout_gravity="top|start" />
+        </FrameLayout>
+
+        <!-- 필터 버튼은 가장 마지막에 배치하여 앞에 오도록 함 -->
         <ImageButton
-                android:id="@+id/btnFilterStranger"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="8dp"
+                android:id="@+id/btnFilter"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:layout_marginTop="98dp"
+                android:layout_marginEnd="10dp"
                 android:background="@null"
-                android:src="@drawable/ic_stranger_enabled"
-                android:contentDescription="모두"
-                android:layout_gravity="top|start" />
+                android:src="@drawable/ic_filter"
+                android:scaleType="centerInside"
+                android:elevation="10dp"
+                android:visibility="gone"
+                android:contentDescription="필터 버튼"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- 버튼: 친구 -->
-        <ImageButton
-                android:id="@+id/btnFilterFriend"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="72dp"
-                android:layout_marginTop="8dp"
-                android:background="@null"
-                android:src="@drawable/ic_friend_enabled"
-                android:contentDescription="친구"
-                android:layout_gravity="top|start" />
 
         <ImageButton
-                android:id="@+id/btnFilterMine"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="120dp"
-                android:layout_marginTop="8dp"
+                android:id="@+id/centerButton"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/ic_center_button_open"
+                android:scaleType="centerInside"
+                android:layout_marginBottom="24dp"
+                android:elevation="10dp"
+                android:contentDescription="중앙 메뉴 버튼"
                 android:background="@null"
-                android:src="@drawable/ic_mypin_enabled"
-                android:contentDescription="나"
-                android:layout_gravity="top|start" />
-    </FrameLayout>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 필터 버튼은 가장 마지막에 배치하여 앞에 오도록 함 -->
-    <ImageButton
-            android:id="@+id/btnFilter"
-            android:layout_width="66dp"
-            android:layout_height="66dp"
-            android:layout_marginTop="98dp"
-            android:layout_marginEnd="10dp"
-            android:background="@null"
-            android:src="@drawable/ic_filter"
-            android:scaleType="centerInside"
-            android:elevation="10dp"
-            android:visibility="gone"
-            android:contentDescription="필터 버튼"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+        <FrameLayout
+                android:id="@+id/profileButtonWrapper"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/centerButton"
+                app:layout_constraintStart_toEndOf="@id/centerButton"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="50dp">
 
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/profileButtonAnim"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:lottie_fileName="profile_button_animation.json"
+                    app:lottie_autoPlay="false"
+                    app:lottie_loop="false" />
 
-    <ImageButton
-            android:id="@+id/centerButton"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/ic_center_button_open"
-            android:scaleType="centerInside"
-            android:layout_marginBottom="24dp"
-            android:elevation="10dp"
-            android:contentDescription="중앙 메뉴 버튼"
-            android:background="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <ImageView
+                    android:id="@+id/profileIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:tint="@color/white"
+                    android:src="@drawable/baseline_account_circle_24"/>
+        </FrameLayout>
 
-    <FrameLayout
-            android:id="@+id/profileButtonWrapper"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/centerButton"
-            app:layout_constraintStart_toEndOf="@id/centerButton"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="50dp">
+        <FrameLayout
+                android:id="@+id/storeButtonWrapper"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/centerButton"
+                app:layout_constraintEnd_toStartOf="@id/centerButton"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="10dp">
 
-        <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/profileButtonAnim"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:lottie_fileName="profile_button_animation.json"
-                app:lottie_autoPlay="false"
-                app:lottie_loop="false" />
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/storeButtonAnim"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:lottie_fileName="store_button_animation.json"
+                    app:lottie_autoPlay="false"
+                    app:lottie_loop="false"
+                    android:layout_gravity="center"/>
 
-        <ImageView
-                android:id="@+id/profileIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:tint="@color/white"
-                android:src="@drawable/baseline_account_circle_24"/>
-    </FrameLayout>
+            <ImageView
+                    android:id="@+id/storeIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_store"/>
+        </FrameLayout>
 
-    <FrameLayout
-            android:id="@+id/storeButtonWrapper"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/centerButton"
-            app:layout_constraintEnd_toStartOf="@id/centerButton"
-            android:layout_marginEnd="50dp"
-            android:layout_marginBottom="10dp">
+        <FrameLayout
+                android:id="@+id/myPinButtonWrapper"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/centerButton"
+                app:layout_constraintEnd_toStartOf="@id/centerButton"
+                android:layout_marginBottom="30dp">
 
-        <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/storeButtonAnim"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:lottie_fileName="store_button_animation.json"
-                app:lottie_autoPlay="false"
-                app:lottie_loop="false"
-                android:layout_gravity="center"/>
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/myPinButtonAnim"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:lottie_fileName="mypin_button_animation.json"
+                    app:lottie_autoPlay="false"
+                    app:lottie_loop="false"
+                    android:layout_gravity="center"/>
 
-        <ImageView
-                android:id="@+id/storeIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_store"/>
-    </FrameLayout>
+            <ImageView
+                    android:id="@+id/myPinIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_mypin"/>
 
-    <FrameLayout
-            android:id="@+id/myPinButtonWrapper"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/centerButton"
-            app:layout_constraintEnd_toStartOf="@id/centerButton"
-            android:layout_marginBottom="30dp">
+        </FrameLayout>
 
-        <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/myPinButtonAnim"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:lottie_fileName="mypin_button_animation.json"
-                app:lottie_autoPlay="false"
-                app:lottie_loop="false"
-                android:layout_gravity="center"/>
+        <FrameLayout
+                android:id="@+id/socialButtonWrapper"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/centerButton"
+                app:layout_constraintStart_toEndOf="@id/centerButton"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="95dp">
 
-        <ImageView
-                android:id="@+id/myPinIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_mypin"/>
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/socialButtonAnim"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:lottie_fileName="social_button_animation.json"
+                    app:lottie_autoPlay="false"
+                    app:lottie_loop="false" />
 
-    </FrameLayout>
+            <ImageView
+                    android:id="@+id/socialIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_social" />
+        </FrameLayout>
 
-    <FrameLayout
-            android:id="@+id/socialButtonWrapper"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/centerButton"
-            app:layout_constraintStart_toEndOf="@id/centerButton"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="95dp">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/testButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/socialButtonAnim"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:lottie_fileName="social_button_animation.json"
-                app:lottie_autoPlay="false"
-                app:lottie_loop="false" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
-                android:id="@+id/socialIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_social" />
-    </FrameLayout>
+    <include
+            layout="@layout/landmark_bottom_sheet" />
 
-
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
