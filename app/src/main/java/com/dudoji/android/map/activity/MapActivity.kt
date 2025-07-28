@@ -32,6 +32,7 @@ import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.map.utils.tile.MaskTileProvider
 import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
 import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
+import com.dudoji.android.map.utils.ui.LandmarkBottomSheet
 import com.dudoji.android.mypage.activity.FollowListActivity
 import com.dudoji.android.mypage.activity.MyPageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
@@ -75,6 +76,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private lateinit var clusterManager: ClusterManager<Pin>
 
     private lateinit var pinFilter: PinFilter // 핀 필터 변수
+    private lateinit var landmarkBottomSheet: LandmarkBottomSheet
+
 
     fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
         this.maskTileMaker = maskTileMaker
@@ -105,6 +108,11 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         setupAnimatedNavButtons()
 
         setupFilterBarToggle()
+
+        landmarkBottomSheet = LandmarkBottomSheet(findViewById(R.id.landmark_bottom_sheet), this)
+        findViewById<Button>(R.id.testButton).setOnClickListener {
+            landmarkBottomSheet.toggleBottomSheet()
+        }
     }
 
     private fun setupLocationUpdates(){
