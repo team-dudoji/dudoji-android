@@ -48,6 +48,5 @@
             android:layout_height="wrap_content"
             android:id="@+id/buttonDelete"
             android:textColor="@color/white"
-            android:backgroundTint="@color/orange"
-            android:text="팔로우" />
+            android:background="@drawable/follow_button"/>
 </LinearLayout>
