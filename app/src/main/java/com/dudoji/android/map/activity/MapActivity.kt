@@ -7,10 +7,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +23,7 @@ import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.follow.repository.FollowRepository
+import com.dudoji.android.landmark.activity.LandmarkSearchActivity
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
 import com.dudoji.android.map.manager.DatabaseMapSectionManager
@@ -117,6 +121,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         setupFilterBarToggle()
 
         landmarkBottomSheet = LandmarkBottomSheet(findViewById(R.id.landmark_bottom_sheet), this)
+
+        setupSearchLandmark()
     }
 
     private fun setupLocationUpdates(){
@@ -177,7 +183,9 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
     override fun onPause() {
         super.onPause()
-        directionController.stop()
+        if (::directionController.isInitialized) {
+            directionController.stop()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -279,6 +287,26 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             } else {
                 filterBarWrapper.visibility = View.GONE
             }
+        }
+    }
+
+    private fun setupSearchLandmark() {
+        val editText = findViewById<EditText>(R.id.searchEditText)
+        val container = findViewById<LinearLayout>(R.id.searchBarContainer)
+
+        fun goToSearch() {
+            val intent = Intent(this, LandmarkSearchActivity::class.java)
+            intent.putExtra("query", editText.text.toString())
+            startActivity(intent)
+        }
+
+        container.setOnClickListener { goToSearch() }
+
+        editText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                goToSearch()
+                true
+            } else false
         }
     }
 }
