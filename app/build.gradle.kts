@@ -92,5 +92,4 @@ dependencies {
 
     implementation(libs.androidx.biometric.ktx) // 생체 인식 라이브러리
 
-    implementation("com.github.bumptech.glide:glide:4.15.1") //Gile 라이브러리
 }
