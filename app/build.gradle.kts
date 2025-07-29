@@ -70,6 +70,8 @@ dependencies {
 
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    implementation(libs.android.maps.ktx)
+
     implementation(libs.android.maps.utils)
 
     implementation(libs.androidx.lifecycle.runtime.ktx)

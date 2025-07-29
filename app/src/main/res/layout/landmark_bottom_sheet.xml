@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@drawable/landmark_background_bottom_sheet"
+        android:id="@+id/landmark_bottom_sheet"
+        android:maxHeight="700dp"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        android:backgroundTint="#F6F6F6"
+
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:src="@drawable/pnu_image"
+            android:scaleType="centerCrop"
+            android:id="@+id/landmark_detail_image"
+            android:layout_gravity="center_horizontal"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
+
+    <TextView
+            android:id="@+id/landmark_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="부산대학교 장전두도지"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:textFontWeight="700"
+            android:textColor="#000000"
+            android:fontFamily="@font/pretendard"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="10dp"/>
+    <TextView
+            android:id="@+id/landmark_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="두도지에 오신 것을 환영합니다!"
+            android:textSize="16sp"
+            android:textFontWeight="500"
+            android:textStyle="normal"
+            android:fontFamily="@font/pretendard"
+            android:textColor="#323232"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="5dp"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/landmark_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+
+            android:nestedScrollingEnabled="false"
+            android:scrollbars="vertical"/>
+
+</LinearLayout>

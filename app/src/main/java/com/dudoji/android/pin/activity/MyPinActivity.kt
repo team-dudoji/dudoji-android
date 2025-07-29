@@ -38,7 +38,7 @@ class MyPinActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun loadMyPins() {
         CoroutineScope(Dispatchers.IO).launch {
-            val pins = PinRepository.getPins()
+            val pins = PinRepository.getMyPins()
             withContext(Dispatchers.Main) {
                 pins.let { pins ->
                     adapter.updateItems(pins)
