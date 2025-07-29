@@ -11,12 +11,10 @@ import com.dudoji.android.pin.api.dto.PinRequestDto
 import com.dudoji.android.pin.api.dto.PinResponseDto
 import com.dudoji.android.pin.api.dto.PinSkinUpdateRequestDto
 import com.dudoji.android.pin.domain.Pin
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 
 object PinRepository {
     val pinList = mutableListOf<Pin>()
-    private lateinit var googleMap: GoogleMap
 
     private var lastPinUpdatedLatLng: LatLng? = null
 
