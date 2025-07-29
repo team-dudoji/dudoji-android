@@ -1,5 +1,8 @@
 package com.dudoji.android.landmark.api.dto
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import com.dudoji.android.landmark.domain.Landmark
 
 data class LandmarkResponseDto(
@@ -9,11 +12,14 @@ data class LandmarkResponseDto(
     val placeName: String,
     val address: String,
     val content: String,
-    val imageUrl: String,
+    val mapImageUrl: String,
+    val detailImageUrl: String,
     val radius: Double,
     val isDetected: Boolean
 ) {
+    @RequiresApi(Build.VERSION_CODES.O)
     fun toDomain(): Landmark {
+        Log.d("LandmarkResponseDto", "Converting to domain model: $landmarkId, $lat, $lng, $placeName, $address, $content, $mapImageUrl, $detailImageUrl, $radius, $isDetected")
         return Landmark(
             landmarkId = landmarkId,
             lat = lat,
@@ -21,7 +27,8 @@ data class LandmarkResponseDto(
             placeName = placeName,
             address = address,
             content = content,
-            imageUrl = imageUrl,
+            mapImageUrl = mapImageUrl,
+            detailImageUrl = detailImageUrl,
             radius = radius,
             isDetected = isDetected
         )

@@ -62,7 +62,8 @@
             android:id="@+id/landmark_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
+            android:layout_gravity="center_horizontal"
+
             android:nestedScrollingEnabled="false"
             android:scrollbars="vertical"/>
 

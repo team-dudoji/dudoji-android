@@ -2,6 +2,7 @@
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.dudoji.android.BuildConfig
+import com.dudoji.android.landmark.api.service.LandmarkApiService
 import com.dudoji.android.login.api.service.LoginApiService
 import com.dudoji.android.mypage.api.service.FollowApiService
 import com.dudoji.android.mypage.api.service.MissionApiService
@@ -39,6 +40,7 @@ object RetrofitClient {
         followApiService = retrofit.create(FollowApiService::class.java)
         pinApiService = retrofit.create(PinApiService::class.java)
         missionApiService = retrofit.create(MissionApiService::class.java)
+        landmarkApiService = retrofit.create(LandmarkApiService::class.java)
     }
 
     fun initNonAuthed(client: OkHttpClient) {
@@ -52,6 +54,7 @@ object RetrofitClient {
         loginApiService = retrofit.create(LoginApiService::class.java)
     }
 
+    lateinit var landmarkApiService: LandmarkApiService
     lateinit var loginApiService: LoginApiService
     lateinit var userApiService: UserApiService
     lateinit var followApiService: FollowApiService

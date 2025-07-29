@@ -20,6 +20,8 @@ import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.follow.repository.FollowRepository
+import com.dudoji.android.landmark.domain.Landmark
+import com.dudoji.android.landmark.util.LandmarkApplier
 import com.dudoji.android.map.manager.DatabaseMapSectionManager
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.RevealCircleRepository
@@ -48,6 +50,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.TileOverlay
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.collections.MarkerManager
 import kotlinx.coroutines.launch
 
 class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
@@ -59,6 +62,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     lateinit var pinSetterController: PinSetterController
     private lateinit var pinDropZone: FrameLayout
     private lateinit var pinApplier: PinApplier
+    private lateinit var LandmarkApplier: LandmarkApplier
 
     private lateinit var googleMap: GoogleMap
     private var mapUtil: MapUtil = MapUtil(this)
@@ -74,6 +78,9 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     lateinit var directionController: MapDirectionController
 
     private lateinit var clusterManager: ClusterManager<Pin>
+    private val normalMarkerCollection: MarkerManager.Collection by lazy {
+        clusterManager.markerManager.newCollection()
+    }
 
     private lateinit var pinFilter: PinFilter // 핀 필터 변수
     private lateinit var landmarkBottomSheet: LandmarkBottomSheet
@@ -187,10 +194,9 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
         mapUtil.setGoogleMap(googleMap)
-        googleMap.setMinZoomPreference(MIN_ZOOM)
-        googleMap.setMaxZoomPreference(MAX_ZOOM)
-
-        mapCameraPositionController = MapCameraPositionController(googleMap, myLocationButton)
+        this.googleMap.setMinZoomPreference(MIN_ZOOM)
+        this.googleMap.setMaxZoomPreference(MAX_ZOOM)
+        mapCameraPositionController = MapCameraPositionController(this.googleMap, myLocationButton)
 
         lifecycleScope.launch {
             mapSectionManager = DatabaseMapSectionManager(this@MapActivity)
@@ -210,24 +216,35 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
             pinFilter = PinFilter(this@MapActivity)
             pinApplier = PinApplier(clusterManager, googleMap, this@MapActivity, pinFilter)
+            LandmarkApplier = LandmarkApplier(normalMarkerCollection, googleMap, this@MapActivity)
 
+            googleMap.setOnCameraIdleListener {
+                clusterManager.onCameraIdle()
+                pinApplier.onCameraIdle()
+                LandmarkApplier.onCameraIdle()
+            }
 
             pinFilter.setupFilterButtons()
-        }
 
-        googleMap.setOnCameraIdleListener {
-            clusterManager.onCameraIdle()
-            pinApplier.onCameraIdle()
-        }
+            normalMarkerCollection.setOnMarkerClickListener { marker ->
+                Log.d("MapActivity", "Marker clicked: ${marker.id}, ${marker.title}")
 
-        googleMap.setOnMarkerClickListener(clusterManager)
+                val tag = marker.tag
+                if (tag is Landmark) {
+                    lifecycleScope.launch {
+                        landmarkBottomSheet.open(tag)
+                    }
+                    true
+                }
+                false
+            }
+        }
 
         directionController = MapDirectionController(this@MapActivity, mapCameraPositionController)
         directionController.start()
 
         setPinSetterController()
     }
-
 
     private fun setupAnimatedNavButtons() {
         AnimatedNavButtonHelper.setup(

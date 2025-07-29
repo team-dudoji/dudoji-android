@@ -3,9 +3,12 @@ package com.dudoji.android.pin.repository
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.dudoji.android.config.LANDMARK_PIN_RADIUS
 import com.dudoji.android.config.PIN_UPDATE_THRESHOLD
+import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.map.utils.MapUtil
 import com.dudoji.android.pin.api.dto.PinRequestDto
+import com.dudoji.android.pin.api.dto.PinResponseDto
 import com.dudoji.android.pin.api.dto.PinSkinUpdateRequestDto
 import com.dudoji.android.pin.domain.Pin
 import com.google.android.gms.maps.GoogleMap
@@ -16,6 +19,21 @@ object PinRepository {
     private lateinit var googleMap: GoogleMap
 
     private var lastPinUpdatedLatLng: LatLng? = null
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getLandmarkPins(landmark: Landmark): List<Pin> {
+        val response = RetrofitClient.pinApiService.getPins(
+            LANDMARK_PIN_RADIUS,
+            landmark.lat,
+            landmark.lng
+        )
+        return if (response.isSuccessful) {
+            response.body()?.map(PinResponseDto::toDomain) ?: emptyList()
+        } else {
+            Log.e("PinRepository", "Failed to fetch pins for landmark: ${response.errorBody()?.string()}")
+            emptyList()
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun loadPins(latLng: LatLng, radius: Double): Boolean{
@@ -53,8 +71,12 @@ object PinRepository {
         return false
     }
 
+    fun getPins(): List<Pin> {
+        return pinList
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun getPins(): List<Pin> {
+    suspend fun getMyPins(): List<Pin> {
         val response = RetrofitClient.pinApiService.getMyPins()
         return if (response.isSuccessful) {
             response.body()?.map { it.toDomain() } ?: emptyList()
