@@ -117,9 +117,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         setupFilterBarToggle()
 
         landmarkBottomSheet = LandmarkBottomSheet(findViewById(R.id.landmark_bottom_sheet), this)
-        findViewById<Button>(R.id.testButton).setOnClickListener {
-            landmarkBottomSheet.toggleBottomSheet()
-        }
     }
 
     private fun setupLocationUpdates(){

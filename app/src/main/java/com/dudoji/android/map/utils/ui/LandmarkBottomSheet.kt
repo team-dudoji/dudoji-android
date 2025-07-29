@@ -16,6 +16,7 @@ import com.dudoji.android.R
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.pin.activity.PinDetailActivity
 import com.dudoji.android.pin.adapter.PinMemoAdapter
+import com.dudoji.android.pin.adapter.SortType
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.repository.PinRepository
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -50,6 +51,8 @@ class LandmarkBottomSheet(val landmarkBottomSheet: LinearLayout,
         pinMemoAdapter.updateItems(
             PinRepository.getLandmarkPins(landmark)
         )
+        pinMemoAdapter.sortBy(SortType.POPULAR)
+
 
         openBottomSheet()
     }

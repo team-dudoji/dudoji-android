@@ -54,7 +54,7 @@ class LandmarkApplier(val normalMarkerCollection: MarkerManager.Collection, val 
                 .build()
 
             val result = (loader.execute(request) as SuccessResult).drawable
-            val resizedBitmap = Bitmap.createScaledBitmap(result.toBitmap(), 100, 100, true)
+            val resizedBitmap = Bitmap.createScaledBitmap(result.toBitmap(), 150, 150, true)
             withContext(Dispatchers.Main) {
                 marker.setIcon(
                     BitmapDescriptorFactory.fromBitmap(resizedBitmap)

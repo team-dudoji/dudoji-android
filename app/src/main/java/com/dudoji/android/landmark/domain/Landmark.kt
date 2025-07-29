@@ -43,8 +43,8 @@ class Landmark {
     }
 
     fun toMarkerOptions(): MarkerOptions {
-
         return MarkerOptions()
             .position(LatLng(lat, lng))
+            .zIndex(10f)
     }
 }
