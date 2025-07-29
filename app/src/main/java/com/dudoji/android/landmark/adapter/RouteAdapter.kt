@@ -8,7 +8,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.landmark.model.Route
+import com.dudoji.android.landmark.domain.Route
 
 class RouteAdapter(private var routes: List<Route>) :
     RecyclerView.Adapter<RouteAdapter.ViewHolder>() {
@@ -29,8 +29,9 @@ class RouteAdapter(private var routes: List<Route>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val route = routes[position]
-        holder.title.text = route.type
+        holder.title.text = route.type.displayName
         holder.time.text = route.time
+
 
         val isSelected = position == selectedPosition
 
@@ -49,21 +50,23 @@ class RouteAdapter(private var routes: List<Route>) :
             else R.drawable.route_card_background
         )
 
-        val iconRes = when (route.type) {
-            "차량" -> if (isSelected) R.drawable.car_selected else R.drawable.car
-            "도보" -> if (isSelected) R.drawable.walk_selected else R.drawable.walk
-            "대중교통" -> if (isSelected) R.drawable.transport_selected else R.drawable.transport
-            "자전거" -> if (isSelected) R.drawable.bike_selected else R.drawable.bike
-            else -> R.drawable.dudoji_logo
+        val iconRes = if (isSelected) {
+            route.type.getSelectedIconRes()
+        } else {
+            route.type.getUnselectedIconRes()
         }
         holder.icon.setImageResource(iconRes)
 
         holder.container.setOnClickListener {
+            val currentPos = holder.adapterPosition
+            if (currentPos == RecyclerView.NO_POSITION) return@setOnClickListener
+
             val previous = selectedPosition
-            selectedPosition = position
+            selectedPosition = currentPos
             notifyItemChanged(previous)
-            notifyItemChanged(position)
+            notifyItemChanged(currentPos)
         }
+
     }
 
     override fun getItemCount(): Int = routes.size
