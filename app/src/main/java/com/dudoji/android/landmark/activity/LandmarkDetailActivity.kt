@@ -1,7 +1,6 @@
 package com.dudoji.android.landmark.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,12 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.bumptech.glide.Glide
 import com.dudoji.android.R
 import com.dudoji.android.landmark.adapter.HashtagAdapter
 import com.dudoji.android.landmark.adapter.RouteAdapter
 import com.dudoji.android.landmark.domain.Landmark
-import com.dudoji.android.landmark.model.Route
+import com.dudoji.android.landmark.domain.Route
+import com.dudoji.android.landmark.domain.RouteType
 
 class LandmarkDetailActivity : AppCompatActivity() {
 
@@ -55,10 +54,10 @@ class LandmarkDetailActivity : AppCompatActivity() {
         transportRecyclerView.layoutManager = GridLayoutManager(this, 2)
 
         val routeList = listOf(
-            Route("차량", "16분"),
-            Route("도보", "30분"),
-            Route("대중교통", "24분"),
-            Route("자전거", "18분")
+            Route(RouteType.CAR, "16분"),
+            Route(RouteType.WALK, "30분"),
+            Route(RouteType.TRANSIT, "24분"),
+            Route(RouteType.BIKE, "18분")
         )
 
         routeAdapter = RouteAdapter(routeList)
