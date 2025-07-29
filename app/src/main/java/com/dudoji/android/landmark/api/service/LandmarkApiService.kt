@@ -10,4 +10,7 @@ interface LandmarkApiService {
     suspend fun getLandmarks(@Query("radius") radius: Int,
                         @Query("lat") lat: Double,
                         @Query("lng") lng: Double): Response<List<LandmarkResponseDto>>
+
+    @GET("/api/user/landmarks/search")
+    suspend fun searchLandmarks(@Query("keyword") keyword: String): Response<List<LandmarkResponseDto>>
 }
