@@ -34,8 +34,8 @@ data class PinResponseDto (
             imageUrl = imageUrl?:"",
             content = content,
             master = master,
-            placeName = placeName,
-            address = address,
+            placeName = placeName?:"",
+            address = address?:"",
             pinSkinId = pinSkinId,
             hashTags = emptyList())
         }
