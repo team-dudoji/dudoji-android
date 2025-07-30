@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.protolite.well.known.types)
+    implementation(libs.play.services.vision)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -90,4 +91,5 @@ dependencies {
     implementation(libs.androidx.security.crypto) // 암호화 라이브러리
 
     implementation(libs.androidx.biometric.ktx) // 생체 인식 라이브러리
+
 }

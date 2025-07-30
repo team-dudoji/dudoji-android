@@ -15,11 +15,12 @@ data class LandmarkResponseDto(
     val mapImageUrl: String,
     val detailImageUrl: String,
     val radius: Double,
-    val isDetected: Boolean
+    val isDetected: Boolean,
+    val hashtags: List<String>?
 ) {
     @RequiresApi(Build.VERSION_CODES.O)
     fun toDomain(): Landmark {
-        Log.d("LandmarkResponseDto", "Converting to domain model: $landmarkId, $lat, $lng, $placeName, $address, $content, $mapImageUrl, $detailImageUrl, $radius, $isDetected")
+        Log.d("LandmarkResponseDto", "Converting to domain model: $landmarkId, $lat, $lng, $placeName, $address, $content, $mapImageUrl, $detailImageUrl, $radius, $isDetected, $hashtags")
         return Landmark(
             landmarkId = landmarkId,
             lat = lat,
@@ -30,7 +31,8 @@ data class LandmarkResponseDto(
             mapImageUrl = mapImageUrl,
             detailImageUrl = detailImageUrl,
             radius = radius,
-            isDetected = isDetected
+            isDetected = isDetected,
+            hashtags ?: emptyList()
         )
     }
 }

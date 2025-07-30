@@ -4,8 +4,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import java.io.Serializable
 
-class Landmark {
+class Landmark : Serializable {
     val landmarkId: Long
     val lat: Double
     val lng: Double
@@ -16,6 +17,7 @@ class Landmark {
     val detailImageUrl: String
     val radius: Double
     var isDetected: Boolean
+    val hashtags: List<String>
 
     @RequiresApi(Build.VERSION_CODES.O)
     constructor(
@@ -29,6 +31,7 @@ class Landmark {
         detailImageUrl: String,
         radius: Double,
         isDetected: Boolean,
+        hashtags: List<String>
     ) {
         this.landmarkId = landmarkId
         this.lat = lat
@@ -40,6 +43,7 @@ class Landmark {
         this.detailImageUrl = detailImageUrl
         this.radius = radius
         this.isDetected = isDetected
+        this.hashtags = hashtags
     }
 
     fun toMarkerOptions(): MarkerOptions {
