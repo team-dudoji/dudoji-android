@@ -15,7 +15,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.databinding.EditPinMemoModalBinding
+import com.dudoji.android.landmark.adapter.EditableHashtagAdapter
 import com.dudoji.android.pin.domain.PinSkin
 import com.dudoji.android.pin.repository.PinSkinRepository
 import com.dudoji.android.pin.util.PinMakeData
@@ -40,6 +43,9 @@ class PinMemoInputFragment(
     private val calendar = Calendar.getInstance()
     private var address: String = "주소를 가져오는 중..."
     private var selectedPinColor: PinSkin? = null
+    private val hashtagEditRecyclerView: RecyclerView by lazy {
+        binding.hashtagRecyclerView
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +62,11 @@ class PinMemoInputFragment(
         _binding = EditPinMemoModalBinding.inflate(inflater, container, false)
         initViews()
         setupListeners()
+
         binding.root.setOnTouchListener { _, _ ->
             true
         }
+
         return binding.root
     }
 
@@ -66,6 +74,12 @@ class PinMemoInputFragment(
     private fun initViews() {
         loadAddress()
         updateDateText()
+        setupHashtagEditRecyclerView()
+    }
+
+    private fun setupHashtagEditRecyclerView() {
+        hashtagEditRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        hashtagEditRecyclerView.adapter = EditableHashtagAdapter()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -148,7 +162,8 @@ class PinMemoInputFragment(
             date = date,
             imageUri = selectedImageUri!!,
             address = address,
-            pinSkinId = selectedPinColor?.id ?: 1L
+            pinSkinId = selectedPinColor?.id ?: 1L,
+            hashtags = (hashtagEditRecyclerView.adapter as EditableHashtagAdapter).getResult()
         )
 
         onComplete(data)
