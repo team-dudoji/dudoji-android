@@ -42,12 +42,10 @@ class LandmarkDetailActivity : AppCompatActivity() {
             crossfade(true)
         }
 
-
-
         val hashtagRecyclerView = findViewById<RecyclerView>(R.id.hashtagRecyclerView)
         hashtagRecyclerView.layoutManager = GridLayoutManager(this, 3)
         val hashtags = landmark.hashtags.take(3) // 최대 3개만
-        hashtagAdapter = HashtagAdapter(hashtags)
+        hashtagAdapter = HashtagAdapter(hashtags.toMutableList())
         hashtagRecyclerView.adapter = hashtagAdapter
 
         val transportRecyclerView = findViewById<RecyclerView>(R.id.transportRecyclerView)

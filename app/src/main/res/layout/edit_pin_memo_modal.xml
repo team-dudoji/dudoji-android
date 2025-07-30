@@ -130,6 +130,13 @@
             android:scaleType="fitCenter"
             android:layout_marginLeft="20dp"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hashtag_recycler_view"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:orientation="horizontal"/>
     <EditText
             android:layout_margin="15dp"
             android:padding="20dp"
