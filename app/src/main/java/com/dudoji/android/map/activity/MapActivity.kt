@@ -57,6 +57,7 @@ import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.collections.MarkerManager
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var myLocationButton : Button;
@@ -65,8 +66,12 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private lateinit var pinSetter: ImageView
     lateinit var pinSetterController: PinSetterController
     private lateinit var pinDropZone: FrameLayout
-    private lateinit var pinApplier: PinApplier
-    private lateinit var LandmarkApplier: LandmarkApplier
+    private val pinApplier: PinApplier by lazy {
+        PinApplier(clusterManager, googleMap, this@MapActivity, pinFilter)
+    }
+    private val LandmarkApplier: LandmarkApplier by lazy {
+        LandmarkApplier(normalMarkerCollection, googleMap, this@MapActivity)
+    }
 
     private lateinit var googleMap: GoogleMap
     private var mapUtil: MapUtil = MapUtil(this)
@@ -81,12 +86,16 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
     lateinit var directionController: MapDirectionController
 
-    private lateinit var clusterManager: ClusterManager<Pin>
+    private val clusterManager: ClusterManager<Pin> by lazy {
+        ClusterManager(this@MapActivity, googleMap)
+    }
     private val normalMarkerCollection: MarkerManager.Collection by lazy {
         clusterManager.markerManager.newCollection()
     }
 
-    private lateinit var pinFilter: PinFilter // 핀 필터 변수
+    private val pinFilter: PinFilter by lazy {
+        PinFilter(this@MapActivity, mapSectionManager as DatabaseMapSectionManager?)
+    }
     private lateinit var landmarkBottomSheet: LandmarkBottomSheet
 
 
@@ -205,12 +214,11 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
         lifecycleScope.launch {
             mapSectionManager = DatabaseMapSectionManager(this@MapActivity)
+
             setTileMaskTileMaker(
                 MapSectionMaskTileMaker(mapSectionManager)
             )
             startLocationUpdates()
-
-            clusterManager = ClusterManager(this@MapActivity, googleMap)
 
             //맵 액티비티에 스킨 씌우기
             clusterManager.renderer = PinRenderer(
@@ -218,10 +226,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 googleMap,
                 clusterManager
             )
-
-            pinFilter = PinFilter(this@MapActivity)
-            pinApplier = PinApplier(clusterManager, googleMap, this@MapActivity, pinFilter)
-            LandmarkApplier = LandmarkApplier(normalMarkerCollection, googleMap, this@MapActivity)
 
             googleMap.setOnCameraIdleListener {
                 clusterManager.onCameraIdle()
