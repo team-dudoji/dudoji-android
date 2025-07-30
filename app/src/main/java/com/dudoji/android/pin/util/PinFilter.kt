@@ -29,7 +29,7 @@ class PinFilter(
     fun filterPins(pins: List<Pin>): List<Pin> {
         return pins.filter { pin ->
             visibilityMap[pin.master] == true
-                    && databaseMapSectionManager?.isFogExists(pin.lat, pin.lng) == false
+                    && !(databaseMapSectionManager?.isFogExists(pin.lat, pin.lng) ?: false)
         }
     }
 
