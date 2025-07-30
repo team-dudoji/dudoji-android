@@ -36,6 +36,7 @@ data class PinResponseDto (
             master = master,
             placeName = placeName?:"",
             address = address?:"",
-            pinSkinId = pinSkinId)
+            pinSkinId = pinSkinId,
+            hashTags = emptyList())
         }
     }

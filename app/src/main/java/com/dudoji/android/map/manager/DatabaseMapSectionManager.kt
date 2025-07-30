@@ -2,6 +2,7 @@ package com.dudoji.android.map.manager
 
 import android.content.Context
 import android.util.Log
+import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.database.dao.MapSectionDao
 import com.dudoji.android.map.domain.MapSection
 import com.dudoji.android.map.domain.RevealCircle
@@ -17,6 +18,15 @@ class DatabaseMapSectionManager(context: Context): MapSectionManager(), IRevealC
 
     init {
         RevealCircleRepository.revealCircleListenerCaller.addListener(this)
+    }
+
+    fun isFogExists(lat: Double, lng: Double): Boolean {
+        val pixel = TileCoordinateUtil.Companion.latLngToPixel(lat, lng, BASIC_ZOOM_LEVEL)
+        val tile = TileCoordinateUtil.Companion.pixelToTile(pixel.first, pixel.second)
+        val tileCoordinate = TileCoordinate(tile.first, tile.second, BASIC_ZOOM_LEVEL)
+        val tileXY = TileCoordinateUtil.Companion.pixelToPixelInTile(pixel.first, pixel.second)
+        val mapSection = getMapSection(tileCoordinate)
+        return mapSection.isFogExists(tileXY.first, tileXY.second)
     }
 
     override fun getMapSection(coordinate: TileCoordinate): MapSection {

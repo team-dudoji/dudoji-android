@@ -47,6 +47,11 @@ class TileCoordinateUtil {
             return closeBasicTileCoordinates
         }
 
+        fun latLngToPixel(lat: Double, lng: Double, zoomLevel: Int): Pair<Int, Int> {
+            val (xOfWorld, yOfWorld) = latLngToWorld(lat, lng)
+            return worldToPixel(xOfWorld, yOfWorld, zoomLevel)
+        }
+
         // lat/lng → EPSG:3857 (world coordinate)
         fun latLngToWorld(lat: Double, lng: Double): Pair<Double, Double> {
             var siny = Math.sin((lat * Math.PI) / 180);
@@ -90,7 +95,6 @@ class TileCoordinateUtil {
         }
 
         fun meterToPixel(length: Double, lat: Double, zoomLevel: Int): Double {
-
             return length / (
                     cos(Math.toRadians(lat)) * 2.0 * Math.PI * EARTH_RADIUS
                      / (TILE_SIZE * (1 shl zoomLevel))

@@ -8,6 +8,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RadialGradient
 import android.graphics.Shader
+import androidx.core.graphics.get
 import com.dudoji.android.config.BASIC_ZOOM_LEVEL
 import com.dudoji.android.config.FOG_COLOR
 import com.dudoji.android.config.GRADIENT_RADIUS_RATE
@@ -34,6 +35,14 @@ open class MapSection {
 
             return _canvas!!
         }
+
+    fun isFogExists(tileX: Int, tileY: Int): Boolean {
+        bitmap?.get(tileX, tileY)?.let { pixelColor ->
+            val alpha = Color.alpha(pixelColor)
+            return alpha > 128
+        }
+        return false
+    }
 
     fun applyPosition(position: WorldPosition) {
         canvas.applyPosition(TileCoordinate(x, y, 15), position.xOfWold, position.yOfWorld, position.radius)

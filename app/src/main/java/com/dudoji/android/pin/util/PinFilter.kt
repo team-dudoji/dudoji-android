@@ -6,11 +6,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.dudoji.android.R
 import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.map.manager.DatabaseMapSectionManager
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
 
 class PinFilter(
-    private val activity: AppCompatActivity
+    private val activity: AppCompatActivity,
+    private val databaseMapSectionManager: DatabaseMapSectionManager?
 ) {
     private lateinit var btnMine: ImageButton
     private lateinit var btnFriend: ImageButton
@@ -27,6 +29,7 @@ class PinFilter(
     fun filterPins(pins: List<Pin>): List<Pin> {
         return pins.filter { pin ->
             visibilityMap[pin.master] == true
+                    && !(databaseMapSectionManager?.isFogExists(pin.lat, pin.lng) ?: false)
         }
     }
 
