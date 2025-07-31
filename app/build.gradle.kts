@@ -39,9 +39,19 @@ android {
         multiDexEnabled = true
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(getApiKey("KEYSTORE_FILE"))
+            storePassword = getApiKey("KEYSTORE_PASSWORD")
+            keyAlias = getApiKey("KEY_ALIAS")
+            keyPassword = getApiKey("KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
