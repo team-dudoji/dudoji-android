@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/searchBarContainer"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:background="@drawable/search_bar_background"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:elevation="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+    <ImageView
+            android:id="@+id/searchIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_search"
+            android:contentDescription="검색" />
+
+    <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="랜드마크 검색"
+            android:textColorHint="#999999"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:maxLines="1" />
+</LinearLayout>
