@@ -1,10 +1,8 @@
 package com.dudoji.android.map.activity
 
 import android.content.Intent
-import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -16,12 +14,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
-import com.dudoji.android.config.TILE_OVERLAY_LOADING_TIME
 import com.dudoji.android.follow.repository.FollowRepository
 import com.dudoji.android.landmark.activity.LandmarkSearchActivity
 import com.dudoji.android.landmark.domain.Landmark
@@ -32,12 +30,10 @@ import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
 import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapUtil
+import com.dudoji.android.map.utils.fog.FogTextureView
 import com.dudoji.android.map.utils.location.GPSLocationService
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
-import com.dudoji.android.map.utils.tile.MaskTileProvider
-import com.dudoji.android.map.utils.tile.mask.IMaskTileMaker
-import com.dudoji.android.map.utils.tile.mask.MapSectionMaskTileMaker
 import com.dudoji.android.map.utils.ui.LandmarkBottomSheet
 import com.dudoji.android.mypage.activity.FollowListActivity
 import com.dudoji.android.mypage.activity.MyPageActivity
@@ -51,16 +47,12 @@ import com.dudoji.android.shop.activity.ShopActivity
 import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.TileOverlay
-import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.collections.MarkerManager
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
-
-    private lateinit var myLocationButton : Button;
     private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
 
     private lateinit var pinSetter: ImageView
@@ -72,16 +64,32 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private val LandmarkApplier: LandmarkApplier by lazy {
         LandmarkApplier(normalMarkerCollection, googleMap, this@MapActivity)
     }
+    private val searchBarContainer by lazy {
+        findViewById<LinearLayout>(R.id.search_bar_container)
+    }
+    private val myLocationButton by lazy {
+        findViewById<Button>(R.id.my_location_button)
+    }
+    private val navigationLayout by lazy {
+        findViewById<ConstraintLayout>(R.id.navigation_layout)
+    }
+    private val landmarkBottomLayout by lazy {
+        findViewById<LinearLayout>(R.id.landmark_bottom_sheet)
+    }
+//    private val fogParticleOverlayView: FogParticleOverlayView by lazy {
+//        findViewById<FogParticleOverlayView>(R.id.particle_overlay)
+//    }
+    val fogTextureView: FogTextureView by lazy {
+        findViewById<FogTextureView>(R.id.fog_texture_view)
+    }
+
 
     private lateinit var googleMap: GoogleMap
     private var mapUtil: MapUtil = MapUtil(this)
-    private lateinit var mapCameraPositionController : MapCameraPositionController
+    private val mapCameraPositionController : MapCameraPositionController by lazy {
+        MapCameraPositionController(this.googleMap, myLocationButton)
+    }
 
-    private val numOfTileOverlay = 2
-    private var indexOfTileOverlay = 0
-    private val tileOverlays: MutableList<TileOverlay> = mutableListOf()
-
-    private lateinit var maskTileMaker: IMaskTileMaker
     private lateinit var mapSectionManager: MapSectionManager
 
     lateinit var directionController: MapDirectionController
@@ -98,28 +106,19 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     }
     private lateinit var landmarkBottomSheet: LandmarkBottomSheet
 
-
-    fun setTileMaskTileMaker(maskTileMaker: IMaskTileMaker) {
-        this.maskTileMaker = maskTileMaker
-        val tileOverlayOptions = TileOverlayOptions().tileProvider(MaskTileProvider(maskTileMaker))
-        for (i in 0 until numOfTileOverlay) {
-            tileOverlays.add(googleMap.addTileOverlay(tileOverlayOptions)!!)
-        }
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_map)
 
         mapUtil.setupLocationServices()
         mapUtil.requestLocationPermission()
-        mapUtil.prepareMap()
+        mapUtil.prepareMap(savedInstanceState)
 
         locationService = GPSLocationService(this)
 
         setupMyLocationButton()
-        setupLocationUpdates() // Setup location updates Callback
 
         lifecycleScope.launch{
             FollowRepository.loadFollowings() // Load followings
@@ -137,45 +136,21 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private fun setupLocationUpdates(){
         locationService.setLocationCallback { locationResult ->
             locationResult?.lastLocation?.let {
-                Log.d(
-                    "MapActivity",
-                    "location callback: Location Updated: ${it.latitude}, ${it.longitude}"
-                )
                 if (!LocationCallbackFilter.isSameLocation(it)) {
-                    Log.d("MapActivity", "location callback: Location is Saved")
                     RevealCircleRepository.addLocation(it)
-                    updateLocationOnMap(it)
                 }
                 mapCameraPositionController.updateLocation(it)
             }
         }
     }
 
-    // Update location on map
-    private fun updateLocationOnMap(location: Location){
-        if (tileOverlays.size == 0)
-            return
-        val lat = location.latitude
-        val lng = location.longitude
-
-        if (lat != 0.0 && lng != 0.0) {
-            updateMap()
-        }
-    }
-
-    fun updateMap(){
-        tileOverlays[indexOfTileOverlay].clearTileCache()
-        indexOfTileOverlay = (indexOfTileOverlay + 1) % numOfTileOverlay
-
-        Handler().postDelayed({
-            tileOverlays[indexOfTileOverlay].clearTileCache()
-            indexOfTileOverlay = (indexOfTileOverlay + 1) % numOfTileOverlay
-
-        }, TILE_OVERLAY_LOADING_TIME)
+    fun bringToFront(view: View) {
+        view.bringToFront()
+        view.parent.requestLayout()
+        (view.parent as View).invalidate()
     }
 
     fun setupMyLocationButton() {
-        myLocationButton = findViewById(R.id.myLocationButton)
         myLocationButton.setOnClickListener {
             mapCameraPositionController.setAttach(true)
             myLocationButton.visibility = View.GONE
@@ -207,17 +182,16 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
+        setupLocationUpdates() // Setup location updates Callback
         mapUtil.setGoogleMap(googleMap)
         this.googleMap.setMinZoomPreference(MIN_ZOOM)
         this.googleMap.setMaxZoomPreference(MAX_ZOOM)
-        mapCameraPositionController = MapCameraPositionController(this.googleMap, myLocationButton)
+        mapCameraPositionController
 
+        fogTextureView.setGoogleMap(googleMap)
         lifecycleScope.launch {
             mapSectionManager = DatabaseMapSectionManager(this@MapActivity)
 
-            setTileMaskTileMaker(
-                MapSectionMaskTileMaker(mapSectionManager)
-            )
             startLocationUpdates()
 
             //맵 액티비티에 스킨 씌우기
@@ -231,6 +205,11 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 clusterManager.onCameraIdle()
                 pinApplier.onCameraIdle()
                 LandmarkApplier.onCameraIdle()
+                fogTextureView.updateParticles(mapSectionManager as DatabaseMapSectionManager)
+            }
+
+            googleMap.setOnCameraMoveListener {
+                fogTextureView.onCameraMoved(mapSectionManager as DatabaseMapSectionManager)
             }
 
             pinFilter.setupFilterButtons()
@@ -296,7 +275,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
     private fun setupSearchLandmark() {
         val editText = findViewById<EditText>(R.id.searchEditText)
-        val container = findViewById<LinearLayout>(R.id.searchBarContainer)
+        val container = findViewById<LinearLayout>(R.id.search_bar_container)
 
         fun goToSearch() {
             val intent = Intent(this, LandmarkSearchActivity::class.java)
