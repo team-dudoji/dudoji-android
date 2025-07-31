@@ -9,21 +9,23 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.dudoji.android.R
-import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 
-class MapUtil : GoogleApiClient.ConnectionCallbacks,
-GoogleApiClient.OnConnectionFailedListener{
-    var activity: AppCompatActivity
+class MapUtil(val activity: AppCompatActivity) {
+
     lateinit var providerClient: FusedLocationProviderClient
     lateinit var apiClient: GoogleApiClient
     private var googleMap: GoogleMap? = null
+
+    private val mapView by lazy {
+        activity.findViewById<MapView>(R.id.mapView)
+    }
 
     companion object {
         fun distanceBetween(p1: LatLng, p2: LatLng): Double {
@@ -31,10 +33,6 @@ GoogleApiClient.OnConnectionFailedListener{
             Location.distanceBetween(p1.latitude, p1.longitude, p2.latitude, p2.longitude, results)
             return results[0].toDouble()
         }
-    }
-
-    constructor(activity: AppCompatActivity) {
-        this.activity = activity
     }
 
     // Permission Request for Location
@@ -62,8 +60,9 @@ GoogleApiClient.OnConnectionFailedListener{
 
     // Prepare Map
     // Initialize Google Map Api
-    fun prepareMap() {
-        (activity.supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment)!!.getMapAsync(
+    fun prepareMap(savedInstanceState: Bundle?) {
+        mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync(
             activity as OnMapReadyCallback
         )
     }
@@ -74,25 +73,11 @@ GoogleApiClient.OnConnectionFailedListener{
         providerClient = LocationServices.getFusedLocationProviderClient(activity)
         apiClient = GoogleApiClient.Builder(activity)
             .addApi(LocationServices.API)
-            .addConnectionCallbacks(this)
-            .addOnConnectionFailedListener(this)
             .build()
     }
 
     // Set Google Map by MapActivity
     fun setGoogleMap(map: GoogleMap?) {
         this.googleMap = map
-    }
-
-    override fun onConnected(p0: Bundle?) {
-
-    }
-
-    override fun onConnectionSuspended(p0: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-        TODO("Not yet implemented")
     }
 }
