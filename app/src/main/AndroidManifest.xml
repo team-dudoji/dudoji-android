@@ -52,7 +52,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.activity.LoginActivity"/>
-        <activity android:name=".map.activity.MapActivity" />
+        <activity android:name=".map.activity.MapActivity"
+                  android:hardwareAccelerated="true"/>
         <activity android:name=".mypage.activity.MyPageActivity" />
         <activity android:name=".shop.activity.ShopActivity" />
         <activity android:name=".pin.activity.MyPinActivity" />

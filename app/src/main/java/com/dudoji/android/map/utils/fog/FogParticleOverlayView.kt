@@ -18,6 +18,7 @@ import com.dudoji.android.map.domain.FogParticle
 import com.dudoji.android.map.manager.DatabaseMapSectionManager
 import com.google.android.gms.maps.GoogleMap
 
+@Deprecated("This class is deprecated and will be removed in future versions. Use the new FogTextureView instead.")
 class FogParticleOverlayView(
     context: Context,
     attrs:AttributeSet

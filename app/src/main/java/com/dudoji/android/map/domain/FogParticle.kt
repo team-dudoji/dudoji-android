@@ -11,7 +11,7 @@ data class FogParticle(
     var visible: Boolean = true
 ) {
     companion object {
-        const val DELTA_ALPHA_PER_MS = 0.3f
+        const val DELTA_ALPHA_PER_MS = 4
     }
 
     fun updateAlpha() {

@@ -23,21 +23,12 @@
                     android:id="@+id/mapView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
-            <com.dudoji.android.map.utils.fog.FogParticleOverlayView
-                    android:id="@+id/particle_overlay"
+            <com.dudoji.android.map.utils.fog.FogTextureView
+                    android:id="@+id/fog_texture_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clickable="false"
                     android:focusable="false"/>
-<!--            <android.opengl.GLSurfaceView-->
-<!--                    android:id="@+id/fog_surface_view"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:visibility="visible"/>-->
-<!--            <com.dudoji.android.map.utils.fog.FogTextureView-->
-<!--                    android:id="@+id/fog_texture_view"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent" />-->
         </FrameLayout>
 
         <include

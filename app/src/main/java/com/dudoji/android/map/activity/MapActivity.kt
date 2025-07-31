@@ -30,7 +30,7 @@ import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
 import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapUtil
-import com.dudoji.android.map.utils.fog.FogParticleOverlayView
+import com.dudoji.android.map.utils.fog.FogTextureView
 import com.dudoji.android.map.utils.location.GPSLocationService
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
@@ -76,12 +76,12 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private val landmarkBottomLayout by lazy {
         findViewById<LinearLayout>(R.id.landmark_bottom_sheet)
     }
-    private val fogParticleOverlayView: FogParticleOverlayView by lazy {
-        findViewById<FogParticleOverlayView>(R.id.particle_overlay)
-    }
-//    val fogTextureView: FogTextureView by lazy {
-//        findViewById<FogTextureView>(R.id.fog_texture_view)
+//    private val fogParticleOverlayView: FogParticleOverlayView by lazy {
+//        findViewById<FogParticleOverlayView>(R.id.particle_overlay)
 //    }
+    val fogTextureView: FogTextureView by lazy {
+        findViewById<FogTextureView>(R.id.fog_texture_view)
+    }
 
 
     private lateinit var googleMap: GoogleMap
@@ -188,7 +188,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         this.googleMap.setMaxZoomPreference(MAX_ZOOM)
         mapCameraPositionController
 
-        fogParticleOverlayView.googleMap = googleMap
+        fogTextureView.setGoogleMap(googleMap)
         lifecycleScope.launch {
             mapSectionManager = DatabaseMapSectionManager(this@MapActivity)
 
@@ -205,11 +205,11 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 clusterManager.onCameraIdle()
                 pinApplier.onCameraIdle()
                 LandmarkApplier.onCameraIdle()
-                fogParticleOverlayView.updateParticles(mapSectionManager as DatabaseMapSectionManager)
+                fogTextureView.updateParticles(mapSectionManager as DatabaseMapSectionManager)
             }
 
             googleMap.setOnCameraMoveListener {
-                fogParticleOverlayView.onCameraMoved(mapSectionManager as DatabaseMapSectionManager)
+                fogTextureView.onCameraMoved(mapSectionManager as DatabaseMapSectionManager)
             }
 
             pinFilter.setupFilterButtons()
