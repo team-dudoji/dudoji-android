@@ -187,7 +187,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         this.googleMap.setMinZoomPreference(MIN_ZOOM)
         this.googleMap.setMaxZoomPreference(MAX_ZOOM)
         mapCameraPositionController
-//        fogTextureView.setupParticles()
+
         fogParticleOverlayView.googleMap = googleMap
         lifecycleScope.launch {
             mapSectionManager = DatabaseMapSectionManager(this@MapActivity)
@@ -206,6 +206,10 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 pinApplier.onCameraIdle()
                 LandmarkApplier.onCameraIdle()
                 fogParticleOverlayView.updateParticles(mapSectionManager as DatabaseMapSectionManager)
+            }
+
+            googleMap.setOnCameraMoveListener {
+                fogParticleOverlayView.onCameraMoved(mapSectionManager as DatabaseMapSectionManager)
             }
 
             pinFilter.setupFilterButtons()

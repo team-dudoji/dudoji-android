@@ -26,6 +26,7 @@ const val MAX_ZOOM = 20f
 const val FOG_COLOR = Color.LTGRAY
 const val FOG_PARTICLE_SIZE = 1000
 const val FOG_PARTICLE_SPACING = 100
-const val FOG_INVALIDATION_INTERVAL = 200 // ms
+const val FOG_INVALIDATION_INTERVAL = 100 // ms
+const val FOG_CHECK_INTERVAL = 200 // ms
 
 const val SPEED_THRESHOLD = 0.5f

@@ -11,6 +11,7 @@ import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
 import com.dudoji.android.R
+import com.dudoji.android.config.FOG_CHECK_INTERVAL
 import com.dudoji.android.config.FOG_INVALIDATION_INTERVAL
 import com.dudoji.android.config.FOG_PARTICLE_SPACING
 import com.dudoji.android.map.domain.FogParticle
@@ -78,6 +79,15 @@ class FogParticleOverlayView(
                 paint
             )
 
+        }
+    }
+
+    var lastUpdateTime = 0L
+    fun onCameraMoved(mapSectionManager: DatabaseMapSectionManager) {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastUpdateTime >= FOG_CHECK_INTERVAL) {
+            updateParticles(mapSectionManager)
+            lastUpdateTime = currentTime
         }
     }
 
