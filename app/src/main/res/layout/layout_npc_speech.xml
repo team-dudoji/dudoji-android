@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/npc_speech_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:id="@+id/npc_speech_frame"
+            app:layout_constraintBottom_toTopOf="@+id/npc_image"
+            app:layout_constraintStart_toEndOf="@+id/npc_image"
+            android:layout_marginStart="-15dp"
+            android:layout_marginBottom="-10dp">
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/speech_bubble" />
+        <TextView
+                android:padding="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/npc_speech_text"
+                android:gravity="center"
+                android:textSize="5sp"
+                android:text="낭만이 넘치는 도시, 부산!" />
+    </FrameLayout>
+
+    <ImageView
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:scaleType="fitXY"
+            android:id="@+id/npc_image"
+            android:src="@mipmap/buggi"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
