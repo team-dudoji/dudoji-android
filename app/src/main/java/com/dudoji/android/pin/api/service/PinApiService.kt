@@ -1,9 +1,11 @@
 package com.dudoji.android.pin.api.service
 
+import com.dudoji.android.network.api.service.RangeSearchApiService
 import com.dudoji.android.pin.api.dto.PinRequestDto
 import com.dudoji.android.pin.api.dto.PinResponseDto
 import com.dudoji.android.pin.api.dto.PinSkinDto
 import com.dudoji.android.pin.api.dto.PinSkinUpdateRequestDto
+import com.dudoji.android.pin.domain.Pin
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -15,7 +17,7 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface PinApiService {
+interface PinApiService: RangeSearchApiService<PinResponseDto, Pin> {
     @POST("/api/user/pins")
     suspend fun createPin(@Body pin: PinRequestDto): Response<PinResponseDto>
 
@@ -24,7 +26,7 @@ interface PinApiService {
     suspend fun uploadImage(@Part image: MultipartBody.Part): Response<String>
 
     @GET("/api/user/pins")
-    suspend fun getPins(@Query("radius") radius: Int,
+    override suspend fun getRangeSearchResults(@Query("radius") radius: Int,
                      @Query("lat") lat: Double,
                      @Query("lng") lng: Double): Response<List<PinResponseDto>>
 
