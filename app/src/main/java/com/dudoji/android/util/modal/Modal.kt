@@ -34,10 +34,11 @@ object Modal {
 
     fun showCustomModal(
         activity: AppCompatActivity,
-        fragment: ModalFragment
+        fragment: ModalFragment,
+        templateLayoutRes: Int = R.layout.template_modal
     ) {
         val inflater = LayoutInflater.from(activity)
-        val modalRoot = inflater.inflate(R.layout.template_modal, null) as ViewGroup
+        val modalRoot = inflater.inflate(templateLayoutRes, null) as ViewGroup
 
         val rootView = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
         rootView.addView(modalRoot)

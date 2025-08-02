@@ -28,6 +28,7 @@ import com.dudoji.android.landmark.activity.LandmarkSearchActivity
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
 import com.dudoji.android.map.domain.Npc
+import com.dudoji.android.map.fragment.QuestFragment
 import com.dudoji.android.map.manager.DatabaseMapSectionManager
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.RevealCircleRepository
@@ -257,11 +258,9 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 } else if (tag is Npc) {
                     Modal.showCustomModal(
                         this@MapActivity,
-                        R.layout.quest_modal,
+                        QuestFragment(tag.npcId),
                         R.layout.template_quest_modal
-                    ) { view ->
-
-                    }
+                    )
                     true
                 }
 
