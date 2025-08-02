@@ -76,7 +76,6 @@ class PinMemoInputFragment(
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun initViews() {
         binding.memoDateEditButton.load("file:///android_asset/pin/calendar_today.png")
-        binding.pinMemoImage.load("file:///android_asset/pin/photo_placeholder.png")
         binding.locationIconEdit.load("file:///android_asset/pin/location_on.png")
         try {
             val pinButtonBg = requireContext().assets.open("pin/pin_button.png").use { Drawable.createFromStream(it, null) }

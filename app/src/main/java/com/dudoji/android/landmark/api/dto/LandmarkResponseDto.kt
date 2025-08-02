@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.landmark.domain.Landmark
+import com.dudoji.android.network.api.dto.BaseDto
 
 data class LandmarkResponseDto(
     val landmarkId: Long,
@@ -17,9 +18,9 @@ data class LandmarkResponseDto(
     val radius: Double,
     val isDetected: Boolean,
     val hashtags: List<String>?
-) {
+): BaseDto<Landmark> {
     @RequiresApi(Build.VERSION_CODES.O)
-    fun toDomain(): Landmark {
+    override fun toDomain(): Landmark {
         Log.d("LandmarkResponseDto", "Converting to domain model: $landmarkId, $lat, $lng, $placeName, $address, $content, $mapImageUrl, $detailImageUrl, $radius, $isDetected, $hashtags")
         return Landmark(
             landmarkId = landmarkId,

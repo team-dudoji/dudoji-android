@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface LandmarkApiService {
     @GET("/api/user/landmarks")
-    suspend fun getLandmarks(@Query("radius") radius: Int,
+    suspend fun getRangeSearchResults(@Query("radius") radius: Int,
                         @Query("lat") lat: Double,
                         @Query("lng") lng: Double): Response<List<LandmarkResponseDto>>
 
