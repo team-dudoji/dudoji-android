@@ -46,37 +46,8 @@ class QuestFragment(val npcId: Long): ModalFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun initViews() {
-//        val response = RetrofitClient.npcQuestApiService.getNpcQuest(npcId)
-val response = Response.success(NpcQuestDto(
-    npcId = 1L,
-    name = "엘프 촌장",
-    imageUrl = "https://example.com/elf_chief.png",
-    npcScript = "용사여, 우리 마을을 도와주십시오!",
-    description = "엘프 마을을 구하기 위한 일련의 퀘스트입니다.",
-    quests = listOf(
-        QuestDto(
-            title = "고블린 퇴치",
-            currentValue = 3,
-            goalValue = 10,
-            unit = MissionUnit.COUNT,
-            type = QuestType.NPC
-        ),
-        QuestDto(
-            title = "숲 속 탐험",
-            currentValue = 2,
-            goalValue = 5,
-            unit = MissionUnit.DISTANCE,
-            type = QuestType.NPC
-        ),
-        QuestDto(
-            title = "엘프들의 신뢰 회복",
-            currentValue = 70,
-            goalValue = 100,
-            unit = MissionUnit.PERCENTAGE,
-            type = QuestType.NPC
-        )
-    )
-))
+        val response = RetrofitClient.npcQuestApiService.getNpcQuest(npcId)
+
         if (response.isSuccessful) {
             npcQuestDto = response.body() ?: throw IllegalStateException("NPC Quest data is null")
         } else {
