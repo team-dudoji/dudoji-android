@@ -50,6 +50,7 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/pin_memo_image"
+                    android:src="@mipmap/photo_placeholder"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />

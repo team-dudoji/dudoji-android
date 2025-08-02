@@ -55,14 +55,10 @@ class PinMemoAdapter(
 
         holder.likeIcon.load("file:///android_asset/pin/heart_like.png")
 
-        val placeholderDrawable = try {
-            holder.itemView.context.assets.open("pin/photo_placeholder.png").use { Drawable.createFromStream(it, null) }
-        } catch (e: IOException) { null }
-
         holder.image.load("${RetrofitClient.BASE_URL}/${pin.imageUrl}") {
             crossfade(true)
-            error(placeholderDrawable)
-            placeholder(placeholderDrawable)
+            error(R.mipmap.photo_placeholder)
+            placeholder(R.mipmap.photo_placeholder)
         }
     }
 

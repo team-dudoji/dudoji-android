@@ -36,14 +36,10 @@ object PinModal {
             val pinAddress = view.findViewById<TextView>(R.id.pin_address)
             var isLiked = pin.isLiked
 
-            val placeholderDrawable = try {
-                activity.assets.open("pin/photo_placeholder.png").use { Drawable.createFromStream(it, null) }
-            } catch (e: IOException) { null }
-
             pinImage.load("${RetrofitClient.BASE_URL}/${pin.imageUrl}") {
                 crossfade(true)
-                error(placeholderDrawable)
-                placeholder(placeholderDrawable)
+                error(R.mipmap.photo_placeholder)
+                placeholder(R.mipmap.photo_placeholder)
             }
 
             fun updateLikeButton() {

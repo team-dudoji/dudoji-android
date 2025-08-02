@@ -78,16 +78,10 @@ class PinDetailActivity : AppCompatActivity() {
         createdDateStr: String?
     ) {
         with(binding) {
-            val placeholderDrawable = try {
-                assets.open("pin/photo_placeholder.png").use { inputStream ->
-                    Drawable.createFromStream(inputStream, null)
-                }
-            } catch (e: IOException) { null }
-
             imageView.load("${RetrofitClient.BASE_URL}/$imageUrl") {
                 crossfade(true)
-                placeholder(placeholderDrawable)
-                error(placeholderDrawable)
+                placeholder(R.mipmap.photo_placeholder)
+                error(R.mipmap.photo_placeholder)
             }
 
             textPlaceName.text = placeName
