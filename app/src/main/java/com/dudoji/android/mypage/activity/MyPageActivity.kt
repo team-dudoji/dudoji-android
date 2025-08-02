@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dudoji.android.R
+import com.dudoji.android.follow.activity.FollowListActivity
 import com.dudoji.android.mypage.adapter.AchievementAdapter
 import com.dudoji.android.mypage.adapter.DailyQuestAdapter
 import com.dudoji.android.mypage.adapter.LandmarkAdapter
@@ -52,6 +53,8 @@ class MyPageActivity : AppCompatActivity() {
         val followerSection = findViewById<LinearLayout>(R.id.follower_section_clickable)
         val followingSection = findViewById<LinearLayout>(R.id.following_section_clickable)
 
+        settingsButton.load("file:///android_asset/account/ic_settings.png")
+
         dailyQuestRecycler = findViewById(R.id.daily_quest_recycler)
         landmarkRecycler = findViewById(R.id.landmark_recycler)
         achievementRecycler = findViewById(R.id.achievement_recycler)
@@ -72,8 +75,8 @@ class MyPageActivity : AppCompatActivity() {
 
                     profileImage.load(profile.profileImageUrl) {
                         crossfade(true)
-                        error(R.drawable.user_placeholder)
-                        placeholder(R.drawable.user_placeholder)
+                        error(R.drawable.dudoji_profile)
+                        placeholder(R.drawable.dudoji_profile)
                     }
                 }
 

@@ -1,10 +1,11 @@
-package com.dudoji.android.mypage.activity
+package com.dudoji.android.follow.activity
 
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView // ImageView import
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -13,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load // Coil import
 import com.dudoji.android.R
 import com.dudoji.android.follow.adapter.FollowAdapter
-import com.dudoji.android.follow.activity.FriendAddActivity
 import com.dudoji.android.follow.domain.User
 import com.dudoji.android.follow.repository.FollowRepository
 import kotlinx.coroutines.launch
@@ -38,13 +39,19 @@ class FollowListActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_follow_list) // 기존 레이아웃 그대로 사용
+        setContentView(R.layout.activity_follow_list)
 
         val type = intent.getStringExtra(EXTRA_TYPE)
         val titleView = findViewById<TextView>(R.id.toolbar_title)
         val backBtn = findViewById<ImageButton>(R.id.back_button)
         val recyclerView = findViewById<RecyclerView>(R.id.follow_list_recycler_view)
         val friendAddSection = findViewById<LinearLayout>(R.id.friend_add_section)
+
+        val sortButton = findViewById<ImageButton>(R.id.sort_button)
+        val personAddIcon = findViewById<ImageView>(R.id.person_add_icon)
+
+        sortButton.load("file:///android_asset/follow/ic_sort_up_down.png")
+        personAddIcon.load("file:///android_asset/follow/person_add.png")
 
         followersCount = findViewById(R.id.followers_count)
         followingCount = findViewById(R.id.following_count)
@@ -109,7 +116,4 @@ class FollowListActivity : AppCompatActivity() {
             }
         }
     }
-
-
-
 }

@@ -18,8 +18,7 @@
                 android:id="@+id/headerImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/campus_image" />
+                android:scaleType="centerCrop"/>
 
         <View
                 android:layout_width="match_parent"
@@ -31,7 +30,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/back_button"
+                android:background="@null"
                 android:contentDescription="뒤로가기"/>
 
         <LinearLayout

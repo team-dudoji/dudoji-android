@@ -1,6 +1,7 @@
 package com.dudoji.android.map.activity
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.airbnb.lottie.LottieAnimationView
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
@@ -35,7 +37,7 @@ import com.dudoji.android.map.utils.location.GPSLocationService
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.map.utils.ui.LandmarkBottomSheet
-import com.dudoji.android.mypage.activity.FollowListActivity
+import com.dudoji.android.follow.activity.FollowListActivity
 import com.dudoji.android.mypage.activity.MyPageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
@@ -50,6 +52,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.collections.MarkerManager
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
@@ -58,6 +61,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private lateinit var pinSetter: ImageView
     lateinit var pinSetterController: PinSetterController
     private lateinit var pinDropZone: FrameLayout
+
+
     private val pinApplier: PinApplier by lazy {
         PinApplier(clusterManager, googleMap, this@MapActivity, pinFilter)
     }
@@ -151,6 +156,15 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun setupMyLocationButton() {
+        try {
+            val myLocationBg = assets.open("map/my_location_button.png").use { inputStream ->
+                Drawable.createFromStream(inputStream, null)
+            }
+            myLocationButton.background = myLocationBg
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
         myLocationButton.setOnClickListener {
             mapCameraPositionController.setAttach(true)
             myLocationButton.visibility = View.GONE
@@ -176,6 +190,16 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     fun setPinSetterController() {
         pinDropZone = findViewById(R.id.outer_drop_zone)
         pinSetter = findViewById(R.id.pinSetter)
+
+        try {
+            val pinSetterBg = assets.open("pin/pin_button.png").use { inputStream ->
+                Drawable.createFromStream(inputStream, null)
+            }
+            pinSetter.background = pinSetterBg
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
         pinSetterController = PinSetterController(pinSetter, pinDropZone ,pinApplier, googleMap, this, clusterManager)
     }
 
@@ -274,8 +298,11 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setupSearchLandmark() {
+        val searchIcon = findViewById<ImageView>(R.id.searchIcon)
         val editText = findViewById<EditText>(R.id.searchEditText)
         val container = findViewById<LinearLayout>(R.id.search_bar_container)
+
+        searchIcon.load("file:///android_asset/map/ic_search.png")
 
         fun goToSearch() {
             val intent = Intent(this, LandmarkSearchActivity::class.java)

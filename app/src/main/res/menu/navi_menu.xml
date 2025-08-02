@@ -5,6 +5,6 @@
         android:title="Map" />
     <item
         android:id="@+id/mypageFragment"
-        android:icon="@drawable/user_placeholder"
+        android:icon="@drawable/dudoji_profile"
         android:title="MyPage" />
 </menu>

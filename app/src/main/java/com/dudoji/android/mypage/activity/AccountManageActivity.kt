@@ -2,11 +2,14 @@ package com.dudoji.android.mypage.activity
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.login.util.RequestPermissionsUtil
+
 class AccountManageActivity : AppCompatActivity() {
 
     private lateinit var switchCamera: Switch
@@ -24,6 +27,12 @@ class AccountManageActivity : AppCompatActivity() {
 
         switchCamera = findViewById(R.id.switch_camera)
         switchPhoto = findViewById(R.id.switch_photo)
+
+        val arrowPath = "file:///android_asset/account/ic_arrow_forward.png"
+        findViewById<ImageView>(R.id.arrow_change_password).load(arrowPath)
+        findViewById<ImageView>(R.id.arrow_two_factor).load(arrowPath)
+        findViewById<ImageView>(R.id.arrow_logout).load(arrowPath)
+        findViewById<ImageView>(R.id.arrow_withdraw).load(arrowPath)
 
         updatePermissionSwitches()
 

@@ -310,7 +310,9 @@ class FogTextureView @JvmOverloads constructor(
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE)
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE)
 
-            val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.fog_particle)
+            val bitmap = context.assets.open("map/fog_particle.png").use { inputStream ->
+                BitmapFactory.decodeStream(inputStream)
+            }
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
             bitmap.recycle()
         }
