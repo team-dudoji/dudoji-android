@@ -22,10 +22,12 @@ import com.airbnb.lottie.LottieAnimationView
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
+import com.dudoji.android.follow.activity.FollowListActivity
 import com.dudoji.android.follow.repository.FollowRepository
 import com.dudoji.android.landmark.activity.LandmarkSearchActivity
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
+import com.dudoji.android.map.domain.Npc
 import com.dudoji.android.map.manager.DatabaseMapSectionManager
 import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.RevealCircleRepository
@@ -36,8 +38,8 @@ import com.dudoji.android.map.utils.fog.FogTextureView
 import com.dudoji.android.map.utils.location.GPSLocationService
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
+import com.dudoji.android.map.utils.npc.NpcApplier
 import com.dudoji.android.map.utils.ui.LandmarkBottomSheet
-import com.dudoji.android.follow.activity.FollowListActivity
 import com.dudoji.android.mypage.activity.MyPageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
@@ -47,6 +49,7 @@ import com.dudoji.android.pin.util.PinRenderer
 import com.dudoji.android.pin.util.PinSetterController
 import com.dudoji.android.shop.activity.ShopActivity
 import com.dudoji.android.ui.AnimatedNavButtonHelper
+import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.maps.android.clustering.ClusterManager
@@ -66,8 +69,11 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private val pinApplier: PinApplier by lazy {
         PinApplier(clusterManager, googleMap, this@MapActivity, pinFilter)
     }
-    private val LandmarkApplier: LandmarkApplier by lazy {
+    private val landmarkApplier: LandmarkApplier by lazy {
         LandmarkApplier(normalMarkerCollection, googleMap, this@MapActivity)
+    }
+    private val npcApplier: NpcApplier by lazy {
+        NpcApplier(normalMarkerCollection, googleMap, this@MapActivity)
     }
     private val searchBarContainer by lazy {
         findViewById<LinearLayout>(R.id.search_bar_container)
@@ -228,7 +234,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             googleMap.setOnCameraIdleListener {
                 clusterManager.onCameraIdle()
                 pinApplier.onCameraIdle()
-                LandmarkApplier.onCameraIdle()
+                landmarkApplier.onCameraIdle()
+                npcApplier.onCameraIdle()
                 fogTextureView.updateParticles(mapSectionManager as DatabaseMapSectionManager)
             }
 
@@ -247,7 +254,17 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                         landmarkBottomSheet.open(tag)
                     }
                     true
+                } else if (tag is Npc) {
+                    Modal.showCustomModal(
+                        this@MapActivity,
+                        R.layout.quest_modal,
+                        R.layout.template_quest_modal
+                    ) { view ->
+
+                    }
+                    true
                 }
+
                 false
             }
         }

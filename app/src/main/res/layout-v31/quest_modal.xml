@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/modal_content"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:clipToOutline="true"
+        android:background="@drawable/rounded_modal_template"
+        android:orientation="vertical">
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+        <ImageView
+                android:clipToOutline="true"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:src="@drawable/pnu_image"
+                android:id="@+id/quest_image"
+                android:scaleType="centerCrop"/>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="퀘스트"
+                    android:textColor="#F6F6F6"
+                    android:fontFamily="@font/pretendard"
+                    android:textStyle="bold"
+                    android:textFontWeight="600"
+                    android:textSize="14sp"
+                    android:gravity="bottom|center" />
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="&lt;광안대교&gt;"
+                    android:textFontWeight="600"
+                    android:textColor="#F6F6F6"
+                    android:fontFamily="@font/pretendard"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:gravity="top|center" />
+        </LinearLayout>
+    </FrameLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#D9CDC1"
+            android:orientation="horizontal">
+        <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@mipmap/dudoji_full"
+                android:layout_gravity="bottom"/>
+        <TextView
+                android:id="@+id/quest_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="여기는 바나나가 굉장히 유명해 이순신 장군이 12척의 배로 적을 물리친 아아아와 두도지가 이곳의 명소야"
+                android:textSize="12sp"
+                android:textColor="#323232"
+                android:fontFamily="@font/pretendard"
+                android:textFontWeight="400"
+                android:paddingHorizontal="16dp"
+                android:clipToOutline="true"
+                android:paddingVertical="10dp"/>
+    </LinearLayout>
+</LinearLayout>
