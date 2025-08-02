@@ -10,9 +10,10 @@ import com.dudoji.android.pin.api.dto.PinRequestDto
 import com.dudoji.android.pin.api.dto.PinResponseDto
 import com.dudoji.android.pin.api.dto.PinSkinUpdateRequestDto
 import com.dudoji.android.pin.domain.Pin
+import retrofit2.Response
 
 @RequiresApi(Build.VERSION_CODES.O)
-object PinRepository: RangeSearchDataSource<PinResponseDto, Pin>(RetrofitClient.pinApiService) {
+object PinRepository: RangeSearchDataSource<PinResponseDto, Pin>() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getLandmarkPins(landmark: Landmark): List<Pin> {
@@ -61,5 +62,23 @@ object PinRepository: RangeSearchDataSource<PinResponseDto, Pin>(RetrofitClient.
             PinSkinUpdateRequestDto(newSkin)
         )
         return response.isSuccessful
+    }
+
+    override suspend fun fetchFromApi(
+        lat: Double,
+        lng: Double,
+        radius: Double
+    ): Response<List<PinResponseDto>> {
+        return RetrofitClient.pinApiService.getRangeSearchResults(
+            radius.toInt(),
+            lat,
+            lng
+        ).also { response ->
+            if (response.isSuccessful) {
+                return response
+            } else {
+                Log.e("PinRepository", "Failed to fetch pins: ${response.errorBody()?.string()}")
+            }
+        }
     }
 }

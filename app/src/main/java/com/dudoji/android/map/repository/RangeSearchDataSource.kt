@@ -6,22 +6,28 @@ import androidx.annotation.RequiresApi
 import com.dudoji.android.config.PIN_UPDATE_THRESHOLD
 import com.dudoji.android.map.utils.MapUtil
 import com.dudoji.android.network.api.dto.BaseDto
-import com.dudoji.android.network.api.service.RangeSearchApiService
 import com.google.android.gms.maps.model.LatLng
+import retrofit2.Response
 
-open class RangeSearchDataSource<T:BaseDto<D>, D>(val apiService: RangeSearchApiService<T, D>) {
+abstract class RangeSearchDataSource<T:BaseDto<D>, D> {
     val dataList = mutableListOf<D>()
 
     private var lastUpdatedLatLng: LatLng? = null
+
+    protected abstract suspend fun fetchFromApi(
+        lat: Double,
+        lng: Double,
+        radius: Double
+    ): Response<List<T>>
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun load(latLng: LatLng, radius: Double): Boolean{
         if (lastUpdatedLatLng == null ||
             MapUtil.distanceBetween(lastUpdatedLatLng!!, latLng) > PIN_UPDATE_THRESHOLD) {
-            val response = apiService.getRangeSearchResults(
-                radius.toInt(),
+            val response = fetchFromApi(
                 latLng.latitude,
-                latLng.longitude)
+                latLng.longitude,
+                radius)
             if (response.isSuccessful) {
                 val datas = response.body()
                 dataList.clear()

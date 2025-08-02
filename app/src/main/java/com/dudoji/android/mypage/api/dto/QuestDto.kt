@@ -1,7 +1,7 @@
-package com.dudoji.android.mypage.dto
+package com.dudoji.android.mypage.api.dto
 
-import com.dudoji.android.mypage.domain.Quest
 import com.dudoji.android.mypage.domain.MissionUnit
+import com.dudoji.android.mypage.domain.Quest
 import com.dudoji.android.mypage.domain.QuestType
 
 data class QuestDto (
