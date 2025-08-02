@@ -7,11 +7,13 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.follow.adapter.FollowSearchAdapter
 import com.dudoji.android.follow.repository.FollowRepository
@@ -24,6 +26,7 @@ class FriendAddActivity : AppCompatActivity() {
     private lateinit var searchEditText: EditText
     private lateinit var recyclerView: RecyclerView
     private lateinit var backButton: ImageButton
+    private lateinit var emailIcon: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +35,9 @@ class FriendAddActivity : AppCompatActivity() {
         searchEditText = findViewById(R.id.friend_search_edit_text)
         recyclerView = findViewById(R.id.friend_recommend_recycler_view)
         backButton = findViewById(R.id.back_button)
+        emailIcon = findViewById(R.id.email_icon)
+
+        emailIcon.load("file:///android_asset/follow/email.png")
 
         setupRecyclerView()
         setupListeners()

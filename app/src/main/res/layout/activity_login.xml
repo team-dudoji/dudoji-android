@@ -13,7 +13,6 @@
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/login_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -25,9 +24,6 @@
             android:id="@+id/kakao_login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:background="@drawable/kakao_login_medium_wide"
-
             android:paddingVertical="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

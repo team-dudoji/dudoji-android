@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.landmark.domain.Route
 
@@ -50,12 +51,12 @@ class RouteAdapter(private var routes: List<Route>) :
             else R.drawable.route_card_background
         )
 
-        val iconRes = if (isSelected) {
-            route.type.getSelectedIconRes()
+        val iconPath = if (isSelected) {
+            route.type.getSelectedIconPath()
         } else {
-            route.type.getUnselectedIconRes()
+            route.type.getUnselectedIconPath()
         }
-        holder.icon.setImageResource(iconRes)
+        holder.icon.load("file:///android_asset/$iconPath")
 
         holder.container.setOnClickListener {
             val currentPos = holder.adapterPosition

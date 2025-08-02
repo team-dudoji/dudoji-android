@@ -44,7 +44,7 @@
                         android:layout_height="80dp"
                         android:layout_marginBottom="12dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/user_placeholder"
+                        android:src="@drawable/dudoji_profile"
                         android:background="@android:color/white"
                         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
@@ -69,7 +69,6 @@
                             android:id="@+id/settings_button"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_settings"
                             android:background="?android:attr/selectableItemBackgroundBorderless"
                             android:scaleType="centerInside"
                             app:tint="@android:color/white" />

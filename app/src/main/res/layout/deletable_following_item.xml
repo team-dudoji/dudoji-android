@@ -13,7 +13,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="12dp"
-            android:src="@drawable/user_placeholder"
+            android:src="@drawable/dudoji_profile"
             android:background="@drawable/ic_circle"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
@@ -47,6 +47,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonDelete"
-            android:textColor="@color/white"
-            android:background="@drawable/follow_button"/>
+            android:textColor="@color/white"/>
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.dudoji.android.follow.adapter
 
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -18,6 +18,7 @@ import com.dudoji.android.R
 import com.dudoji.android.follow.domain.User
 import com.dudoji.android.follow.repository.FollowRepository
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 @RequiresApi(Build.VERSION_CODES.O)
 class FollowAdapter(
@@ -45,8 +46,8 @@ class FollowAdapter(
         holder.email.text = user.email
         holder.image.load(user.profileImageUrl) {
             crossfade(true)
-            error(R.drawable.user_placeholder)
-            placeholder(R.drawable.user_placeholder)
+            error(R.drawable.dudoji_profile)
+            placeholder(R.drawable.dudoji_profile)
         }
 
         activity.lifecycleScope.launch {
@@ -87,10 +88,14 @@ class FollowAdapter(
     }
 
     private fun updateFollowButtonState(button: Button, isFollowing: Boolean) {
-        if (isFollowing) {
-            button.setBackgroundResource(R.drawable.following_button)
-        } else {
-            button.setBackgroundResource(R.drawable.follow_button)
+        try {
+            val backgroundPath = if (isFollowing) "follow/following_button.png" else "follow/follow_button.png"
+            val drawable = activity.assets.open(backgroundPath).use { inputStream ->
+                Drawable.createFromStream(inputStream, null)
+            }
+            button.background = drawable
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
         button.backgroundTintList = null
     }

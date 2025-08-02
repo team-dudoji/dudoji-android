@@ -26,7 +26,7 @@ class PinRenderer(
 ) : DefaultClusterRenderer<Pin>(context, map, clusterManager) {
 
     override fun onBeforeClusterItemRendered(item: Pin, markerOptions: MarkerOptions) {
-        val defaultPinSkin = BitmapDescriptorFactory.fromResource(R.drawable.pin_button)
+        val defaultPinSkin = BitmapDescriptorFactory.fromAsset("pin/pin_button.png")
         markerOptions.icon(defaultPinSkin)
     }
 

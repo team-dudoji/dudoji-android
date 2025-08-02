@@ -4,6 +4,7 @@ import android.os.Build
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.map.manager.DatabaseMapSectionManager
@@ -18,14 +19,12 @@ class PinFilter(
     private lateinit var btnFriend: ImageButton
     private lateinit var btnStranger: ImageButton
 
-    // 각 who에 대한 가시성 맵
     private val visibilityMap = mutableMapOf(
         Who.MINE to true,
         Who.FOLLOWING to true,
         Who.UNKNOWN to true
     )
 
-    // 핀 필터 함수
     fun filterPins(pins: List<Pin>): List<Pin> {
         return pins.filter { pin ->
             visibilityMap[pin.master] == true
@@ -33,7 +32,6 @@ class PinFilter(
         }
     }
 
-    // 3종 필터 버튼 기능 함수, 토글로 껐다 켰다
     @RequiresApi(Build.VERSION_CODES.O)
     fun setupFilterButtons() {
         btnMine = activity.findViewById(R.id.btnFilterMine)
@@ -56,31 +54,31 @@ class PinFilter(
         }
     }
 
-    // 버튼 토글 함수
     @RequiresApi(Build.VERSION_CODES.O)
     private fun toggle(who: Who) {
         val newState = !(visibilityMap[who] ?: true)
         visibilityMap[who] = newState
 
-        val iconRes = if (newState) {
+        val iconFileName = if (newState) {
             when (who) {
-                Who.MINE -> R.drawable.ic_mypin_enabled
-                Who.FOLLOWING -> R.drawable.ic_friend_enabled
-                Who.UNKNOWN -> R.drawable.ic_stranger_enabled
+                Who.MINE -> "ic_mypin_enabled.png"
+                Who.FOLLOWING -> "ic_friend_enabled.png"
+                Who.UNKNOWN -> "ic_stranger_enabled.png"
             }
         } else {
             when (who) {
-                Who.MINE -> R.drawable.ic_mypin_disabled
-                Who.FOLLOWING -> R.drawable.ic_friend_disabled
-                Who.UNKNOWN -> R.drawable.ic_stranger_disabled
+                Who.MINE -> "ic_mypin_disabled.png"
+                Who.FOLLOWING -> "ic_friend_disabled.png"
+                Who.UNKNOWN -> "ic_stranger_disabled.png"
             }
         }
 
-        when (who) {
-            Who.MINE -> btnMine.setImageResource(iconRes)
-            Who.FOLLOWING -> btnFriend.setImageResource(iconRes)
-            Who.UNKNOWN -> btnStranger.setImageResource(iconRes)
-        }
+        val assetPath = "file:///android_asset/navi/$iconFileName"
 
+        when (who) {
+            Who.MINE -> btnMine.load(assetPath)
+            Who.FOLLOWING -> btnFriend.load(assetPath)
+            Who.UNKNOWN -> btnStranger.load(assetPath)
+        }
     }
 }
