@@ -76,7 +76,7 @@ class LandmarkApplier(val normalMarkerCollection: MarkerManager.Collection, val 
     override fun onCameraIdle() {
         activity.lifecycleScope.launch {
             Log.d("LandmarkApplier", "onCameraIdle called")
-            if (hasToReload || LandmarkDataSource.loadLandmark(
+            if (hasToReload || LandmarkDataSource.load(
                     googleMap.projection.visibleRegion.latLngBounds.center,
                     100.0)) {
                 val landmarks = LandmarkDataSource.getLandmarks()
