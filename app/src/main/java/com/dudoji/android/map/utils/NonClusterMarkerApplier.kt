@@ -42,9 +42,12 @@ abstract class NonClusterMarkerApplier<T : NonClusterMarker> (
                 marker?.tag = markerBase
                 appliedMarkerBases.add(markerBase)
                 applyMarkerIcon(marker, markerBase)
+                onMarkerLoaded(marker)
             }
         }
     }
+
+    open fun onMarkerLoaded(marker: Marker?) {}
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun applyMarkerIcon(marker: Marker?, markerBase: T) {
