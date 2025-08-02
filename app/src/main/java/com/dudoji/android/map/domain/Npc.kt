@@ -1,10 +1,13 @@
 package com.dudoji.android.map.domain
 
+import com.dudoji.android.map.activity.MapActivity.ActivityMapObject
+
 class Npc: NonClusterMarker {
     val npcId: Long
     val name: String
     val npcSkinUrl: String
     val hasQuest: Boolean
+    var activityMapObject: ActivityMapObject? = null
 
     constructor(
         npcId: Long,

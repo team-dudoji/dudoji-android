@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,8 +15,11 @@ import com.dudoji.android.databinding.QuestModalBinding
 import com.dudoji.android.map.adapter.QuestAdapter
 import com.dudoji.android.mypage.api.dto.NpcQuestDto
 import com.dudoji.android.mypage.api.dto.QuestDto
+import com.dudoji.android.mypage.domain.MissionUnit
+import com.dudoji.android.mypage.domain.QuestType
 import com.dudoji.android.util.modal.ModalFragment
 import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class QuestFragment(val npcId: Long): ModalFragment() {
     private var _binding: QuestModalBinding? = null
@@ -51,6 +55,7 @@ class QuestFragment(val npcId: Long): ModalFragment() {
             return
         }
 
+        (binding.root.parent.parent as ViewGroup).findViewById<TextView>(R.id.npc_speech_text).text = npcQuestDto.npcScript
         binding.questImage.load(npcQuestDto.imageUrl) {
             crossfade(true)
             placeholder(R.mipmap.photo_placeholder)
