@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F5F5F5"
-        tools:context=".mypage.activity.FollowListActivity">
+        tools:context=".follow.activity.FollowListActivity">
 
     <LinearLayout
             android:id="@+id/toolbar"
@@ -41,7 +41,6 @@
                 android:id="@+id/sort_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_sort_up_down"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="16dp" />
 
@@ -126,9 +125,9 @@
                 android:focusable="true">
 
             <ImageView
+                    android:id="@+id/person_add_icon"
                     android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/person_add"/>
+                    android:layout_height="24dp"/>
 
             <TextView
                     android:layout_width="wrap_content"

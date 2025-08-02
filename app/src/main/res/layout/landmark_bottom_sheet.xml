@@ -19,7 +19,6 @@
     <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="180dp"
             android:layout_height="180dp"
-            android:src="@drawable/pnu_image"
             android:scaleType="centerCrop"
             android:id="@+id/landmark_detail_image"
             android:layout_gravity="center_horizontal"

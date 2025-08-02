@@ -1,16 +1,19 @@
 package com.dudoji.android.login.activity
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.databinding.ActivityLoginBinding
 import com.dudoji.android.login.oauth.kakao.KakaoLoginUtil
@@ -21,6 +24,7 @@ import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.network.NetworkInitializer
 import com.dudoji.android.network.utils.NoNetWorkUtil
 import kotlinx.coroutines.launch
+import java.io.IOException // import 추가
 
 class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.PermissionResultListener {
 
@@ -31,7 +35,7 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
 
     override fun onStart() {
         super.onStart()
-        requestPermissionsUtil.requestInitialPermissions() //초기 권한 값 한꺼번에(위치, 카메라, 사진)
+        requestPermissionsUtil.requestInitialPermissions()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -44,7 +48,6 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
         requestPermissionsUtil = RequestPermissionsUtil(this)
         permissionHandler = MandatoryPermissionHandler(this, this)
 
-        // Edge-to-edge 설정
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -53,6 +56,17 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
         NoNetWorkUtil(this).checkNetworkAndNavigate()
 
         NetworkInitializer.initNonAuthed(this@LoginActivity)
+
+        findViewById<ImageView>(R.id.imageView).load("file:///android_asset/login/login_logo.png")
+        kakaoLoginButton = findViewById(R.id.kakao_login_button)
+        try {
+            val kakaoBg = assets.open("login/kakao_login_medium_wide.png").use { inputStream ->
+                Drawable.createFromStream(inputStream, null)
+            }
+            kakaoLoginButton.background = kakaoBg
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
 
         setKakaoLoginButton()
 
@@ -63,7 +77,6 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setKakaoLoginButton() {
-        kakaoLoginButton = findViewById<Button>(R.id.kakao_login_button)
         kakaoLoginButton.setOnClickListener(){
             KakaoLoginUtil.tryLoginWithKakao(this)
         }
@@ -91,7 +104,6 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
                 val response = RetrofitClient.loginApiService.validateJwt("Bearer $jwt")
                 if (response.isSuccessful) {
                     NetworkInitializer.initAuthed(this)
-
                     val intent = Intent(this, MapActivity::class.java)
                     startActivity(intent)
                     finish()

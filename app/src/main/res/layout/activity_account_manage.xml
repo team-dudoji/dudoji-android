@@ -138,9 +138,9 @@
                         android:textColor="#222222" />
 
                 <ImageView
+                        android:id="@+id/arrow_change_password"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_forward"
                         app:tint="#CCCCCC" />
 
             </LinearLayout>
@@ -165,7 +165,7 @@
                 <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_forward"
+                        android:id="@+id/arrow_two_factor"
                         app:tint="#CCCCCC" />
 
             </LinearLayout>
@@ -190,7 +190,7 @@
                 <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_forward"
+                        android:id="@+id/arrow_logout"
                         app:tint="#CCCCCC" />
 
             </LinearLayout>
@@ -216,7 +216,7 @@
                 <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_forward"
+                        android:id="@+id/arrow_withdraw"
                         app:tint="#CCCCCC" />
 
             </LinearLayout>

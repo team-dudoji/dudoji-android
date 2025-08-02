@@ -1,5 +1,6 @@
 package com.dudoji.android.landmark.activity
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -30,21 +31,42 @@ class LandmarkDetailActivity : AppCompatActivity() {
             return
         }
 
-        findViewById<ImageButton>(R.id.backButton).setOnClickListener { finish() }
+        val backButton: ImageButton = findViewById(R.id.backButton)
+
+        try {
+            val inputStream = assets.open("landmark/back_button.png")
+            val drawable = Drawable.createFromStream(inputStream, null)
+            backButton.setImageDrawable(drawable)
+            inputStream.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        backButton.setOnClickListener { finish() }
 
         findViewById<TextView>(R.id.locationTitle).text = landmark.placeName
         findViewById<TextView>(R.id.locationSubtitle).text = landmark.content
 
         val headerImageView = findViewById<ImageView>(R.id.headerImage)
-        val fullImageUrl = "${RetrofitClient.BASE_URL.trimEnd('/')}/${landmark.detailImageUrl.trimStart('/')}"
-        headerImageView.load(fullImageUrl) {
-            error(R.drawable.campus_image)
-            crossfade(true)
+
+        val placeholderDrawable = try {
+            assets.open("landmark/campus_image.png").use { inputStream ->
+                Drawable.createFromStream(inputStream, null)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null // 파일을 찾지 못할 경우 null
         }
 
+        val fullImageUrl = "${RetrofitClient.BASE_URL.trimEnd('/')}/${landmark.detailImageUrl.trimStart('/')}"
+        headerImageView.load(fullImageUrl) {
+            crossfade(true)
+            placeholder(placeholderDrawable)
+            error(placeholderDrawable)
+        }
         val hashtagRecyclerView = findViewById<RecyclerView>(R.id.hashtagRecyclerView)
         hashtagRecyclerView.layoutManager = GridLayoutManager(this, 3)
-        val hashtags = landmark.hashtags.take(3) // 최대 3개만
+        val hashtags = landmark.hashtags.take(3)
         hashtagAdapter = HashtagAdapter(hashtags.toMutableList())
         hashtagRecyclerView.adapter = hashtagAdapter
 

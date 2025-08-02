@@ -39,8 +39,8 @@ class FriendRecommendAdapter(val recommendedFriends: List<User>, val activity: M
         if (!imageUrl.isNullOrEmpty()) {
             holder.image.load(imageUrl) {
                 crossfade(true)
-                error(R.drawable.user_placeholder)
-                placeholder(R.drawable.user_placeholder)
+                error(R.drawable.dudoji_profile)
+                placeholder(R.drawable.dudoji_profile)
             }
         }
 

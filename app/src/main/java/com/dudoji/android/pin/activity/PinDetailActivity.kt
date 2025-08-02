@@ -1,5 +1,6 @@
 package com.dudoji.android.pin.activity
 
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -12,6 +13,7 @@ import com.dudoji.android.databinding.ActivityPinDetailBinding
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.io.IOException
 
 class PinDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPinDetailBinding
@@ -49,8 +51,8 @@ class PinDetailActivity : AppCompatActivity() {
                 binding.textProfileName.text = it.name
                 binding.imageProfile.load(it.profileImageUrl) {
                     crossfade(true)
-                    placeholder(R.drawable.user_placeholder)
-                    error(R.drawable.user_placeholder)
+                    placeholder(R.drawable.dudoji_profile)
+                    error(R.drawable.dudoji_profile)
                 }
             }
         }
@@ -76,16 +78,33 @@ class PinDetailActivity : AppCompatActivity() {
         createdDateStr: String?
     ) {
         with(binding) {
+            val placeholderDrawable = try {
+                assets.open("pin/photo_placeholder.png").use { inputStream ->
+                    Drawable.createFromStream(inputStream, null)
+                }
+            } catch (e: IOException) { null }
+
             imageView.load("${RetrofitClient.BASE_URL}/$imageUrl") {
                 crossfade(true)
-                placeholder(R.drawable.photo_placeholder)
-                error(R.drawable.photo_placeholder)
+                placeholder(placeholderDrawable)
+                error(placeholderDrawable)
             }
 
             textPlaceName.text = placeName
             textLikeCount.text = likeCount.toString()
             textContent.text = content
             textDate.text = formatDate(createdDateStr)
+
+            imageHeart.load("file:///android_asset/pin/heart_like.png")
+
+            try {
+                val followButtonBg = assets.open("follow/follow_button.png").use { inputStream ->
+                    Drawable.createFromStream(inputStream, null)
+                }
+                btnFollow.background = followButtonBg
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
     }
 

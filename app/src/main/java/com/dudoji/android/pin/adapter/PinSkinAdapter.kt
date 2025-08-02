@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.pin.domain.PinSkin
 import com.dudoji.android.pin.repository.PinSkinRepository
@@ -59,7 +60,7 @@ class PinSkinAdapter(
                     if (bitmap != null) {
                         pinSkinImage.setImageBitmap(bitmap)
                     } else {
-                        pinSkinImage.setImageResource(R.drawable.pin_button)
+                        pinSkinImage.load("file:///android_asset/pin/pin_button.png")
                     }
                 }
             }
