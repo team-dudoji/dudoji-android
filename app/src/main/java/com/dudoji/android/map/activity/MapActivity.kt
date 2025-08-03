@@ -1,6 +1,7 @@
 package com.dudoji.android.map.activity
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -34,6 +35,8 @@ import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
 import com.dudoji.android.map.utils.MapDirectionController
+import com.dudoji.android.map.utils.MapObject
+import com.dudoji.android.map.utils.MapObjectTextureView
 import com.dudoji.android.map.utils.MapUtil
 import com.dudoji.android.map.utils.fog.FogTextureView
 import com.dudoji.android.map.utils.location.GPSLocationService
@@ -53,6 +56,7 @@ import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.collections.MarkerManager
 import kotlinx.coroutines.launch
@@ -60,6 +64,8 @@ import java.io.IOException
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
+    data class ActivityMapObject(val latLng: LatLng, val bitmap: Bitmap, val offsetX: Float = 0f, val offsetY: Float = 0f, val width: Int? = null, val height: Int? = null)
+
     private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
 
     private lateinit var pinSetter: ImageView
@@ -88,9 +94,9 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private val landmarkBottomLayout by lazy {
         findViewById<LinearLayout>(R.id.landmark_bottom_sheet)
     }
-//    private val fogParticleOverlayView: FogParticleOverlayView by lazy {
-//        findViewById<FogParticleOverlayView>(R.id.particle_overlay)
-//    }
+    private val objectTextureView by lazy {
+        findViewById<MapObjectTextureView>(R.id.map_object_texture_view)
+    }
     val fogTextureView: FogTextureView by lazy {
         findViewById<FogTextureView>(R.id.fog_texture_view)
     }
@@ -117,6 +123,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         PinFilter(this@MapActivity, mapSectionManager as DatabaseMapSectionManager?)
     }
     private lateinit var landmarkBottomSheet: LandmarkBottomSheet
+
+    val activityObjects = mutableListOf<ActivityMapObject>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -220,6 +228,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         mapCameraPositionController
 
         fogTextureView.setGoogleMap(googleMap)
+
         lifecycleScope.launch {
             mapSectionManager = DatabaseMapSectionManager(this@MapActivity)
 
@@ -242,6 +251,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
             googleMap.setOnCameraMoveListener {
                 fogTextureView.onCameraMoved(mapSectionManager as DatabaseMapSectionManager)
+                updateMapObjects()
             }
 
             pinFilter.setupFilterButtons()
@@ -272,6 +282,16 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         directionController.start()
 
         setPinSetterController()
+    }
+
+    private fun updateMapObjects() {
+       if (!::googleMap.isInitialized) return
+
+        val viewObjects = activityObjects.map { obj ->
+            val screenPoint = googleMap.projection.toScreenLocation(obj.latLng)
+            MapObject(screenPoint.x.toFloat(), screenPoint.y.toFloat(), obj.offsetX, obj.offsetY, obj.width, obj.height, obj.bitmap)
+        }
+        objectTextureView.setMapObjects(viewObjects)
     }
 
     private fun setupAnimatedNavButtons() {
