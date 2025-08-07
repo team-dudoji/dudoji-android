@@ -2,12 +2,11 @@ package com.dudoji.android.pin.api.dto
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.dudoji.android.network.api.dto.BaseDto
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
 import java.time.LocalDateTime
 
-data class PinResponseDto(
+data class PinResponseDto (
     val lat: Double,
     val lng: Double,
     val userId: Long,
@@ -18,13 +17,13 @@ data class PinResponseDto(
     val createdDate: LocalDateTime,
     val content: String,
     val master: Who,
-    val placeName: String?, 
-    val address: String?,
+    val placeName: String,
+    val address: String,
     val pinSkinId: Long,
-    val hashTags: List<String>?
-) : BaseDto<Pin> {
+    val hashtags: List<String>
+) {
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun toDomain(): Pin {
+    fun toDomain(): Pin {
         return Pin(
             lat = lat,
             lng = lng,
@@ -33,13 +32,13 @@ data class PinResponseDto(
             likeCount = likeCount,
             isLiked = liked,
             createdDate = createdDate.toLocalDate(),
-            imageUrl = imageUrl ?: "",
+            imageUrl = imageUrl?:"",
             content = content,
             master = master,
-            placeName = placeName ?: "",
-            address = address ?: "",
+            placeName = placeName?:"",
+            address = address?:"",
             pinSkinId = pinSkinId,
-            hashTags = hashTags ?: emptyList()
+            hashtags = hashtags ?: emptyList()
         )
+        }
     }
-}
