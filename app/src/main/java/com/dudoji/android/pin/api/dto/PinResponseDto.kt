@@ -2,6 +2,7 @@ package com.dudoji.android.pin.api.dto
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.dudoji.android.network.api.dto.BaseDto
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
 import java.time.LocalDateTime
@@ -21,9 +22,9 @@ data class PinResponseDto (
     val address: String,
     val pinSkinId: Long,
     val hashtags: List<String>
-) {
+): BaseDto<Pin> {
     @RequiresApi(Build.VERSION_CODES.O)
-    fun toDomain(): Pin {
+    override fun toDomain(): Pin {
         return Pin(
             lat = lat,
             lng = lng,
