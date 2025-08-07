@@ -21,7 +21,7 @@ data class PinResponseDto(
     val placeName: String?, 
     val address: String?,
     val pinSkinId: Long,
-    val hashtags: List<String>?
+    val hashTags: List<String>?
 ) : BaseDto<Pin> {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun toDomain(): Pin {
@@ -39,7 +39,7 @@ data class PinResponseDto(
             placeName = placeName ?: "",
             address = address ?: "",
             pinSkinId = pinSkinId,
-            hashtags = hashtags ?: emptyList()
+            hashTags = hashTags ?: emptyList()
         )
     }
 }
