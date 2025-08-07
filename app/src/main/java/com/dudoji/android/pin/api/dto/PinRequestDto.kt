@@ -11,6 +11,6 @@ data class PinRequestDto(
     val placeName: String,
     val address: String,
     val pinSkinId: Long,
-    val hashtags: List<String>
+    val hashTags: List<String>
 )
 
