@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -35,7 +36,7 @@ object PinModal {
     fun openPinMemoModal(activity: AppCompatActivity, pin: Pin) {
         Modal.showCustomModal(activity, R.layout.show_pin_memo_modal) { view ->
             val userAvatar = view.findViewById<ShapeableImageView>(R.id.user_avatar)
-            val followButton = view.findViewById<Button>(R.id.follow_button)
+            val followButton = view.findViewById<ImageButton>(R.id.follow_button)
             val pinPlaceName = view.findViewById<TextView>(R.id.pin_place_name)
             val pinContent = view.findViewById<TextView>(R.id.memo_content_output)
             val pinImage = view.findViewById<ImageView>(R.id.pin_memo_image)
@@ -72,7 +73,7 @@ object PinModal {
                 pinLikeButton.load("file:///android_asset/$heartIconPath")
             }
 
-            fun updateFollowButton(button: Button, followingState: Boolean) {
+            fun updateFollowButton(button: ImageButton, followingState: Boolean) {
                 try {
                     val backgroundPath = if (followingState) "follow/following_button.png" else "follow/follow_button.png"
                     val drawable = activity.assets.open(backgroundPath).use { Drawable.createFromStream(it, null) }
