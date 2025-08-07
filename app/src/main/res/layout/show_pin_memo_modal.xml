@@ -1,139 +1,146 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="350dp"
-        android:layout_height="600dp"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
-        android:gravity="center">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_margin="10dp">
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="핀 "
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true"
+        android:background="@android:color/white">
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginHorizontal="10dp"
-            android:orientation="horizontal">
-
-        <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
-                android:id="@+id/pin_memo_image"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white">
 
         <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginVertical="20dp"
-                android:gravity="center"
-                android:layout_marginHorizontal="20dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="top">
 
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center">
-                <ImageView
-                        android:id="@+id/memo_date_edit_button"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="fitCenter" />
-                <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:id="@+id/memo_date_output"
-                        android:text="yyyy.mm.dd (w)"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:orientation="horizontal">
-
-                <ImageView
-                        android:id="@+id/location_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="장소 이름"
-                            android:id="@+id/pin_place_name"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/pin_address"
-                            android:text="부산광역시 금정구 부산대학로"
-                            android:textSize="12sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="알 수 없음"
-                    android:id="@+id/pin_memo_writer_name"/>
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/user_avatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:scaleType="centerCrop"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+                <ImageButton
+                        android:id="@+id/follow_button"
+                        android:layout_width="50dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="4dp"
+                        android:scaleType="fitCenter"
+                        android:padding="0dp"
+                        android:background="@android:color/transparent" />
+
+            </LinearLayout>
 
             <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                <ImageView
-                        android:id="@+id/memo_like_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+
                 <TextView
+                        android:id="@+id/pin_place_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="부산대학교 장전캠퍼스"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black" />
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="4dp">
+
+                    <ImageView
+                            android:id="@+id/memo_date_edit_button"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_marginEnd="4dp" />
+
+                    <TextView
+                            android:id="@+id/memo_date_output"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2025.04.30 수"
+                            android:textSize="12sp"
+                            android:textColor="@android:color/darker_gray" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/memo_like_button_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless">
+
+                <ImageView
+                        android:id="@+id/memo_like_button"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp" />
+
+                <TextView
                         android:id="@+id/memo_like_count"
-                        android:textColor="#FF0044"
-                        android:text="0"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="123"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FF0044" />
+
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/pin_memo_image"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:scaleType="centerCrop"
+                android:background="@android:color/white" />
 
-    <TextView
-            android:layout_margin="15dp"
-            android:padding="20dp"
-            android:background="@drawable/rounded_edittext"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="top|start"
-            android:id="@+id/memo_content_output"
-            android:textSize="20sp" />
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/hashtag_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal" />
+
+        <TextView
+                android:id="@+id/memo_content_output"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="모습 누워 쫓 몸 걸이 노래 몸은 얻으리라. 좋으며 어디에서 놓영하지 있는 좋겠고 고무되어 바이 곧을 옥, 목곧했을 타..."
+                android:textSize="14sp"
+                android:textColor="#374151"
+                android:lineSpacingExtra="2dp"
+                android:gravity="start" />
+
+
+    </LinearLayout>
 
 </LinearLayout>
