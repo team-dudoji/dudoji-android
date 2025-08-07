@@ -6,5 +6,6 @@ data class UserProfile(
     val email: String,
     val pinCount: Int,
     val followerCount: Int,
-    val followingCount: Int
+    val followingCount: Int,
+    var coin: Int
 )
