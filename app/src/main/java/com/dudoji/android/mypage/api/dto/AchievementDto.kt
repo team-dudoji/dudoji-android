@@ -1,4 +1,4 @@
-package com.dudoji.android.mypage.dto
+package com.dudoji.android.mypage.api.dto
 
 import com.dudoji.android.mypage.domain.Achievement
 import com.dudoji.android.mypage.domain.MissionUnit

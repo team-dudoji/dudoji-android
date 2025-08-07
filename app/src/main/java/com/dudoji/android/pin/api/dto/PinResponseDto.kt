@@ -7,7 +7,7 @@ import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
 import java.time.LocalDateTime
 
-data class PinResponseDto (
+data class PinResponseDto(
     val lat: Double,
     val lng: Double,
     val userId: Long,
@@ -22,6 +22,7 @@ data class PinResponseDto (
     val address: String,
     val pinSkinId: Long,
     val hashtags: List<String>
+
 ): BaseDto<Pin> {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun toDomain(): Pin {
@@ -41,5 +42,6 @@ data class PinResponseDto (
             pinSkinId = pinSkinId,
             hashtags = hashtags ?: emptyList()
         )
-        }
-    }
+      }
+}
+

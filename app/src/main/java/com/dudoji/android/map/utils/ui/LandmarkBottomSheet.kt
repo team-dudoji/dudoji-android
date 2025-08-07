@@ -45,16 +45,10 @@ class LandmarkBottomSheet(val landmarkBottomSheet: LinearLayout,
         landmarkTitleTextView.text = landmark.placeName
         landmarkDescriptionTextView.text = landmark.content
 
-        val placeholderDrawable = try {
-            context.assets.open("pin/photo_placeholder.png").use { inputStream ->
-                Drawable.createFromStream(inputStream, null)
-            }
-        } catch (e: IOException) { null }
-
         landmarkDetailImageView.load("${RetrofitClient.BASE_URL}/${landmark.detailImageUrl}") {
             crossfade(true)
-            error(placeholderDrawable)
-            placeholder(placeholderDrawable)
+            error(R.mipmap.photo_placeholder)
+            placeholder(R.mipmap.photo_placeholder)
         }
 
         pinMemoAdapter.updateItems(

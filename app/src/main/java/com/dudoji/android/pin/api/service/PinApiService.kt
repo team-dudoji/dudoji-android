@@ -24,9 +24,10 @@ interface PinApiService {
     suspend fun uploadImage(@Part image: MultipartBody.Part): Response<String>
 
     @GET("/api/user/pins")
-    suspend fun getPins(@Query("radius") radius: Int,
-                     @Query("lat") lat: Double,
-                     @Query("lng") lng: Double): Response<List<PinResponseDto>>
+    suspend fun getRangeSearchResults(
+        @Query("radius") radius: Int,
+         @Query("lat") lat: Double,
+         @Query("lng") lng: Double): Response<List<PinResponseDto>>
 
     @POST("/api/user/pins/{pinId}/like")
     suspend fun likePin(@Path("pinId") pinId: Long): Response<String>

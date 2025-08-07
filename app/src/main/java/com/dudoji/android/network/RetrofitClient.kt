@@ -6,6 +6,7 @@ import com.dudoji.android.landmark.api.service.LandmarkApiService
 import com.dudoji.android.login.api.service.LoginApiService
 import com.dudoji.android.follow.api.FollowApiService
 import com.dudoji.android.mypage.api.service.MissionApiService
+import com.dudoji.android.mypage.api.service.NpcQuestApiService
 import com.dudoji.android.mypage.api.service.UserApiService
 import com.dudoji.android.network.utils.LocalDateTimeAdapter
 import com.dudoji.android.pin.api.service.PinApiService
@@ -41,6 +42,7 @@ object RetrofitClient {
         pinApiService = retrofit.create(PinApiService::class.java)
         missionApiService = retrofit.create(MissionApiService::class.java)
         landmarkApiService = retrofit.create(LandmarkApiService::class.java)
+        npcQuestApiService = retrofit.create(NpcQuestApiService::class.java)
     }
 
     fun initNonAuthed(client: OkHttpClient) {
@@ -60,4 +62,5 @@ object RetrofitClient {
     lateinit var followApiService: FollowApiService
     lateinit var pinApiService: PinApiService
     lateinit var missionApiService: MissionApiService
+    lateinit var npcQuestApiService: NpcQuestApiService
 }

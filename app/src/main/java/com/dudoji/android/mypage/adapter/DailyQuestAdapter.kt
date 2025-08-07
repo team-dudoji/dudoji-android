@@ -7,27 +7,29 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
-import com.dudoji.android.mypage.domain.Quest
 import com.dudoji.android.mypage.domain.MissionUnit
+import com.dudoji.android.mypage.domain.Quest
 
-class DailyQuestAdapter(
-    private val quests: List<Quest>
-) : RecyclerView.Adapter<DailyQuestAdapter.ViewHolder>() {
+open class DailyQuestAdapter(
+    val quests: List<Quest>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_daily_quest, parent, false)
-        return ViewHolder(view)
+        return DailyQuestViewHolder(view)
     }
 
     override fun getItemCount(): Int = quests.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(quests[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val questHolder = holder
+        if (questHolder is DailyQuestViewHolder) {
+            questHolder.bind(quests[position])
+        }
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+    open class DailyQuestViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val title: TextView = itemView.findViewById(R.id.quest_title)
         private val progressBar: ProgressBar = itemView.findViewById(R.id.quest_progress_bar)
         private val currentValue: TextView = itemView.findViewById(R.id.quest_current_value)
@@ -35,8 +37,7 @@ class DailyQuestAdapter(
         private val targetValue: TextView = itemView.findViewById(R.id.quest_target_value)
         private val targetUnit: TextView = itemView.findViewById(R.id.quest_target_unit)
 
-
-        fun bind(quest: Quest) {
+        open fun bind(quest: Quest) {
             title.text = quest.title
 
             val progressPercent = if (quest.goalValue == 0) 0 else
@@ -50,7 +51,7 @@ class DailyQuestAdapter(
             val displayUnit = when (quest.unit) {
                 MissionUnit.DISTANCE -> "km"
                 MissionUnit.COUNT -> "회"
-                MissionUnit.PERCENTAGE -> TODO()
+                MissionUnit.PERCENTAGE -> "%"
             }
             unit.text = displayUnit
             targetUnit.text = displayUnit

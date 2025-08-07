@@ -49,14 +49,10 @@ object PinModal {
             var isLiked = pin.isLiked
             var isFollowing = (pin.master == Who.FOLLOWING)
 
-            val placeholderDrawable = try {
-                activity.assets.open("pin/photo_placeholder.png").use { Drawable.createFromStream(it, null) }
-            } catch (e: IOException) { null }
-
             pinImage.load("${RetrofitClient.BASE_URL}/${pin.imageUrl}") {
                 crossfade(true)
-                error(placeholderDrawable)
-                placeholder(placeholderDrawable)
+                error(R.mipmap.photo_placeholder)
+                placeholder(R.mipmap.photo_placeholder)
             }
 
             hashtagRecyclerView.layoutManager =

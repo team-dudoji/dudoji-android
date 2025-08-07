@@ -65,7 +65,7 @@ class PinApplier(val clusterManager: ClusterManager<Pin>,
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCameraIdle() {
         activity.lifecycleScope.launch {
-            if (hasToReload || PinRepository.loadPins(googleMap.projection.visibleRegion.latLngBounds.center, 100.0)) {
+            if (hasToReload || PinRepository.load(googleMap.projection.visibleRegion.latLngBounds.center, 100.0)) {
                 val pins = PinRepository.getPins()
                 clearPins()
                 applyPins(pins)
