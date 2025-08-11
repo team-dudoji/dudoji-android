@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 // REST API client
 @RequiresApi(Build.VERSION_CODES.O)
 object RetrofitClient {
-    const val BASE_URL = "http://${BuildConfig.HOST_IP_ADDRESS}:${BuildConfig.HOST_PORT}"
+    const val BASE_URL = "https://${BuildConfig.HOST_IP_ADDRESS}:${BuildConfig.HOST_PORT}"
 
     @RequiresApi(Build.VERSION_CODES.O)
     val gson = GsonBuilder()
