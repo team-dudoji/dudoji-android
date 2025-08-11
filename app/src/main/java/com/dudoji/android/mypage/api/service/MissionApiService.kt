@@ -1,7 +1,7 @@
 package com.dudoji.android.mypage.api.service
 
-import com.dudoji.android.mypage.dto.AchievementDto
-import com.dudoji.android.mypage.dto.QuestDto
+import com.dudoji.android.mypage.api.dto.AchievementDto
+import com.dudoji.android.mypage.api.dto.QuestDto
 import retrofit2.Response
 import retrofit2.http.GET
 

@@ -1,5 +1,6 @@
 package com.dudoji.android.pin.adapter
 
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.util.WeekTranslator
+import java.io.IOException
 import java.time.format.DateTimeFormatter
 
 class PinMemoAdapter(
@@ -19,13 +21,13 @@ class PinMemoAdapter(
     private val onItemClick: ((Pin) -> Unit)? = null
 ) : RecyclerView.Adapter<PinMemoAdapter.PinViewHolder>() {
 
-
     inner class PinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val placeName: TextView = itemView.findViewById(R.id.pin_place_name)
         val content: TextView = itemView.findViewById(R.id.pin_item_content)
         val image: ImageView = itemView.findViewById(R.id.pin_image)
         val date: TextView = itemView.findViewById(R.id.pin_item_date)
         val likeCount: TextView = itemView.findViewById(R.id.pin_item_like_count)
+        val likeIcon: ImageView = itemView.findViewById(R.id.pin_item_like_icon)
 
         init {
             itemView.setOnClickListener {
@@ -51,10 +53,12 @@ class PinMemoAdapter(
         holder.date.text = formattedDate
         holder.likeCount.text = pin.likeCount.toString()
 
+        holder.likeIcon.load("file:///android_asset/pin/heart_like.png")
+
         holder.image.load("${RetrofitClient.BASE_URL}/${pin.imageUrl}") {
             crossfade(true)
-            error(R.drawable.photo_placeholder)
-            placeholder(R.drawable.photo_placeholder)
+            error(R.mipmap.photo_placeholder)
+            placeholder(R.mipmap.photo_placeholder)
         }
     }
 

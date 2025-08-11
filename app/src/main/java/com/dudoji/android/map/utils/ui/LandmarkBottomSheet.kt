@@ -2,6 +2,7 @@ package com.dudoji.android.map.utils.ui
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
 import android.view.View
@@ -20,6 +21,7 @@ import com.dudoji.android.pin.adapter.SortType
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.repository.PinRepository
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import java.io.IOException
 
 class LandmarkBottomSheet(val landmarkBottomSheet: LinearLayout,
                           private val context: Context) {
@@ -42,10 +44,11 @@ class LandmarkBottomSheet(val landmarkBottomSheet: LinearLayout,
     suspend fun open(landmark: Landmark) {
         landmarkTitleTextView.text = landmark.placeName
         landmarkDescriptionTextView.text = landmark.content
+
         landmarkDetailImageView.load("${RetrofitClient.BASE_URL}/${landmark.detailImageUrl}") {
             crossfade(true)
-            error(R.drawable.photo_placeholder)
-            placeholder(R.drawable.photo_placeholder)
+            error(R.mipmap.photo_placeholder)
+            placeholder(R.mipmap.photo_placeholder)
         }
 
         pinMemoAdapter.updateItems(
@@ -53,10 +56,8 @@ class LandmarkBottomSheet(val landmarkBottomSheet: LinearLayout,
         )
         pinMemoAdapter.sortBy(SortType.POPULAR)
 
-
         openBottomSheet()
     }
-
     private fun openBottomSheet() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }

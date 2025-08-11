@@ -122,11 +122,13 @@ class FogParticleOverlayView(
     }
 
 
-    private fun getBitmapForType(type: Int):Bitmap {
+    private fun getBitmapForType(type: Int): Bitmap {
         if (bitmapCache.containsKey(type)) {
             return bitmapCache[type]!!
         }
-        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.fog_particle)
+        val bitmap = context.assets.open("map/fog_particle.png").use { inputStream ->
+            BitmapFactory.decodeStream(inputStream)
+        }
         bitmapCache[type] = bitmap
         return bitmap
     }

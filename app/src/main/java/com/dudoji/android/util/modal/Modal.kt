@@ -11,9 +11,10 @@ import com.dudoji.android.R
 object Modal {
     fun showCustomModal(activity: Activity,
                         contentLayoutRes: Int,
+                        templateLayoutRes: Int = R.layout.template_modal,
                         onBind: (View) -> Unit) {
         val inflater = LayoutInflater.from(activity)
-        val modalRoot = inflater.inflate(R.layout.template_modal, null) as ViewGroup
+        val modalRoot = inflater.inflate(templateLayoutRes, null) as ViewGroup
         val contentContainer = modalRoot.findViewById<FrameLayout>(R.id.modal_content)
 
         val contentView = inflater.inflate(contentLayoutRes, contentContainer, false)
@@ -33,10 +34,11 @@ object Modal {
 
     fun showCustomModal(
         activity: AppCompatActivity,
-        fragment: ModalFragment
+        fragment: ModalFragment,
+        templateLayoutRes: Int = R.layout.template_modal
     ) {
         val inflater = LayoutInflater.from(activity)
-        val modalRoot = inflater.inflate(R.layout.template_modal, null) as ViewGroup
+        val modalRoot = inflater.inflate(templateLayoutRes, null) as ViewGroup
 
         val rootView = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
         rootView.addView(modalRoot)

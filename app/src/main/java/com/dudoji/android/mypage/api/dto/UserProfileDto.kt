@@ -1,4 +1,4 @@
-package com.dudoji.android.mypage.dto
+package com.dudoji.android.mypage.api.dto
 
 import com.dudoji.android.mypage.domain.UserProfile
 
@@ -8,7 +8,8 @@ data class UserProfileDto(
     val profileImageUrl: String,
     val pinCount: Int,
     val followerCount: Int,
-    val followingCount: Int
+    val followingCount: Int,
+    val coin: Int
 ) {
     fun toDomain(): UserProfile {
         return UserProfile(
@@ -17,7 +18,8 @@ data class UserProfileDto(
             email = this.email,
             pinCount = this.pinCount,
             followerCount = this.followerCount,
-            followingCount = this.followingCount
+            followingCount = this.followingCount,
+            coin = this.coin
         )
     }
 }

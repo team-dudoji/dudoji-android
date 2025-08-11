@@ -2,10 +2,10 @@ package com.dudoji.android.pin.util
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.dudoji.android.R
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.repository.PinSkinRepository
 import com.google.android.gms.maps.GoogleMap
@@ -26,8 +26,12 @@ class PinRenderer(
 ) : DefaultClusterRenderer<Pin>(context, map, clusterManager) {
 
     override fun onBeforeClusterItemRendered(item: Pin, markerOptions: MarkerOptions) {
-        val defaultPinSkin = BitmapDescriptorFactory.fromResource(R.drawable.pin_button)
-        markerOptions.icon(defaultPinSkin)
+        val assetManager = context.assets
+        val inputStream = assetManager.open("pin/pin_button.png")
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 96, 96, true)
+        val descriptor = BitmapDescriptorFactory.fromBitmap(resizedBitmap)
+        markerOptions.icon(descriptor)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

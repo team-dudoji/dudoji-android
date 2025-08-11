@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import coil.load
 import com.airbnb.lottie.LottieAnimationView
 import com.dudoji.android.R
 import com.dudoji.android.map.activity.MapActivity
@@ -43,9 +44,19 @@ object AnimatedNavButtonHelper {
         val btnFriend = activity.findViewById<ImageButton>(R.id.btnFilterFriend)
         val btnMine = activity.findViewById<ImageButton>(R.id.btnFilterMine)
         val btnStranger = activity.findViewById<ImageButton>(R.id.btnFilterStranger)
-
-        val pinSetter = activity.findViewById<ImageView>(R.id.pinSetter)
         val btnFilter = activity.findViewById<ImageButton>(R.id.btnFilter)
+        val pinSetter = activity.findViewById<ImageView>(R.id.pinSetter)
+
+        val naviAssetPath = "file:///android_asset/navi/"
+        btnStranger.load(naviAssetPath + "ic_stranger_enabled.png")
+        btnFriend.load(naviAssetPath + "ic_friend_enabled.png")
+        btnMine.load(naviAssetPath + "ic_mypin_enabled.png")
+        btnFilter.load(naviAssetPath + "ic_filter.png")
+        storeIcon.load(naviAssetPath + "ic_store.png")
+        profileIcon.load(naviAssetPath + "ic_profile.png")
+        mypinIcon.load(naviAssetPath + "ic_mypin.png")
+        socialIcon.load(naviAssetPath + "ic_social.png")
+        centerButton.load(naviAssetPath + "ic_center_button_open.png")
 
         LottieIconSyncHelper.setup(storeAnim, storeIcon)
         LottieIconSyncHelper.setup(profileAnim, profileIcon)
@@ -68,7 +79,7 @@ object AnimatedNavButtonHelper {
                 pinSetter.visibility = View.VISIBLE
                 btnFilter.visibility = View.VISIBLE
 
-                centerButton.setImageResource(R.drawable.ic_center_button_close)
+                centerButton.load(naviAssetPath + "ic_center_button_close.png")
 
                 btnFriend.visibility = View.VISIBLE
                 btnMine.visibility = View.VISIBLE
@@ -88,9 +99,8 @@ object AnimatedNavButtonHelper {
                 pinSetter.visibility = View.GONE
                 btnFilter.visibility = View.GONE
 
-                centerButton.setImageResource(R.drawable.ic_center_button_open)
+                centerButton.load(naviAssetPath + "ic_center_button_open.png")
 
-                // 필터 바 닫기
                 btnFriend.visibility = View.GONE
                 btnMine.visibility = View.GONE
                 btnStranger.visibility = View.GONE

@@ -11,7 +11,6 @@
             android:layout_height="50dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="180dp"
-            android:background="@drawable/pin_button"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -20,8 +19,7 @@
             android:id="@+id/centerButton"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@drawable/ic_center_button_open"
-            android:scaleType="centerInside"
+            android:scaleType="fitXY"
             android:layout_marginBottom="24dp"
             android:elevation="10dp"
             android:contentDescription="중앙 메뉴 버튼"
@@ -48,7 +46,6 @@
                 app:lottie_autoPlay="false"
                 app:lottie_loop="false" />
 
-        <!-- 버튼: 모두 -->
         <ImageButton
                 android:id="@+id/btnFilterStranger"
                 android:layout_width="40dp"
@@ -56,11 +53,9 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="8dp"
                 android:background="@null"
-                android:src="@drawable/ic_stranger_enabled"
                 android:contentDescription="모두"
                 android:layout_gravity="top|start" />
 
-        <!-- 버튼: 친구 -->
         <ImageButton
                 android:id="@+id/btnFilterFriend"
                 android:layout_width="40dp"
@@ -68,7 +63,6 @@
                 android:layout_marginStart="72dp"
                 android:layout_marginTop="8dp"
                 android:background="@null"
-                android:src="@drawable/ic_friend_enabled"
                 android:contentDescription="친구"
                 android:layout_gravity="top|start" />
 
@@ -79,12 +73,10 @@
                 android:layout_marginStart="120dp"
                 android:layout_marginTop="8dp"
                 android:background="@null"
-                android:src="@drawable/ic_mypin_enabled"
                 android:contentDescription="나"
                 android:layout_gravity="top|start" />
     </FrameLayout>
 
-    <!-- 필터 버튼은 가장 마지막에 배치하여 앞에 오도록 함 -->
     <ImageButton
             android:id="@+id/btnFilter"
             android:layout_width="66dp"
@@ -92,7 +84,6 @@
             android:layout_marginTop="98dp"
             android:layout_marginEnd="10dp"
             android:background="@null"
-            android:src="@drawable/ic_filter"
             android:scaleType="centerInside"
             android:elevation="10dp"
             android:visibility="gone"
@@ -150,8 +141,7 @@
                 android:id="@+id/storeIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_store"/>
+                android:layout_gravity="center"/>
     </FrameLayout>
 
     <FrameLayout
@@ -176,8 +166,7 @@
                 android:id="@+id/myPinIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_mypin"/>
+                android:layout_gravity="center"/>
 
     </FrameLayout>
 
@@ -203,7 +192,6 @@
                 android:id="@+id/socialIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_social" />
+                android:layout_gravity="center" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

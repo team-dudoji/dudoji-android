@@ -4,23 +4,20 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.config.LANDMARK_PIN_RADIUS
-import com.dudoji.android.config.PIN_UPDATE_THRESHOLD
 import com.dudoji.android.landmark.domain.Landmark
-import com.dudoji.android.map.utils.MapUtil
+import com.dudoji.android.map.repository.RangeSearchDataSource
 import com.dudoji.android.pin.api.dto.PinRequestDto
 import com.dudoji.android.pin.api.dto.PinResponseDto
 import com.dudoji.android.pin.api.dto.PinSkinUpdateRequestDto
 import com.dudoji.android.pin.domain.Pin
-import com.google.android.gms.maps.model.LatLng
+import retrofit2.Response
 
-object PinRepository {
-    val pinList = mutableListOf<Pin>()
-
-    private var lastPinUpdatedLatLng: LatLng? = null
+@RequiresApi(Build.VERSION_CODES.O)
+object PinRepository: RangeSearchDataSource<PinResponseDto, Pin>() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getLandmarkPins(landmark: Landmark): List<Pin> {
-        val response = RetrofitClient.pinApiService.getPins(
+        val response = RetrofitClient.pinApiService.getRangeSearchResults(
             LANDMARK_PIN_RADIUS,
             landmark.lat,
             landmark.lng
@@ -34,35 +31,10 @@ object PinRepository {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun loadPins(latLng: LatLng, radius: Double): Boolean{
-        if (lastPinUpdatedLatLng == null ||
-            MapUtil.distanceBetween(lastPinUpdatedLatLng!!, latLng) > PIN_UPDATE_THRESHOLD) {
-            val response = RetrofitClient.pinApiService.getPins(
-                radius.toInt(),
-                latLng.latitude,
-                latLng.longitude)
-            if (response.isSuccessful) {
-                val pins = response.body()
-
-                pinList.clear()
-                pinList.addAll(pins?.map { pinDto ->
-                    pinDto.toDomain()
-                } ?: emptyList()
-                )
-                lastPinUpdatedLatLng = latLng
-                return true
-            } else {
-                Log.e("PinRepository", "Failed to fetch pins: ${response.message()}, error: ${response.errorBody()?.string()}")
-            }
-        }
-        return false
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun addPin(pin: PinRequestDto): Boolean {
         val response = RetrofitClient.pinApiService.createPin(pin)
         if (response.isSuccessful) {
-            pinList.add(response.body()?.toDomain()!!)
+            dataList.add(response.body()?.toDomain()!!)
             return true
         }
         Log.e("PinRepository", "Failed to add pin: ${response.errorBody()?.string()}")
@@ -70,7 +42,7 @@ object PinRepository {
     }
 
     fun getPins(): List<Pin> {
-        return pinList
+        return dataList
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -90,5 +62,23 @@ object PinRepository {
             PinSkinUpdateRequestDto(newSkin)
         )
         return response.isSuccessful
+    }
+
+    override suspend fun fetchFromApi(
+        lat: Double,
+        lng: Double,
+        radius: Double
+    ): Response<List<PinResponseDto>> {
+        return RetrofitClient.pinApiService.getRangeSearchResults(
+            radius.toInt(),
+            lat,
+            lng
+        ).also { response ->
+            if (response.isSuccessful) {
+                return response
+            } else {
+                Log.e("PinRepository", "Failed to fetch pins: ${response.errorBody()?.string()}")
+            }
+        }
     }
 }

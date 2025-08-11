@@ -1,7 +1,6 @@
 package com.dudoji.android.map.domain
 
 import android.graphics.Point
-import android.util.Log
 import com.dudoji.android.config.FOG_INVALIDATION_INTERVAL
 
 data class FogParticle(
@@ -26,6 +25,5 @@ data class FogParticle(
                 alpha = 0
             }
         }
-        Log.d("FogParticle", "updateAlpha: type=$type, alpha=$alpha, visible=$visible")
     }
 }

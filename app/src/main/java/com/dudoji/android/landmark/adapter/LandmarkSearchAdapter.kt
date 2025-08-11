@@ -1,6 +1,7 @@
 package com.dudoji.android.landmark.adapter
 
 import RetrofitClient
+import android.graphics.drawable.Drawable // import 추가
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +12,11 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.dudoji.android.R
 import com.dudoji.android.landmark.domain.Landmark
+import java.lang.Exception // import 추가
 
 class LandmarkSearchAdapter(
     private var fullList: List<Landmark>,
-    private val onItemClick: (Landmark) -> Unit 
+    private val onItemClick: (Landmark) -> Unit
 ) : RecyclerView.Adapter<LandmarkSearchAdapter.ViewHolder>() {
 
     private var filteredList: List<Landmark> = fullList
@@ -28,10 +30,19 @@ class LandmarkSearchAdapter(
             nameText.text = landmark.placeName
             hashtagText.text = landmark.hashtags.take(3).joinToString(" ") { "#$it" }
 
+            val defaultDrawable = try {
+                itemView.context.assets.open("landmark/default_landmark.png").use { inputStream ->
+                    Drawable.createFromStream(inputStream, null)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+
             profileImage.load("${RetrofitClient.BASE_URL}/${landmark.detailImageUrl}") {
                 crossfade(true)
-                error(R.drawable.user_placeholder)
-                placeholder(R.drawable.user_placeholder)
+                placeholder(defaultDrawable)
+                error(defaultDrawable)
                 transformations(CircleCropTransformation())
             }
 

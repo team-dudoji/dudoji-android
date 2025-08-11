@@ -1,6 +1,7 @@
 package com.dudoji.android.pin.fragment
 
 import android.app.DatePickerDialog
+import android.graphics.drawable.Drawable
 import android.icu.util.Calendar
 import android.location.Geocoder
 import android.net.Uri
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.dudoji.android.databinding.EditPinMemoModalBinding
 import com.dudoji.android.landmark.adapter.EditableHashtagAdapter
 import com.dudoji.android.pin.domain.PinSkin
@@ -25,6 +27,7 @@ import com.dudoji.android.pin.util.PinMakeData
 import com.dudoji.android.util.WeekTranslator
 import com.dudoji.android.util.modal.ModalFragment
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.time.LocalDate
 import java.util.Locale
 
@@ -72,11 +75,17 @@ class PinMemoInputFragment(
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun initViews() {
+        binding.memoDateEditButton.load("file:///android_asset/pin/calendar_today.png")
+        binding.locationIconEdit.load("file:///android_asset/pin/location_on.png")
+        try {
+            val pinButtonBg = requireContext().assets.open("pin/pin_button.png").use { Drawable.createFromStream(it, null) }
+            binding.pinColorSelectButton.background = pinButtonBg
+        } catch (e: IOException) { e.printStackTrace() }
+
         loadAddress()
         updateDateText()
         setupHashtagEditRecyclerView()
     }
-
     private fun setupHashtagEditRecyclerView() {
         hashtagEditRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         hashtagEditRecyclerView.adapter = EditableHashtagAdapter()
