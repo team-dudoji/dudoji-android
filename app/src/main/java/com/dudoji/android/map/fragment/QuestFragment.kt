@@ -45,7 +45,7 @@ class QuestFragment(val npcId: Long): ModalFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun initViews() {
-        val response = Response.success(NPC_QUEST_DTO_MOCK) // RetrofitClient.npcQuestApiService.getNpcQuest(npcId)
+        val response = RetrofitClient.npcQuestApiService.getNpcQuest(npcId)
 
         if (response.isSuccessful) {
             npcQuestDto = response.body() ?: throw IllegalStateException("NPC Quest data is null")
