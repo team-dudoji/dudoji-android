@@ -13,8 +13,7 @@
             android:fontFamily="@font/pretendard"
             android:textStyle="bold"
             android:textFontWeight="700"
-            android:paddingHorizontal="10dp"
-            android:text="1. 오늘 하루도 힘차게!"/>
+            android:paddingHorizontal="10dp"/>
     <TextView
             android:id="@+id/quest_title"
             android:layout_width="match_parent"
@@ -24,8 +23,7 @@
             android:fontFamily="@font/pretendard"
             android:textStyle="bold"
             android:textFontWeight="500"
-            android:paddingHorizontal="15dp"
-            android:text="광안대교에서 맛집 5개 방문"/>
+            android:paddingHorizontal="15dp"/>
     <include
         android:id="@+id/quest_progress_layout"
         android:layout_width="250dp"

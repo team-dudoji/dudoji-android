@@ -8,7 +8,6 @@
             android:id="@+id/quest_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="오늘 하루도 힘차게!"
             android:textSize="14sp"
             android:textColor="#222222"
             android:layout_marginBottom="8dp" />
@@ -37,7 +36,6 @@
                     android:id="@+id/quest_current_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
                     android:textSize="12sp"
                     android:textColor="#F47B20"
                     android:textStyle="bold" />
@@ -46,7 +44,6 @@
                     android:id="@+id/quest_unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="km"
                     android:textSize="12sp"
                     android:textColor="#CCCCCC" />
 
@@ -66,7 +63,6 @@
                     android:id="@+id/quest_target_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5"
                     android:textSize="12sp"
                     android:textColor="#CCCCCC" />
 
@@ -74,7 +70,6 @@
                     android:id="@+id/quest_target_unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="km"
                     android:textSize="12sp"
                     android:textColor="#CCCCCC" />
 

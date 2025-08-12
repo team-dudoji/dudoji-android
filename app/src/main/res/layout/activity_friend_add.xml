@@ -37,14 +37,12 @@
                 android:textStyle="bold"
                 android:gravity="center_horizontal" />
 
-        <!-- 오른쪽 여백을 위한 투명한 뷰 -->
         <View
                 android:layout_width="48dp"
                 android:layout_height="48dp" />
 
     </LinearLayout>
 
-    <!-- Search Section -->
     <LinearLayout
             android:id="@+id/search_section"
             android:layout_width="match_parent"

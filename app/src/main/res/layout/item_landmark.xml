@@ -8,7 +8,6 @@
             android:id="@+id/landmark_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="새로운 "
             android:textSize="14sp"
             android:textColor="#BAA896"
             android:layout_marginBottom="8dp" />
@@ -18,7 +17,6 @@
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="8dp"
-            android:progress="0"
             android:progressDrawable="@drawable/custom_progress_bar"
             android:layout_marginBottom="4dp" />
 
@@ -36,7 +34,6 @@
                     android:id="@+id/landmark_current_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
                     android:textSize="12sp"
                     android:textColor="#F47B20"
                     android:textStyle="bold" />
@@ -45,7 +42,6 @@
                     android:id="@+id/landmark_unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="km"
                     android:textSize="12sp"
                     android:textColor="#CCCCCC" />
 
@@ -65,7 +61,6 @@
                     android:id="@+id/landmark_target_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5"
                     android:textSize="12sp"
                     android:textColor="#CCCCCC" />
 
@@ -73,7 +68,6 @@
                     android:id="@+id/landmark_target_unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="km"
                     android:textSize="12sp"
                     android:textColor="#CCCCCC" />
 

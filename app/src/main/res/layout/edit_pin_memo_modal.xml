@@ -84,7 +84,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:id="@+id/memo_date"
-                        android:text="yyyy.mm.dd (w)"
                         android:textSize="15sp"
                         android:textStyle="bold" />
             </LinearLayout>
@@ -105,7 +104,6 @@
                     <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="장소 이름"
                             android:id="@+id/pin_place_name"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -113,7 +111,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/pin_address"
-                            android:text="두도지시 두도지동"
                             android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>

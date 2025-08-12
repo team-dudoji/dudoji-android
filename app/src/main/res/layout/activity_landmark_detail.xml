@@ -44,7 +44,6 @@
                     android:id="@+id/locationTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="부산대학교 장전캠퍼스"
                     android:textColor="@android:color/white"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -54,7 +53,6 @@
                     android:id="@+id/locationSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="부산광역시 대학교육의 no.2 거점은 대학교입니다"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
                     android:alpha="0.9" />

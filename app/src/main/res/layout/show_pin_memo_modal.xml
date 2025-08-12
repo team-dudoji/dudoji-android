@@ -56,7 +56,6 @@
                         android:id="@+id/pin_place_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="부산대학교 장전캠퍼스"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@android:color/black" />
@@ -78,7 +77,6 @@
                             android:id="@+id/memo_date_output"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="2025.04.30 수"
                             android:textSize="12sp"
                             android:textColor="@android:color/darker_gray" />
 
@@ -105,7 +103,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:text="123"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FF0044" />
@@ -134,7 +131,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="모습 누워 쫓 몸 걸이 노래 몸은 얻으리라. 좋으며 어디에서 놓영하지 있는 좋겠고 고무되어 바이 곧을 옥, 목곧했을 타..."
                 android:textSize="14sp"
                 android:textColor="#374151"
                 android:lineSpacingExtra="2dp"

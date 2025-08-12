@@ -19,7 +19,6 @@
                 android:id="@+id/achievement_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="72"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="#666666" />
@@ -28,7 +27,6 @@
                 android:id="@+id/achievement_unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="%"
                 android:textSize="16sp"
                 android:textColor="#666666"
                 android:layout_marginStart="2dp" />
@@ -39,7 +37,6 @@
             android:id="@+id/achievement_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="안개 제거"
             android:textSize="12sp"
             android:textColor="#999999"
             android:gravity="center"
