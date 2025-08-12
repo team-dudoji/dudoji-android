@@ -3,7 +3,7 @@ package com.dudoji.android.mypage.api.dto
 import com.dudoji.android.map.domain.Npc
 import com.dudoji.android.network.api.dto.BaseDto
 
-data class NpcDto(
+data class NpcDto (
     val npcId: Long,
     val lat: Double,
     val lng: Double,

@@ -1,7 +1,9 @@
 package com.dudoji.android.mypage.api.service
 
+import com.dudoji.android.map.api.dto.NpcMetaDto
 import com.dudoji.android.mypage.api.dto.NpcDto
 import com.dudoji.android.mypage.api.dto.NpcQuestDto
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,4 +17,7 @@ interface NpcQuestApiService {
 
     @GET("/api/user/npcs/{npcId}/quests")
     suspend fun getNpcQuest(@Path("npcId") npcId: Long): Response<NpcQuestDto>
+
+    @GET("/api/user/npcs/meta")
+    fun getQuestMetaData(): Call<List<NpcMetaDto>>
 }

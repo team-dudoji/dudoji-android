@@ -1,5 +1,6 @@
 package com.dudoji.android.mock.npc
 
+import com.dudoji.android.map.api.dto.NpcMetaDto
 import com.dudoji.android.mypage.api.dto.NpcDto
 import com.dudoji.android.mypage.api.dto.NpcQuestDto
 import com.dudoji.android.mypage.api.dto.QuestDto
@@ -46,5 +47,35 @@ val NPC_QUEST_DTO_MOCK: NpcQuestDto = NpcQuestDto (
             unit = MissionUnit.DISTANCE,
             type = QuestType.NPC,
         )
+    )
+)
+
+val NPC_META_DTO_MOCK: List<NpcMetaDto> = listOf(
+    NpcMetaDto(
+        locationName = "부산",
+        npcSkinId = 1L,
+        lat = 35.231985,
+        lng = 129.083111,
+        questName = "First Quest",
+        numOfQuests = 2,
+        numOfClearedQuests = 0
+    ),
+    NpcMetaDto(
+        locationName = "부산",
+        npcSkinId = 1L,
+        lat = 35.231985,
+        lng = 129.083111,
+        questName = "First Quest",
+        numOfQuests = 2,
+        numOfClearedQuests = 2
+    ),
+    NpcMetaDto(
+        locationName = "러시아",
+        npcSkinId = 2L,
+        lat = 35.231985,
+        lng = 129.083111,
+        questName = "Second Quest",
+        numOfQuests = 2,
+        numOfClearedQuests = 2
     )
 )

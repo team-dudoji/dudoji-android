@@ -159,7 +159,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         questPageButton.setOnClickListener {
             Modal.showCustomModal(
                 this@MapActivity,
-                NpcListFragment(),
+                NpcListFragment(this),
                 R.layout.template_quest_modal
         )}
     }
@@ -227,6 +227,11 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         }
 
         pinSetterController = PinSetterController(pinSetter, pinDropZone ,pinApplier, googleMap, this, clusterManager)
+    }
+
+    fun moveTo(lat: Double, lng: Double) {
+        if (!::googleMap.isInitialized) return
+        mapCameraPositionController.moveCameraPosition(lat, lng, 15f)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
