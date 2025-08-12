@@ -5,6 +5,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <ImageButton
+            android:id="@+id/quest_modal_button"
+            android:src="@mipmap/quest_button"
+            android:visibility="gone"
+            android:layout_width="50dp"
+            android:layout_height="63dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:layout_gravity="top|start"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="156dp"
+            android:layout_marginStart="16dp" />
+
     <ImageView
             android:id="@+id/pinSetter"
             android:layout_width="50dp"
