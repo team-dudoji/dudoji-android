@@ -18,6 +18,10 @@ import com.google.maps.android.collections.MarkerManager
 class NpcApplier(normalMarkerCollection: MarkerManager.Collection, googleMap: GoogleMap, activity: MapActivity)
     : NonClusterMarkerApplier<Npc>(normalMarkerCollection, googleMap, activity), OnCameraIdleListener{
 
+    init {
+        isIncludedBaseUrl = true
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun load(
         latLng: LatLng,

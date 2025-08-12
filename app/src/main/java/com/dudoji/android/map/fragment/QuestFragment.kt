@@ -13,10 +13,9 @@ import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.databinding.QuestModalBinding
 import com.dudoji.android.map.adapter.QuestAdapter
+import com.dudoji.android.mock.npc.NPC_QUEST_DTO_MOCK
 import com.dudoji.android.mypage.api.dto.NpcQuestDto
 import com.dudoji.android.mypage.api.dto.QuestDto
-import com.dudoji.android.mypage.domain.MissionUnit
-import com.dudoji.android.mypage.domain.QuestType
 import com.dudoji.android.util.modal.ModalFragment
 import kotlinx.coroutines.launch
 import retrofit2.Response

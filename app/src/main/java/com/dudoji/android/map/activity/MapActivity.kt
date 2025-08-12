@@ -29,6 +29,7 @@ import com.dudoji.android.landmark.activity.LandmarkSearchActivity
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
 import com.dudoji.android.map.domain.Npc
+import com.dudoji.android.map.fragment.NpcListFragment
 import com.dudoji.android.map.fragment.QuestFragment
 import com.dudoji.android.map.manager.DatabaseMapSectionManager
 import com.dudoji.android.map.manager.MapSectionManager
@@ -100,6 +101,9 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     val fogTextureView: FogTextureView by lazy {
         findViewById<FogTextureView>(R.id.fog_texture_view)
     }
+    val questPageButton: ImageButton by lazy {
+        findViewById<ImageButton>(R.id.quest_modal_button)
+    }
 
 
     private lateinit var googleMap: GoogleMap
@@ -151,6 +155,13 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         landmarkBottomSheet = LandmarkBottomSheet(findViewById(R.id.landmark_bottom_sheet), this)
 
         setupSearchLandmark()
+
+        questPageButton.setOnClickListener {
+            Modal.showCustomModal(
+                this@MapActivity,
+                NpcListFragment(this),
+                R.layout.template_quest_modal
+        )}
     }
 
     private fun setupLocationUpdates(){
@@ -216,6 +227,11 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         }
 
         pinSetterController = PinSetterController(pinSetter, pinDropZone ,pinApplier, googleMap, this, clusterManager)
+    }
+
+    fun moveTo(lat: Double, lng: Double) {
+        if (!::googleMap.isInitialized) return
+        mapCameraPositionController.moveCameraPosition(lat, lng, 15f)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

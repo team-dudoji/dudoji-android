@@ -7,6 +7,7 @@ import com.dudoji.android.mypage.api.dto.NpcDto
 import retrofit2.Response
 
 object NpcDataSource: RangeSearchDataSource<NpcDto, Npc>() {
+
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun fetchFromApi(
         lat: Double,
@@ -18,6 +19,9 @@ object NpcDataSource: RangeSearchDataSource<NpcDto, Npc>() {
             lat,
             lng
         )
+//        return Response.success(
+//            NPC_DTO_MOCK
+//        )
     }
 
     fun getNpcs(): List<Npc> {

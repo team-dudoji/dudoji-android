@@ -30,6 +30,8 @@ abstract class NonClusterMarkerApplier<T : NonClusterMarker> (
     private var hasToReload = true
     private val appliedMarkerBases: HashSet<T> = HashSet()
 
+    protected var isIncludedBaseUrl = false
+
     companion object {
         const val TAG = "NonClusterMarkerApplier"
     }
@@ -56,7 +58,7 @@ abstract class NonClusterMarkerApplier<T : NonClusterMarker> (
         CoroutineScope(Dispatchers.IO).launch {
             val loader = Coil.imageLoader
             val request = ImageRequest.Builder(activity)
-                .data("${RetrofitClient.BASE_URL}/${markerBase.iconUrl}")
+                .data(if (isIncludedBaseUrl) {markerBase.iconUrl} else {"${RetrofitClient.BASE_URL}/${markerBase.iconUrl}"})
                 .build()
 
             val result = loader.execute(request)

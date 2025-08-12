@@ -46,6 +46,7 @@ object AnimatedNavButtonHelper {
         val btnStranger = activity.findViewById<ImageButton>(R.id.btnFilterStranger)
         val btnFilter = activity.findViewById<ImageButton>(R.id.btnFilter)
         val pinSetter = activity.findViewById<ImageView>(R.id.pinSetter)
+        val questPageButton = activity.findViewById<ImageButton>(R.id.quest_modal_button)
 
         val naviAssetPath = "file:///android_asset/navi/"
         btnStranger.load(naviAssetPath + "ic_stranger_enabled.png")
@@ -70,6 +71,7 @@ object AnimatedNavButtonHelper {
                 profileWrapper.visibility = View.VISIBLE
                 mypinWrapper.visibility = View.VISIBLE
                 socialWrapper.visibility = View.VISIBLE
+                questPageButton.visibility = View.VISIBLE
 
                 storeAnim.playAnimation()
                 profileAnim.playAnimation()
@@ -95,6 +97,7 @@ object AnimatedNavButtonHelper {
                 profileWrapper.visibility = View.GONE
                 mypinWrapper.visibility = View.GONE
                 socialWrapper.visibility = View.GONE
+                questPageButton.visibility = View.GONE
 
                 pinSetter.visibility = View.GONE
                 btnFilter.visibility = View.GONE
