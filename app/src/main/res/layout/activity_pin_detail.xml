@@ -69,7 +69,7 @@
                                 android:id="@+id/imageProfile"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:scaleType="fitCenter"
+                                android:scaleType="centerCrop"
                                 android:src="@drawable/dudoji_profile" />
 
                     </androidx.cardview.widget.CardView>
