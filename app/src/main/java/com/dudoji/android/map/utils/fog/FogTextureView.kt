@@ -13,7 +13,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.TextureView
 import android.view.View
-import com.dudoji.android.R
 import com.dudoji.android.config.FOG_CHECK_INTERVAL
 import com.dudoji.android.config.FOG_INVALIDATION_INTERVAL
 import com.dudoji.android.config.FOG_PARTICLE_SIZE
@@ -24,6 +23,7 @@ import com.google.android.gms.maps.GoogleMap
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
+import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.microedition.khronos.opengles.GL10
 
@@ -80,6 +80,7 @@ class FogTextureView @JvmOverloads constructor(
         }
 
         synchronized(particles) {
+            Collections.shuffle(particleList)
             particles = particleList
             renderThread?.setParticles(particles)
         }
