@@ -1,6 +1,7 @@
 package com.dudoji.android.landmark.activity
 
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -25,7 +26,13 @@ class LandmarkDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landmark_detail)
 
-        val landmark = intent.getSerializableExtra("landmark") as? Landmark
+        val landmark = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra("landmark", Landmark::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra("landmark")
+        }
+
         if (landmark == null) {
             finish()
             return

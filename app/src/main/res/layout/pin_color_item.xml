@@ -16,7 +16,6 @@
         android:id="@+id/pin_color_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="빨강"
         android:textSize="12sp"
         android:layout_marginTop="4dp" />
 
