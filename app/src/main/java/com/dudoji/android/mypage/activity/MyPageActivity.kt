@@ -21,6 +21,7 @@ import com.dudoji.android.mypage.adapter.DailyQuestAdapter
 import com.dudoji.android.mypage.adapter.LandmarkAdapter
 import com.dudoji.android.mypage.repository.MyPageRemoteDataSource
 import com.dudoji.android.mypage.domain.QuestType
+import com.dudoji.android.pin.activity.MyPinActivity
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.launch
 
@@ -52,6 +53,7 @@ class MyPageActivity : AppCompatActivity() {
 
         val followerSection = findViewById<LinearLayout>(R.id.follower_section_clickable)
         val followingSection = findViewById<LinearLayout>(R.id.following_section_clickable)
+        val pinSection = findViewById<LinearLayout>(R.id.pin_section_clickable)
 
         settingsButton.load("file:///android_asset/account/ic_settings.png")
 
@@ -116,6 +118,11 @@ class MyPageActivity : AppCompatActivity() {
             settingsButton.setOnClickListener {
                 Log.d("MyPageDEBUG", "팔로잉 섹션 클릭됨")
                 val intent = Intent(this@MyPageActivity, AccountManageActivity::class.java)
+                startActivity(intent)
+            }
+
+            pinSection.setOnClickListener {
+                val intent = Intent(this@MyPageActivity, MyPinActivity::class.java)
                 startActivity(intent)
             }
         }

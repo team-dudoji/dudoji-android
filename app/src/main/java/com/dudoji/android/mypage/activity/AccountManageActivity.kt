@@ -2,13 +2,18 @@ package com.dudoji.android.mypage.activity
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Switch
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.login.util.RequestPermissionsUtil
+import com.dudoji.android.mypage.repository.MyPageRemoteDataSource
+import kotlinx.coroutines.launch
 
 class AccountManageActivity : AppCompatActivity() {
 
@@ -33,6 +38,8 @@ class AccountManageActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.arrow_two_factor).load(arrowPath)
         findViewById<ImageView>(R.id.arrow_logout).load(arrowPath)
         findViewById<ImageView>(R.id.arrow_withdraw).load(arrowPath)
+
+        loadUserProfile()
 
         updatePermissionSwitches()
 
@@ -77,6 +84,24 @@ class AccountManageActivity : AppCompatActivity() {
     private fun updatePermissionSwitches() {
         switchCamera.isChecked = requestPermissionsUtil.isCameraPermissionGranted()
         switchPhoto.isChecked = requestPermissionsUtil.isImagePermissionGranted()
+    }
+
+    private fun loadUserProfile() {
+        val tvEmail = findViewById<TextView>(R.id.tv_email)
+        val etNickname = findViewById<EditText>(R.id.et_nickname)
+
+        lifecycleScope.launch {
+            try {
+                val userProfile = MyPageRemoteDataSource.getUserProfile()
+                userProfile?.let { profile ->
+                    tvEmail.text = profile.email
+                    etNickname.setText(profile.name)
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@AccountManageActivity, "프로필을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(
