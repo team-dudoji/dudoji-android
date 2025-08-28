@@ -1,6 +1,7 @@
 package com.dudoji.android.landmark.datasource
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.landmark.api.dto.LandmarkResponseDto
 import com.dudoji.android.landmark.domain.Landmark
@@ -27,7 +28,8 @@ object LandmarkDataSource: RangeSearchDataSource<LandmarkResponseDto, Landmark>(
             if (response.isSuccessful) {
                 return response
             } else {
-                throw Exception("Failed to fetch landmarks: ${response.errorBody()?.string()}")
+                Log.e("LandmarkDataSource", "Failed to fetch landmarks: ${response.errorBody()?.string()}")
+                return response;
             }
         }
     }

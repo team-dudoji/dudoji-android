@@ -33,6 +33,7 @@ object NetworkInitializer {
 
     fun provideNonAuthedOkHttpClient(context: Context): OkHttpClient {
         return OkHttpClient.Builder()
+            .followRedirects(false)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
@@ -42,6 +43,7 @@ object NetworkInitializer {
 
     fun provideAuthedOkHttpClient(context: Context): OkHttpClient {
         return OkHttpClient.Builder()
+            .followRedirects(false)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
@@ -54,12 +56,16 @@ object NetworkInitializer {
         val appVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName
         val osVersion = Build.VERSION.RELEASE
 
-        Log.d("NetworkInitializer", "User-Agent: Dudoji/$appVersion (Android $osVersion; ${Build.MODEL})")
+        Log.d(
+            "NetworkInitializer",
+            "User-Agent: Dudoji/$appVersion (Android $osVersion; ${Build.MODEL})"
+        )
 
         return okhttp3.Interceptor { chain ->
             val request = chain.request().newBuilder()
                 .header(USER_AGENT, "Dudoji/${appVersion} (Android ${osVersion}; ${Build.MODEL})")
                 .build()
+            Log.d("NetworkInitializer", "Request URL: ${request.url}")
             chain.proceed(request)
         }
     }
