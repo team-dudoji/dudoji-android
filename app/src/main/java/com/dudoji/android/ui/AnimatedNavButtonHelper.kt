@@ -48,6 +48,10 @@ object AnimatedNavButtonHelper {
         val pinSetter = activity.findViewById<ImageView>(R.id.pinSetter)
         val questPageButton = activity.findViewById<ImageButton>(R.id.quest_modal_button)
 
+        val btnItem = activity.findViewById<ImageButton>(R.id.btnItem)
+        val searchBar = activity.findViewById<View>(R.id.search_bar_container)
+        val myLocationBtn = activity.findViewById<View>(R.id.my_location_button)
+
         val naviAssetPath = "file:///android_asset/navi/"
         btnStranger.load(naviAssetPath + "ic_stranger_enabled.png")
         btnFriend.load(naviAssetPath + "ic_friend_enabled.png")
@@ -58,59 +62,53 @@ object AnimatedNavButtonHelper {
         mypinIcon.load(naviAssetPath + "ic_mypin.png")
         socialIcon.load(naviAssetPath + "ic_social.png")
         centerButton.load(naviAssetPath + "ic_center_button_open.png")
+        btnItem.load(naviAssetPath + "ic_item.png")
 
         LottieIconSyncHelper.setup(storeAnim, storeIcon)
         LottieIconSyncHelper.setup(profileAnim, profileIcon)
         LottieIconSyncHelper.setup(mypinAnim, mypinIcon)
         LottieIconSyncHelper.setup(socialAnim, socialIcon)
-        centerButton.setOnClickListener {
-            isExpanded = !isExpanded
 
-            if (isExpanded) {
-                storeWrapper.visibility = View.VISIBLE
-                profileWrapper.visibility = View.VISIBLE
-                mypinWrapper.visibility = View.VISIBLE
-                socialWrapper.visibility = View.VISIBLE
-                questPageButton.visibility = View.VISIBLE
+        fun setExpanded(expanded: Boolean) {
+            isExpanded = expanded
+            val vis = if (expanded) View.VISIBLE else View.GONE
 
+            if (expanded) {
                 storeAnim.playAnimation()
                 profileAnim.playAnimation()
                 mypinAnim.playAnimation()
                 socialAnim.playAnimation()
-
-                pinSetter.visibility = View.VISIBLE
-                btnFilter.visibility = View.VISIBLE
-
                 centerButton.load(naviAssetPath + "ic_center_button_close.png")
-
-                btnFriend.visibility = View.VISIBLE
-                btnMine.visibility = View.VISIBLE
-                btnStranger.visibility = View.VISIBLE
-                filterBarAnim.visibility = View.VISIBLE
             } else {
                 storeAnim.cancelAnimation()
                 profileAnim.cancelAnimation()
                 mypinAnim.cancelAnimation()
                 socialAnim.cancelAnimation()
-
-                storeWrapper.visibility = View.GONE
-                profileWrapper.visibility = View.GONE
-                mypinWrapper.visibility = View.GONE
-                socialWrapper.visibility = View.GONE
-                questPageButton.visibility = View.GONE
-
-                pinSetter.visibility = View.GONE
-                btnFilter.visibility = View.GONE
-
                 centerButton.load(naviAssetPath + "ic_center_button_open.png")
-
-                btnFriend.visibility = View.GONE
-                btnMine.visibility = View.GONE
-                btnStranger.visibility = View.GONE
-
-                filterBarAnim.visibility = View.GONE
             }
 
+            storeWrapper.visibility = vis
+            profileWrapper.visibility = vis
+            mypinWrapper.visibility = vis
+            socialWrapper.visibility = vis
+            questPageButton.visibility = vis
+
+            pinSetter.visibility = vis
+            btnFilter.visibility = vis
+            btnItem.visibility = vis
+            searchBar.visibility = vis
+            myLocationBtn.visibility = vis
+
+            btnFriend.visibility = vis
+            btnMine.visibility = vis
+            btnStranger.visibility = vis
+            filterBarAnim.visibility = vis
+        }
+
+        setExpanded(false)
+
+        centerButton.setOnClickListener {
+            setExpanded(!isExpanded)
             onCenterClick?.invoke()
         }
 
