@@ -10,16 +10,12 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
 import coil.load
-import com.airbnb.lottie.LottieAnimationView
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
@@ -29,7 +25,6 @@ import com.dudoji.android.landmark.activity.LandmarkSearchActivity
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
 import com.dudoji.android.map.domain.Npc
-import com.dudoji.android.map.fragment.NpcListFragment
 import com.dudoji.android.map.fragment.QuestFragment
 import com.dudoji.android.map.manager.DatabaseMapSectionManager
 import com.dudoji.android.map.manager.MapSectionManager
@@ -51,7 +46,6 @@ import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinFilter
 import com.dudoji.android.pin.util.PinRenderer
-import com.dudoji.android.pin.util.PinSetterController
 import com.dudoji.android.shop.activity.ShopActivity
 import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.dudoji.android.util.modal.Modal
@@ -69,11 +63,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
 
-    private lateinit var pinSetter: ImageView
-    lateinit var pinSetterController: PinSetterController
-    private lateinit var pinDropZone: FrameLayout
-
-
     private val pinApplier: PinApplier by lazy {
         PinApplier(clusterManager, googleMap, this@MapActivity, pinFilter)
     }
@@ -83,17 +72,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private val npcApplier: NpcApplier by lazy {
         NpcApplier(normalMarkerCollection, googleMap, this@MapActivity)
     }
-    private val searchBarContainer by lazy {
-        findViewById<LinearLayout>(R.id.search_bar_container)
-    }
     private val myLocationButton by lazy {
         findViewById<Button>(R.id.my_location_button)
-    }
-    private val navigationLayout by lazy {
-        findViewById<ConstraintLayout>(R.id.navigation_layout)
-    }
-    private val landmarkBottomLayout by lazy {
-        findViewById<LinearLayout>(R.id.landmark_bottom_sheet)
     }
     private val objectTextureView by lazy {
         findViewById<MapObjectTextureView>(R.id.map_object_texture_view)
@@ -101,10 +81,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     val fogTextureView: FogTextureView by lazy {
         findViewById<FogTextureView>(R.id.fog_texture_view)
     }
-    val questPageButton: ImageButton by lazy {
-        findViewById<ImageButton>(R.id.quest_modal_button)
-    }
-
+    var mapOverlayUI: MapOverlayUI? = null
 
     private lateinit var googleMap: GoogleMap
     private var mapUtil: MapUtil = MapUtil(this)
@@ -150,18 +127,9 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
         setupAnimatedNavButtons()
 
-        setupFilterBarToggle()
-
         landmarkBottomSheet = LandmarkBottomSheet(findViewById(R.id.landmark_bottom_sheet), this)
 
         setupSearchLandmark()
-
-        questPageButton.setOnClickListener {
-            Modal.showCustomModal(
-                this@MapActivity,
-                NpcListFragment(this),
-                R.layout.template_quest_modal
-        )}
     }
 
     private fun setupLocationUpdates(){
@@ -173,12 +141,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 mapCameraPositionController.updateLocation(it)
             }
         }
-    }
-
-    fun bringToFront(view: View) {
-        view.bringToFront()
-        view.parent.requestLayout()
-        (view.parent as View).invalidate()
     }
 
     fun setupMyLocationButton() {
@@ -210,23 +172,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         if (::directionController.isInitialized) {
             directionController.stop()
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun setPinSetterController() {
-        pinDropZone = findViewById(R.id.outer_drop_zone)
-        pinSetter = findViewById(R.id.pinSetter)
-
-        try {
-            val pinSetterBg = assets.open("pin/pin_button.png").use { inputStream ->
-                Drawable.createFromStream(inputStream, null)
-            }
-            pinSetter.background = pinSetterBg
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        pinSetterController = PinSetterController(pinSetter, pinDropZone ,pinApplier, googleMap, this, clusterManager)
     }
 
     fun moveTo(lat: Double, lng: Double) {
@@ -297,7 +242,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         directionController = MapDirectionController(this@MapActivity, mapCameraPositionController)
         directionController.start()
 
-        setPinSetterController()
+        mapOverlayUI = MapOverlayUI(assets, this, googleMap, pinApplier, clusterManager)
     }
 
     private fun updateMapObjects() {
@@ -328,25 +273,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 startActivity(Intent(this, MyPageActivity::class.java))
             }
         )
-    }
-
-    private fun setupFilterBarToggle() {
-        val btnFilter = findViewById<ImageButton>(R.id.btnFilter)
-        val filterBarWrapper = findViewById<FrameLayout>(R.id.filterBarWrapper)
-        val filterBarAnim = findViewById<LottieAnimationView>(R.id.filterBarAnim)
-
-        var isFilterBarVisible = false
-
-        btnFilter.setOnClickListener {
-            isFilterBarVisible = !isFilterBarVisible
-            if (isFilterBarVisible) {
-                filterBarWrapper.visibility = View.VISIBLE
-                filterBarAnim.progress = 0f
-                filterBarAnim.playAnimation()
-            } else {
-                filterBarWrapper.visibility = View.GONE
-            }
-        }
     }
 
     private fun setupSearchLandmark() {

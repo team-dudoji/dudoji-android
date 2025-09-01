@@ -54,9 +54,13 @@
 
         <include
                 android:id="@+id/navigation_layout"
-                layout="@layout/navigation_layout" />
+                layout="@layout/map_navigation_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+            android:id="@+id/map_overlay_ui_layout"
+            layout="@layout/map_overlay_ui_layout"/>
 
     <include
             android:id="@+id/landmark_bottom_sheet"
