@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import coil.load
 import com.airbnb.lottie.LottieAnimationView
@@ -26,13 +27,14 @@ class MapOverlayUI(val assets: AssetManager, val activity: MapActivity, val goog
     val questPageButton: ImageButton by lazy {
         activity.findViewById<ImageButton>(R.id.quest_modal_button)
     }
-
     val pinSetter: ImageView by lazy {
         activity.findViewById(R.id.pinSetter)
     }
-
     val pinDropZone: FrameLayout by lazy {
         activity.findViewById(R.id.outer_drop_zone)
+    }
+    val itemModal: LinearLayout by lazy {
+        activity.findViewById(R.id.item_modal)
     }
     val itemButton = activity.findViewById<ImageButton>(R.id.btnItem)
     var pinSetterController: PinSetterController? = null
@@ -50,6 +52,10 @@ class MapOverlayUI(val assets: AssetManager, val activity: MapActivity, val goog
 
         val naviAssetPath = "file:///android_asset/navi/"
         itemButton.load(naviAssetPath + "ic_item.png")
+
+        itemButton.setOnClickListener {
+            itemModal.visibility = if (itemModal.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        }
     }
 
 
