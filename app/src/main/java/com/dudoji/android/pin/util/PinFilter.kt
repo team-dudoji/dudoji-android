@@ -37,20 +37,28 @@ class PinFilter(
         btnMine = activity.findViewById(R.id.btnFilterMine)
         btnFriend = activity.findViewById(R.id.btnFilterFriend)
         btnStranger = activity.findViewById(R.id.btnFilterStranger)
+        val btnFilter = activity.findViewById<ImageButton>(R.id.btnFilter)
+
+
+        val naviAssetPath = "file:///android_asset/navi/"
+        btnStranger.load(naviAssetPath + "ic_stranger_enabled.png")
+        btnFriend.load(naviAssetPath + "ic_friend_enabled.png")
+        btnMine.load(naviAssetPath + "ic_mypin_enabled.png")
+        btnFilter.load(naviAssetPath + "ic_filter.png")
 
         btnMine.setOnClickListener {
             toggle(Who.MINE)
-            (activity as MapActivity).pinSetterController.pinApplier.markForReload()
+            (activity as MapActivity).mapOverlayUI?.pinSetterController?.pinApplier?.markForReload()
         }
 
         btnFriend.setOnClickListener {
             toggle(Who.FOLLOWING)
-            (activity as MapActivity).pinSetterController.pinApplier.markForReload()
+            (activity as MapActivity).mapOverlayUI?.pinSetterController?.pinApplier?.markForReload()
         }
 
         btnStranger.setOnClickListener {
             toggle(Who.UNKNOWN)
-            (activity as MapActivity).pinSetterController.pinApplier.markForReload()
+            (activity as MapActivity).mapOverlayUI?.pinSetterController?.pinApplier?.markForReload()
         }
     }
 
