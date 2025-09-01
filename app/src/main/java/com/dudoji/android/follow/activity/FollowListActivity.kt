@@ -3,9 +3,10 @@ package com.dudoji.android.follow.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.MenuInflater
 import android.view.View
 import android.widget.ImageButton
-import android.widget.ImageView // ImageView import
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -14,12 +15,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.load // Coil import
+import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.follow.adapter.FollowAdapter
+import com.dudoji.android.follow.adapter.FollowSortType
 import com.dudoji.android.follow.domain.User
 import com.dudoji.android.follow.repository.FollowRepository
 import kotlinx.coroutines.launch
+import android.widget.PopupMenu
+import java.text.Collator
+import java.util.Locale
 
 class FollowListActivity : AppCompatActivity() {
     companion object {
@@ -36,17 +41,23 @@ class FollowListActivity : AppCompatActivity() {
     private lateinit var followerSection: View
     private lateinit var followingSection: View
 
+    private var currentType: String = TYPE_FOLLOWER
+    private var currentSort: FollowSortType = FollowSortType.NAME_KOR
+
+    private val followingIdSet = mutableSetOf<Long>()
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_follow_list)
 
         val type = intent.getStringExtra(EXTRA_TYPE)
+        currentType = if (type == TYPE_FOLLOWING) TYPE_FOLLOWING else TYPE_FOLLOWER
+
         val titleView = findViewById<TextView>(R.id.toolbar_title)
         val backBtn = findViewById<ImageButton>(R.id.back_button)
         val recyclerView = findViewById<RecyclerView>(R.id.follow_list_recycler_view)
         val friendAddSection = findViewById<LinearLayout>(R.id.friend_add_section)
-
         val sortButton = findViewById<ImageButton>(R.id.sort_button)
         val personAddIcon = findViewById<ImageView>(R.id.person_add_icon)
 
@@ -60,28 +71,141 @@ class FollowListActivity : AppCompatActivity() {
 
         followerSection.setOnClickListener {
             titleView.text = "팔로워 목록"
-            loadUsers(TYPE_FOLLOWER)
+            currentType = TYPE_FOLLOWER
+            currentSort = FollowSortType.NAME_KOR
+            loadUsers(currentType)
         }
 
         followingSection.setOnClickListener {
             titleView.text = "팔로잉 목록"
-            loadUsers(TYPE_FOLLOWING)
+            currentType = TYPE_FOLLOWING
+            currentSort = FollowSortType.NAME_KOR
+            loadUsers(currentType)
         }
 
-        titleView.text = if (type == TYPE_FOLLOWING) "팔로잉 목록" else "팔로워 목록"
+        titleView.text = if (currentType == TYPE_FOLLOWING) "팔로잉 목록" else "팔로워 목록"
         backBtn.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
-
         recyclerView.layoutManager = LinearLayoutManager(this)
-        followAdapter = FollowAdapter(userList, this)
+        followAdapter = FollowAdapter(
+            users = userList,
+            activity = this,
+            followingIdSet = followingIdSet,
+            onFollowStateChanged = { userId, nowFollowing ->
+                if (nowFollowing) followingIdSet.add(userId) else followingIdSet.remove(userId)
+                adjustCounts(nowFollowing)
+            }
+        )
         recyclerView.adapter = followAdapter
 
-        loadUsers(type)
+        sortButton.setOnClickListener { v -> showSortPopup(v) }
 
+        preloadFollowingSetThenLoadList()
         loadCounts()
 
         friendAddSection.setOnClickListener {
             startActivity(Intent(this, FriendAddActivity::class.java))
+        }
+    }
+
+    private fun showSortPopup(anchor: View) {
+        val popup = PopupMenu(this, anchor)
+
+        //메뉴에 있는 xml을 실제 메뉴에 붙임
+        popup.menuInflater.inflate(R.menu.menu_follow_sort, popup.menu)
+
+        //한 항목을 체크하면 다른 항목은 자동으로 체크 해제
+        popup.menu.setGroupCheckable(R.id.group_sort, true, true)
+
+        //현재 정렬 상태에 맞는 메뉴 아이템을 찾아서 체크 표시
+        val checkedId = when (currentSort) {
+            FollowSortType.NAME_KOR -> R.id.sort_name
+            FollowSortType.LATEST   -> R.id.sort_latest
+            FollowSortType.OLDEST   -> R.id.sort_oldest
+        }
+        popup.menu.findItem(checkedId).isChecked = true
+
+        //메뉴 아이템 클릭 리스너 등록
+        popup.setOnMenuItemClickListener { item ->
+            item.isChecked = true
+
+            // 클릭된 항목에 따라 현재 정렬 기준 갱신
+            currentSort = when (item.itemId) {
+                R.id.sort_name   -> FollowSortType.NAME_KOR
+                R.id.sort_latest -> FollowSortType.LATEST
+                R.id.sort_oldest -> FollowSortType.OLDEST
+                else             -> currentSort
+            }
+
+            applySortAndRefresh()
+            true
+        }
+
+        popup.show()
+    }
+
+    //정렬 적용 및 최신화
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun applySortAndRefresh() {
+        sortUsersInPlace(userList, currentSort, currentType)
+        followAdapter.notifyDataSetChanged()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun sortUsersInPlace(
+        list: MutableList<User>,
+        sortType: FollowSortType,
+        type: String
+    ) {
+        //한국 사전식 정렬을 위해 생성
+        val collator = Collator.getInstance(Locale.KOREAN).apply {
+            strength = Collator.PRIMARY //초성, 중성만 비교 가능하네요
+        }
+
+        when (sortType) {
+            FollowSortType.NAME_KOR -> {
+                list.sortWith { u1, u2 -> collator.compare(u1.name, u2.name) }
+            }
+            FollowSortType.LATEST -> {
+                list.sortWith { u1, u2 ->
+                    val t1 = if (type == TYPE_FOLLOWER) u1.followAt else u1.followedAt
+                    val t2 = if (type == TYPE_FOLLOWER) u2.followAt else u2.followedAt
+                    when {
+                        t1 == null && t2 == null -> collator.compare(u1.name, u2.name)
+                        t1 == null -> 1
+                        t2 == null -> -1
+                        else -> t2.compareTo(t1)
+                    }
+                }
+            }
+            FollowSortType.OLDEST -> {
+                list.sortWith { u1, u2 ->
+                    val t1 = if (type == TYPE_FOLLOWER) u1.followAt else u1.followedAt
+                    val t2 = if (type == TYPE_FOLLOWER) u2.followAt else u2.followedAt
+                    when {
+                        t1 == null && t2 == null -> collator.compare(u1.name, u2.name)
+                        t1 == null -> 1
+                        t2 == null -> -1
+                        else -> t1.compareTo(t2)
+                    }
+                }
+            }
+        }
+    }
+
+    //앱이 시작될 때, 내가 팔로잉 중인 유저 id 목록을 미리 세팅하는 함수
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun preloadFollowingSetThenLoadList() {
+        lifecycleScope.launch {
+            try {
+                val followings = FollowRepository.getFollowings()
+                followingIdSet.clear()
+                followingIdSet.addAll(followings.map { it.id })
+
+                loadUsers(currentType)
+            } catch (e: Exception) {
+                Toast.makeText(this@FollowListActivity, "불러오기 실패", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -96,7 +220,7 @@ class FollowListActivity : AppCompatActivity() {
 
                 userList.clear()
                 userList.addAll(users)
-                followAdapter.notifyDataSetChanged()
+                applySortAndRefresh()
             } catch (e: Exception) {
                 Toast.makeText(this@FollowListActivity, "불러오기 실패", Toast.LENGTH_SHORT).show()
             }
@@ -115,5 +239,10 @@ class FollowListActivity : AppCompatActivity() {
                 Toast.makeText(this@FollowListActivity, "수 불러오기 실패", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun adjustCounts(nowFollowing: Boolean) {
+        val current = followingCount.text.toString().toIntOrNull() ?: return
+        followingCount.text = (if (nowFollowing) current + 1 else current - 1).coerceAtLeast(0).toString()
     }
 }
