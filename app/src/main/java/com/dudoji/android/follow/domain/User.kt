@@ -1,18 +1,21 @@
 package com.dudoji.android.follow.domain
 
 import java.util.Date
+import java.time.LocalDateTime
 
 data class User (
     val id: Long,
-    val password : String,
-    val role: String ,
-    val name:  String ,
-    val email: String ,
-    val createAt: Date ,
-    val provider : String ,
-    val providerId: String ,
+    val password: String,
+    val role: String,
+    val name: String,
+    val email: String,
+    val createAt: Date,
+    val provider: String,
+    val providerId: String,
     val profileImageUrl: String,
-){
+    val followedAt: LocalDateTime? = null,
+    val followAt: LocalDateTime? = null
+) {
     constructor(name: String, email: String) : this(
         id = 0,
         password = "",
@@ -22,6 +25,8 @@ data class User (
         createAt = Date(),
         provider = "",
         providerId = "",
-        profileImageUrl = ""
+        profileImageUrl = "",
+        followedAt = null,
+        followAt = null
     )
 }
