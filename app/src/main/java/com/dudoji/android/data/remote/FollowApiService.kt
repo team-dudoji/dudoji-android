@@ -1,6 +1,6 @@
-package com.dudoji.android.follow.api
+package com.dudoji.android.data.remote
 
-import com.dudoji.android.follow.domain.User
+import com.dudoji.android.domain.model.User
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET
