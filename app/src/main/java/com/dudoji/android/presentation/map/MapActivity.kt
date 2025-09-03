@@ -1,17 +1,16 @@
 package com.dudoji.android.presentation.map
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -19,20 +18,18 @@ import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
+import com.dudoji.android.databinding.ActivityMapBinding
+import com.dudoji.android.domain.model.ActivityMapObject
 import com.dudoji.android.domain.model.UserType
 import com.dudoji.android.landmark.activity.LandmarkSearchActivity
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
 import com.dudoji.android.map.domain.Npc
 import com.dudoji.android.map.fragment.QuestFragment
-import com.dudoji.android.map.manager.DatabaseMapSectionManager
-import com.dudoji.android.map.manager.MapSectionManager
 import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
 import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapObject
-import com.dudoji.android.map.utils.MapObjectTextureView
-import com.dudoji.android.map.utils.MapUtil
 import com.dudoji.android.map.utils.location.GPSLocationService
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
@@ -50,17 +47,20 @@ import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.collections.MarkerManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.IOException
 
+@AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.O)
 class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
-
     private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
+    private lateinit var binding: ActivityMapBinding
+
+    private val mapViewModel: MapViewModel by viewModels()
 
     private val pinApplier: PinApplier by lazy {
         PinApplier(clusterManager, googleMap, this@MapActivity, pinFilter)
@@ -71,21 +71,13 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private val npcApplier: NpcApplier by lazy {
         NpcApplier(normalMarkerCollection, googleMap, this@MapActivity)
     }
-    private val myLocationButton by lazy {
-        findViewById<Button>(R.id.my_location_button)
-    }
-    private val objectTextureView by lazy {
-        findViewById<MapObjectTextureView>(R.id.map_object_texture_view)
-    }
+
     var mapOverlayUI: MapOverlayUI? = null
 
     private lateinit var googleMap: GoogleMap
-    private var mapUtil: MapUtil = MapUtil(this)
     private val mapCameraPositionController : MapCameraPositionController by lazy {
-        MapCameraPositionController(this.googleMap, myLocationButton)
+        MapCameraPositionController(this.googleMap, binding.myLocationButton)
     }
-
-    private lateinit var mapSectionManager: MapSectionManager
 
     lateinit var directionController: MapDirectionController
 
@@ -97,26 +89,24 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     }
 
     private val pinFilter: PinFilter by lazy {
-        PinFilter(this@MapActivity, mapSectionManager as DatabaseMapSectionManager?)
+        PinFilter(this@MapActivity)
     }
     private lateinit var landmarkBottomSheet: LandmarkBottomSheet
 
     val activityObjects = mutableListOf<ActivityMapObject>()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_map)
+        binding = ActivityMapBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        mapUtil.setupLocationServices()
-        mapUtil.requestLocationPermission()
-        mapUtil.prepareMap(savedInstanceState)
+        binding.mapView.onCreate(savedInstanceState)
+        binding.mapView.getMapAsync(this)
 
         locationService = GPSLocationService(this)
 
         setupMyLocationButton()
-
         setupAnimatedNavButtons()
 
         landmarkBottomSheet = LandmarkBottomSheet(findViewById(R.id.landmark_bottom_sheet), this)
@@ -140,14 +130,14 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             val myLocationBg = assets.open("map/my_location_button.png").use { inputStream ->
                 Drawable.createFromStream(inputStream, null)
             }
-            myLocationButton.background = myLocationBg
+            binding.myLocationButton.background = myLocationBg
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
-        myLocationButton.setOnClickListener {
+        binding.myLocationButton.setOnClickListener {
             mapCameraPositionController.setAttach(true)
-            myLocationButton.visibility = View.GONE
+            binding.myLocationButton.visibility = View.GONE
         }
     }
 
@@ -171,18 +161,14 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         mapCameraPositionController.moveCameraPosition(lat, lng, 15f)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
         setupLocationUpdates() // Setup location updates Callback
-        mapUtil.setGoogleMap(googleMap)
         this.googleMap.setMinZoomPreference(MIN_ZOOM)
         this.googleMap.setMaxZoomPreference(MAX_ZOOM)
         mapCameraPositionController
 
         lifecycleScope.launch {
-            mapSectionManager = DatabaseMapSectionManager(this@MapActivity)
-
             startLocationUpdates()
 
             //맵 액티비티에 스킨 씌우기
@@ -240,7 +226,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             val screenPoint = googleMap.projection.toScreenLocation(obj.latLng)
             MapObject(screenPoint.x.toFloat(), screenPoint.y.toFloat(), obj.offsetX, obj.offsetY, obj.width, obj.height, obj.bitmap)
         }
-        objectTextureView.setMapObjects(viewObjects)
+        binding.mapObjectTextureView.setMapObjects(viewObjects)
     }
 
     private fun setupAnimatedNavButtons() {

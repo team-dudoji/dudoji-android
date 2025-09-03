@@ -1,6 +1,6 @@
 package com.dudoji.android.map.domain
 
-import com.dudoji.android.presentation.map.MapActivity.ActivityMapObject
+import com.dudoji.android.domain.model.ActivityMapObject
 
 class Npc: NonClusterMarker {
     val npcId: Long

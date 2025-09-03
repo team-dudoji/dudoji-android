@@ -1,11 +1,11 @@
 package com.dudoji.android.map.utils.tile
 
 import com.dudoji.android.config.BASIC_ZOOM_LEVEL
+import com.dudoji.android.config.EARTH_RADIUS
+import com.dudoji.android.config.TILE_SIZE
 import com.dudoji.android.map.domain.TileCoordinate
 import kotlin.math.cos
 import kotlin.math.ln
-
-const val EARTH_RADIUS = 6378137.0
 
 // for google tile system's positioning (by x, y, zoom)
 class TileCoordinateUtil {
