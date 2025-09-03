@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dudoji.android.R
-import com.dudoji.android.follow.activity.FollowListActivity
+import com.dudoji.android.presentation.follow.FollowListActivity
 import com.dudoji.android.mypage.adapter.AchievementAdapter
 import com.dudoji.android.mypage.adapter.DailyQuestAdapter
 import com.dudoji.android.mypage.adapter.LandmarkAdapter

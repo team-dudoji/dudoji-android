@@ -37,6 +37,10 @@ data class Pin (
         return content
     }
 
+    override fun getZIndex(): Float? {
+        return 0.0f
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun toPinRequestDto(): PinRequestDto {
         return PinRequestDto(

@@ -58,9 +58,8 @@
         <activity android:name=".shop.activity.ShopActivity" />
         <activity android:name=".pin.activity.MyPinActivity" />
         <activity android:name=".pin.activity.PinDetailActivity" />
-        <activity android:name=".follow.activity.FollowListActivity" />
+        <activity android:name=".presentation.follow.FollowListActivity" />
         <activity android:name=".mypage.activity.AccountManageActivity"/>
-        <activity android:name=".follow.activity.FriendAddActivity"/>
         <activity android:name=".landmark.activity.LandmarkSearchActivity" />
         <activity android:name=".landmark.activity.LandmarkDetailActivity" />
 

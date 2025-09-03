@@ -19,8 +19,7 @@ import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
-import com.dudoji.android.follow.activity.FollowListActivity
-import com.dudoji.android.follow.repository.FollowRepository
+import com.dudoji.android.presentation.follow.FollowListActivity
 import com.dudoji.android.landmark.activity.LandmarkSearchActivity
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
@@ -120,10 +119,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         locationService = GPSLocationService(this)
 
         setupMyLocationButton()
-
-        lifecycleScope.launch{
-            FollowRepository.loadFollowings() // Load followings
-        }
 
         setupAnimatedNavButtons()
 

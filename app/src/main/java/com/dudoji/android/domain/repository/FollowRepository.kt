@@ -4,6 +4,8 @@ import com.dudoji.android.domain.model.User
 
 interface FollowRepository {
 
+    suspend fun getFollowersNum(): Int
+    suspend fun getFollowingsNum(): Int
     suspend fun followUser(userId: Long)
     suspend fun unfollowUser(userId: Long)
     suspend fun getUsers(
