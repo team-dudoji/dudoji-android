@@ -6,7 +6,7 @@ import android.widget.ImageView
 import coil.load
 import com.airbnb.lottie.LottieAnimationView
 import com.dudoji.android.R
-import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.presentation.map.MapActivity
 
 object AnimatedNavButtonHelper {
 

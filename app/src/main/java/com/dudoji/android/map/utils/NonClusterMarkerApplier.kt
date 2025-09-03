@@ -8,7 +8,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.lifecycleScope
 import coil.request.ImageRequest
 import coil.request.SuccessResult
-import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.presentation.map.MapActivity
 import com.dudoji.android.map.domain.NonClusterMarker
 import com.dudoji.android.network.Coil
 import com.google.android.gms.maps.GoogleMap

@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
-import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.presentation.map.MapActivity
 import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.pin.api.dto.PinRequestDto
 import com.dudoji.android.pin.domain.Pin

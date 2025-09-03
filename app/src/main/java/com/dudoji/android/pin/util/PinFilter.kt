@@ -6,7 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.dudoji.android.R
-import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.presentation.map.MapActivity
 import com.dudoji.android.map.manager.DatabaseMapSectionManager
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who

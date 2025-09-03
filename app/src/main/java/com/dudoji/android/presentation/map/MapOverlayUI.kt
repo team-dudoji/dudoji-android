@@ -1,4 +1,4 @@
-package com.dudoji.android.map.activity
+package com.dudoji.android.presentation.map
 
 import android.content.res.AssetManager
 import android.graphics.drawable.Drawable

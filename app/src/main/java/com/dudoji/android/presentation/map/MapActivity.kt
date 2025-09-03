@@ -1,4 +1,4 @@
-package com.dudoji.android.map.activity
+package com.dudoji.android.presentation.map
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -33,7 +33,6 @@ import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapObject
 import com.dudoji.android.map.utils.MapObjectTextureView
 import com.dudoji.android.map.utils.MapUtil
-import com.dudoji.android.map.utils.fog.FogTextureView
 import com.dudoji.android.map.utils.location.GPSLocationService
 import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
@@ -59,7 +58,7 @@ import java.io.IOException
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
-    data class ActivityMapObject(val latLng: LatLng, val bitmap: Bitmap, val offsetX: Float = 0f, val offsetY: Float = 0f, val width: Int? = null, val height: Int? = null)
+
 
     private lateinit var locationService: LocationService //로케이션 서비스 변수 추가
 
@@ -77,9 +76,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     }
     private val objectTextureView by lazy {
         findViewById<MapObjectTextureView>(R.id.map_object_texture_view)
-    }
-    val fogTextureView: FogTextureView by lazy {
-        findViewById<FogTextureView>(R.id.fog_texture_view)
     }
     var mapOverlayUI: MapOverlayUI? = null
 
@@ -184,8 +180,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         this.googleMap.setMaxZoomPreference(MAX_ZOOM)
         mapCameraPositionController
 
-        fogTextureView.setGoogleMap(googleMap)
-
         lifecycleScope.launch {
             mapSectionManager = DatabaseMapSectionManager(this@MapActivity)
 
@@ -203,11 +197,9 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 pinApplier.onCameraIdle()
                 landmarkApplier.onCameraIdle()
                 npcApplier.onCameraIdle()
-                fogTextureView.updateParticles(mapSectionManager as DatabaseMapSectionManager)
             }
 
             googleMap.setOnCameraMoveListener {
-                fogTextureView.onCameraMoved(mapSectionManager as DatabaseMapSectionManager)
                 updateMapObjects()
             }
 

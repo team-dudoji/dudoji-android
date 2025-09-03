@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".map.activity.MapActivity">
+        tools:context=".presentation.map.MapActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/mapRoot"
@@ -25,12 +25,7 @@
                     android:id="@+id/mapView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
-            <com.dudoji.android.map.utils.fog.FogTextureView
-                    android:id="@+id/fog_texture_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:focusable="false"/>
+
             <com.dudoji.android.map.utils.MapObjectTextureView
                     android:id="@+id/map_object_texture_view"
                     android:layout_width="match_parent"

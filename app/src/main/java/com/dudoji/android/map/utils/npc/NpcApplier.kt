@@ -4,8 +4,8 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.dudoji.android.R
-import com.dudoji.android.map.activity.MapActivity
-import com.dudoji.android.map.activity.MapActivity.ActivityMapObject
+import com.dudoji.android.presentation.map.MapActivity
+import com.dudoji.android.presentation.map.MapActivity.ActivityMapObject
 import com.dudoji.android.map.domain.Npc
 import com.dudoji.android.map.repository.NpcDataSource
 import com.dudoji.android.map.utils.NonClusterMarkerApplier

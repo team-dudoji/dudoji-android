@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.landmark.adapter.HashtagAdapter
-import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.presentation.map.MapActivity
 import com.dudoji.android.mypage.repository.MyPageRemoteDataSource
 import com.dudoji.android.pin.adapter.PinMemoAdapter
 import com.dudoji.android.pin.domain.Pin

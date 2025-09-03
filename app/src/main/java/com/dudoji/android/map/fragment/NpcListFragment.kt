@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dudoji.android.databinding.NpcListModalBinding
-import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.presentation.map.MapActivity
 import com.dudoji.android.map.adapter.NpcListAdapter
 import com.dudoji.android.map.api.dto.NpcMetaDto
 import com.dudoji.android.util.modal.ModalFragment
