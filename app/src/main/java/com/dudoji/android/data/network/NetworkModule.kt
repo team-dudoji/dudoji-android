@@ -17,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -33,6 +34,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @Named("NonAuthed")
     fun provideNonAuthedClient(
         userAgentInterceptor: UserAgentInterceptor
     ): OkHttpClient {
@@ -47,6 +49,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @Named("Authed")
     fun provideAuthedOkHttpClient(
         userAgentInterceptor: UserAgentInterceptor,
         authorizationInterceptor: AuthorizationInterceptor
@@ -63,25 +66,26 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @Named("NonAuthed")
     fun provideNonAuthedRetrofit(
-        userAgentInterceptor: UserAgentInterceptor
+        @Named("NonAuthed") okHttpClient: OkHttpClient,
     ): Retrofit =
         Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .client(provideNonAuthedClient(userAgentInterceptor))
+        .client(okHttpClient)
         .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
     @Provides
     @Singleton
+    @Named("Authed")
     fun provideAuthedRetrofit(
-        userAgentInterceptor: UserAgentInterceptor,
-        authorizationInterceptor: AuthorizationInterceptor
+        @Named("Authed") okHttpClient: OkHttpClient,
     ): Retrofit =
         Retrofit.Builder()
         .baseUrl(RetrofitClient.BASE_URL)
-        .client(provideAuthedOkHttpClient(userAgentInterceptor, authorizationInterceptor))
+        .client(okHttpClient)
         .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
@@ -89,7 +93,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideFollowApiService(
-        retrofit: Retrofit
+        @Named("Authed") retrofit: Retrofit
     ): FollowApiService {
         return retrofit.create(FollowApiService::class.java)
     }
