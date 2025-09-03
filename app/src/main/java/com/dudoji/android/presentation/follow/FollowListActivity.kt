@@ -1,5 +1,6 @@
 package com.dudoji.android.presentation.follow
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -27,6 +28,8 @@ class FollowListActivity: AppCompatActivity() {
 
     companion object {
         const val EXTRA_TYPE = "type"
+        const val UNSELECTED_COLOR = "#666666"
+        const val SELECTED_COLOR = "#FF8445"
     }
 
     private lateinit var binding: ActivityFollowListBinding
@@ -49,7 +52,7 @@ class FollowListActivity: AppCompatActivity() {
 
         binding.followerSection.setOnClickListener { selectSection(UserType.FOLLOWER) }
         binding.followingSection.setOnClickListener { selectSection(UserType.FOLLOWING) }
-        binding.friendAddSection.setOnClickListener { selectSection(UserType.NONE) }
+        binding.noneSection.setOnClickListener { selectSection(UserType.NONE) }
 
         binding.backButton.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         
@@ -102,7 +105,47 @@ class FollowListActivity: AppCompatActivity() {
 
     private fun selectSection(sectionType: UserType) {
         followViewModel.type = sectionType
+        when (sectionType) {
+            UserType.FOLLOWER -> {
+                setSelectSection(UserType.FOLLOWER, true)
+                setSelectSection(UserType.FOLLOWING, false)
+                setSelectSection(UserType.NONE, false)
+            }
+            UserType.FOLLOWING -> {
+                setSelectSection(UserType.FOLLOWER, false)
+                setSelectSection(UserType.FOLLOWING, true)
+                setSelectSection(UserType.NONE, false)
+            }
+            UserType.NONE -> {
+                setSelectSection(UserType.FOLLOWER, false)
+                setSelectSection(UserType.FOLLOWING, false)
+                setSelectSection(UserType.NONE, true)
+            }
+        }
         loadUsers()
+    }
+
+    private fun setSelectSection(sectionType: UserType, selected: Boolean) {
+        val visibility = if (selected) View.VISIBLE else View.INVISIBLE
+        val color = Color.parseColor(if (selected) SELECTED_COLOR else UNSELECTED_COLOR)
+
+        when(sectionType) {
+            UserType.FOLLOWER -> {
+                binding.followerUnderBar.visibility = visibility
+                binding.followerText.setTextColor(color)
+                binding.followersCount.setTextColor(color)
+            }
+            UserType.FOLLOWING -> {
+                binding.followingUnderBar.visibility = visibility
+                binding.followingText.setTextColor(color)
+                binding.followingCount.setTextColor(color)
+            }
+            UserType.NONE -> {
+                binding.noneUnderBar.visibility = visibility
+                binding.noneText.setTextColor(color)
+                binding.personAddIcon.setColorFilter(color)
+            }
+        }
     }
 
     private fun onUserClick(user: User) {
@@ -116,32 +159,7 @@ class FollowListActivity: AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun loadUsers() {
         lifecycleScope.launch {
-            val users = when (followViewModel.type) {
-                UserType.FOLLOWER ->
-                    followViewModel.getUsers(
-                        UserType.FOLLOWER,
-                        0,
-                        20,
-                        SortType.NEWEST,
-                        ""
-                    )
-
-                UserType.FOLLOWING -> followViewModel.getUsers(
-                    UserType.FOLLOWING,
-                    0,
-                    20,
-                    SortType.NEWEST,
-                    ""
-                )
-                else -> followViewModel.getUsers(
-                    UserType.NONE,
-                    0,
-                    20,
-                    SortType.NEWEST,
-                    binding.searchSection.searchEditText.text.toString()
-                )
-            }
-
+            val users = followViewModel.getUsers()
             userList.clear()
             userList.addAll(users)
             followAdapter.notifyDataSetChanged()

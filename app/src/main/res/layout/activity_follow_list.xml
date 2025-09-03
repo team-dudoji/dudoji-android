@@ -50,25 +50,26 @@
     <LinearLayout
             android:id="@+id/stats_section"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:orientation="horizontal"
             android:background="@android:color/white"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
             android:gravity="center_vertical"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <LinearLayout
                 android:id="@+id/follower_section"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center">
-
-        <TextView
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1"/>
+            <TextView
                     android:id="@+id/followers_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -77,6 +78,7 @@
                     android:textStyle="bold" />
 
             <TextView
+                    android:id="@+id/follower_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="팔로워"
@@ -84,16 +86,28 @@
                     android:textSize="14sp"
                     android:layout_marginTop="2dp" />
 
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1" />
+            <View
+                    android:id="@+id/follower_under_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="#FF8445"/>
         </LinearLayout>
 
         <LinearLayout
                 android:id="@+id/following_section"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center">
-
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1"/>
             <TextView
                     android:id="@+id/following_count"
                     android:layout_width="wrap_content"
@@ -105,24 +119,37 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/following_text"
                     android:text="팔로잉"
                     android:textColor="#666666"
                     android:textSize="14sp"
                     android:layout_marginTop="2dp" />
-
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1"/>
+            <View
+                    android:id="@+id/following_under_bar"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="#FF8445"/>
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/friend_add_section"
+                android:id="@+id/none_section"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true">
-
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1"/>
             <ImageView
                     android:id="@+id/person_add_icon"
                     android:layout_width="24dp"
@@ -131,11 +158,21 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/none_text"
                     android:text="친구 추가"
                     android:textColor="#666666"
                     android:textSize="14sp"
                     android:layout_marginTop="2dp" />
-
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1"/>
+            <View
+                    android:id="@+id/none_under_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:visibility="invisible"
+                    android:background="#FF8445"/>
         </LinearLayout>
 
     </LinearLayout>
