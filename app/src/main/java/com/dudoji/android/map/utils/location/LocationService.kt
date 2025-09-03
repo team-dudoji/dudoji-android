@@ -1,7 +1,6 @@
 package com.dudoji.android.map.utils.location
 
 import android.location.Location
-import com.google.android.gms.location.LocationResult
 
 interface LocationService {
     companion object{
@@ -18,5 +17,5 @@ interface LocationService {
             return lastLocation?.let {Pair(it.latitude, it.longitude)} ?: Pair(0.0, 0.0)
         }
     }
-    fun setLocationCallback(callback: (LocationResult?)->Unit)
+    fun setLocationCallback(callback: (Location)->Unit)
 }

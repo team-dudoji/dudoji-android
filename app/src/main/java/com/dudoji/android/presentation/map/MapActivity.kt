@@ -26,12 +26,10 @@ import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
 import com.dudoji.android.map.domain.Npc
 import com.dudoji.android.map.fragment.QuestFragment
-import com.dudoji.android.map.repository.RevealCircleRepository
 import com.dudoji.android.map.utils.MapCameraPositionController
 import com.dudoji.android.map.utils.MapDirectionController
 import com.dudoji.android.map.utils.MapObject
 import com.dudoji.android.map.utils.location.GPSLocationService
-import com.dudoji.android.map.utils.location.LocationCallbackFilter
 import com.dudoji.android.map.utils.location.LocationService
 import com.dudoji.android.map.utils.npc.NpcApplier
 import com.dudoji.android.map.utils.ui.LandmarkBottomSheet
@@ -115,13 +113,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setupLocationUpdates(){
-        locationService.setLocationCallback { locationResult ->
-            locationResult?.lastLocation?.let {
-                if (!LocationCallbackFilter.isSameLocation(it)) {
-                    RevealCircleRepository.addLocation(it)
-                }
-                mapCameraPositionController.updateLocation(it)
-            }
+        locationService.setLocationCallback { location ->
+            mapCameraPositionController.updateLocation(location)
         }
     }
 
@@ -216,7 +209,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         directionController = MapDirectionController(this@MapActivity, mapCameraPositionController)
         directionController.start()
 
-        mapOverlayUI = MapOverlayUI(assets, this, googleMap, pinApplier, clusterManager)
+        mapOverlayUI = MapOverlayUI(binding, this, assets, googleMap, pinApplier, clusterManager)
     }
 
     private fun updateMapObjects() {

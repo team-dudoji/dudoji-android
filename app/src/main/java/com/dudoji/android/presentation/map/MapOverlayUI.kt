@@ -4,14 +4,11 @@ import android.content.res.AssetManager
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import coil.load
-import com.airbnb.lottie.LottieAnimationView
 import com.dudoji.android.R
+import com.dudoji.android.databinding.ActivityMapBinding
 import com.dudoji.android.map.fragment.NpcListFragment
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.util.PinApplier
@@ -22,28 +19,15 @@ import com.google.maps.android.clustering.ClusterManager
 import java.io.IOException
 
 @RequiresApi(Build.VERSION_CODES.O)
-class MapOverlayUI(val assets: AssetManager, val activity: MapActivity, val googleMap: GoogleMap, val pinApplier: PinApplier, val clusterManager: ClusterManager<Pin>) {
+class MapOverlayUI(val binding: ActivityMapBinding, val activity: MapActivity, val assets: AssetManager, val googleMap: GoogleMap, val pinApplier: PinApplier, val clusterManager: ClusterManager<Pin>) {
 
-    val questPageButton: ImageButton by lazy {
-        activity.findViewById<ImageButton>(R.id.quest_modal_button)
-    }
-    val pinSetter: ImageView by lazy {
-        activity.findViewById(R.id.pinSetter)
-    }
-    val pinDropZone: FrameLayout by lazy {
-        activity.findViewById(R.id.outer_drop_zone)
-    }
-    val itemModal: LinearLayout by lazy {
-        activity.findViewById(R.id.item_modal)
-    }
-    val itemButton = activity.findViewById<ImageButton>(R.id.btnItem)
     var pinSetterController: PinSetterController? = null
 
     init {
         setPinSetterController()
         setupFilterBarToggle()
 
-        questPageButton.setOnClickListener {
+        binding.mapOverlayUiLayout.questModalButton.setOnClickListener {
             Modal.showCustomModal(
                 activity,
                 NpcListFragment(activity),
@@ -51,10 +35,10 @@ class MapOverlayUI(val assets: AssetManager, val activity: MapActivity, val goog
             )}
 
         val naviAssetPath = "file:///android_asset/navi/"
-        itemButton.load(naviAssetPath + "ic_item.png")
+        binding.mapOverlayUiLayout.btnItem.load(naviAssetPath + "ic_item.png")
 
-        itemButton.setOnClickListener {
-            itemModal.visibility = if (itemModal.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        binding.mapOverlayUiLayout.btnItem.setOnClickListener {
+            binding.mapOverlayUiLayout.itemModal.visibility = if (binding.mapOverlayUiLayout.itemModal.isVisible) View.GONE else View.VISIBLE
         }
     }
 
@@ -65,29 +49,32 @@ class MapOverlayUI(val assets: AssetManager, val activity: MapActivity, val goog
             val pinSetterBg = assets.open("pin/pin_button.png").use { inputStream ->
                 Drawable.createFromStream(inputStream, null)
             }
-            pinSetter.background = pinSetterBg
+            binding.mapOverlayUiLayout.pinSetter.background = pinSetterBg
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
-        pinSetterController = PinSetterController(pinSetter, pinDropZone ,pinApplier, googleMap, activity, clusterManager)
+        pinSetterController = PinSetterController(
+            binding.mapOverlayUiLayout.pinSetter,
+            binding.outerDropZone,
+            pinApplier,
+            googleMap,
+            activity,
+            clusterManager
+        )
     }
 
     private fun setupFilterBarToggle() {
-        val btnFilter = activity.findViewById<ImageButton>(R.id.btnFilter)
-        val filterBarWrapper = activity.findViewById<FrameLayout>(R.id.filterBarWrapper)
-        val filterBarAnim = activity.findViewById<LottieAnimationView>(R.id.filterBarAnim)
-
         var isFilterBarVisible = false
 
-        btnFilter.setOnClickListener {
+        binding.mapOverlayUiLayout.btnFilter.setOnClickListener {
             isFilterBarVisible = !isFilterBarVisible
             if (isFilterBarVisible) {
-                filterBarWrapper.visibility = View.VISIBLE
-                filterBarAnim.progress = 0f
-                filterBarAnim.playAnimation()
+                binding.mapOverlayUiLayout.filterBarWrapper.visibility = View.VISIBLE
+                binding.mapOverlayUiLayout.filterBarAnim.progress = 0f
+                binding.mapOverlayUiLayout.filterBarAnim.playAnimation()
             } else {
-                filterBarWrapper.visibility = View.GONE
+                binding.mapOverlayUiLayout.filterBarWrapper.visibility = View.GONE
             }
         }
     }

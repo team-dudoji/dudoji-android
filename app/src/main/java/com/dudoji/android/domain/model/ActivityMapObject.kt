@@ -10,4 +10,4 @@ data class ActivityMapObject(
         val offsetY: Float = 0f,
         val width: Int? = null,
         val height: Int? = null
-    )
+)

@@ -10,6 +10,7 @@ import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
 import com.dudoji.android.presentation.map.MapActivity
 
+@RequiresApi(Build.VERSION_CODES.O)
 class PinFilter(
     private val activity: AppCompatActivity,
 ) {
@@ -28,7 +29,6 @@ class PinFilter(
             visibilityMap[pin.master] == true
         }
     }
-
 
     fun setupFilterButtons() {
         btnMine = activity.findViewById(R.id.btnFilterMine)
