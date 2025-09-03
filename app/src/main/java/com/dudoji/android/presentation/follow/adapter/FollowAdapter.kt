@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dudoji.android.R
@@ -15,9 +17,8 @@ import com.dudoji.android.domain.model.User
 
 @RequiresApi(Build.VERSION_CODES.O)
 class FollowAdapter(
-    private val users: List<User>,
     private val onFollowClick: (User) -> Unit,
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : ListAdapter<User, FollowAdapter.FollowViewHolder>(UserDiffCallback) {
 
     companion object {
         private const val VIEW_TYPE_FOLLOWED = 1
@@ -32,32 +33,24 @@ class FollowAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (users[position].followingAt != null) {
+        if (getItem(position).followingAt != null) {
             return VIEW_TYPE_FOLLOWED
         }
         return VIEW_TYPE_UNFOLLOWED
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowViewHolder {
-        when (viewType) {
-            VIEW_TYPE_FOLLOWED -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.follow_followed_user_item, parent, false)
-                return FollowViewHolder(view)
-            }
-            VIEW_TYPE_UNFOLLOWED -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.follow_unfollowed_user_item, parent, false)
-                return FollowViewHolder(view)
-            }
+        val layoutId = when (viewType) {
+            VIEW_TYPE_FOLLOWED -> R.layout.follow_followed_user_item
+            VIEW_TYPE_UNFOLLOWED -> R.layout.follow_unfollowed_user_item
             else -> throw IllegalArgumentException("Unknown viewType: $viewType")
         }
+        val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
+        return FollowViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val user = users[position]
-
-        if (holder !is FollowViewHolder) return
+    override fun onBindViewHolder(holder: FollowViewHolder, position: Int) {
+        val user = getItem(position)
 
         holder.name.text = user.name
         holder.email.text = user.email
@@ -69,9 +62,16 @@ class FollowAdapter(
 
         holder.actionButton.setOnClickListener {
             onFollowClick.invoke(user)
-            notifyItemRangeChanged(position, 1)
         }
     }
 
-    override fun getItemCount(): Int = users.size
+    object UserDiffCallback : DiffUtil.ItemCallback<User>() {
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+            return oldItem == newItem
+        }
+    }
 }

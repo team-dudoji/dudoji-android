@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -37,7 +36,6 @@ class FollowListActivity: AppCompatActivity() {
     private val followViewModel: FollowViewModel by viewModels()
 
     private lateinit var followAdapter: FollowAdapter
-    private val userList = mutableListOf<User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,33 +43,37 @@ class FollowListActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         val typeString = intent.getStringExtra(EXTRA_TYPE) ?: "NONE"
-        followViewModel.type = UserType.valueOf(typeString)
+        followViewModel.loadInitialData(UserType.valueOf(typeString))
 
         binding.sortButton.load("file:///android_asset/follow/ic_sort_up_down.png")
         binding.personAddIcon.load("file:///android_asset/follow/person_add.png")
 
-        binding.followerSection.setOnClickListener { selectSection(UserType.FOLLOWER) }
-        binding.followingSection.setOnClickListener { selectSection(UserType.FOLLOWING) }
-        binding.noneSection.setOnClickListener { selectSection(UserType.NONE) }
+        binding.followerSection.setOnClickListener { followViewModel.setListType(UserType.FOLLOWER) }
+        binding.followingSection.setOnClickListener { followViewModel.setListType(UserType.FOLLOWING) }
+        binding.noneSection.setOnClickListener { followViewModel.setListType(UserType.NONE) }
 
         binding.backButton.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         
         binding.followListRecyclerView.layoutManager = LinearLayoutManager(this)
-        followAdapter = FollowAdapter(userList, { onUserClick(it) })
+        followAdapter = FollowAdapter({ onUserClick(it) })
         binding.followListRecyclerView.adapter = followAdapter
 
         binding.searchSection.searchEditText.doOnTextChanged {
             text, _, _, _ ->
-            followViewModel.keyword = text.toString()
-            this.loadUsers()
-            this.loadCounts()
+            followViewModel.setSearchKeyword(text.toString())
             true
         }
 
         binding.sortButton.setOnClickListener { v -> showSortPopup(v) }
 
-        selectSection(followViewModel.type)
-        loadCounts()
+        lifecycleScope.launch {
+            followViewModel.uiState.collect { state ->
+                selectSection(state.currentType)
+                followAdapter.submitList(state.users)
+                binding.followingCount.text = state.followingCount.toString()
+                binding.followersCount.text = state.followerCount.toString()
+            }
+        }
     }
 
     private fun showSortPopup(anchor: View) {
@@ -80,8 +82,7 @@ class FollowListActivity: AppCompatActivity() {
         popup.menuInflater.inflate(R.menu.follow_sort_menu, popup.menu)
         popup.menu.setGroupCheckable(R.id.group_sort, true, true)
 
-        // 현재 정렬 상태 체크 표시
-        val checkedId = when (followViewModel.sort) {
+        val checkedId = when (followViewModel.uiState.value.sort) {
             SortType.NAME_ASC -> R.id.sort_name
             SortType.NEWEST   -> R.id.sort_latest
             SortType.OLDEST   -> R.id.sort_oldest
@@ -91,20 +92,19 @@ class FollowListActivity: AppCompatActivity() {
 
         popup.setOnMenuItemClickListener { item ->
             item.isChecked = true
-            followViewModel.sort = when (item.itemId) {
+            val newSortType = when (item.itemId) {
                 R.id.sort_name   -> SortType.NAME_ASC
                 R.id.sort_latest -> SortType.NEWEST
                 R.id.sort_oldest -> SortType.OLDEST
-                else             -> followViewModel.sort
+                else             -> followViewModel.uiState.value.sort
             }
-            loadUsers()
+            followViewModel.setSortType(newSortType)
             true
         }
         popup.show()
     }
 
     private fun selectSection(sectionType: UserType) {
-        followViewModel.type = sectionType
         when (sectionType) {
             UserType.FOLLOWER -> {
                 setSelectSection(UserType.FOLLOWER, true)
@@ -122,7 +122,6 @@ class FollowListActivity: AppCompatActivity() {
                 setSelectSection(UserType.NONE, true)
             }
         }
-        loadUsers()
     }
 
     private fun setSelectSection(sectionType: UserType, selected: Boolean) {
@@ -151,31 +150,6 @@ class FollowListActivity: AppCompatActivity() {
     private fun onUserClick(user: User) {
         lifecycleScope.launch {
             followViewModel.toggleFollow(user)
-            loadUsers()
-            loadCounts()
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun loadUsers() {
-        lifecycleScope.launch {
-            val users = followViewModel.getUsers()
-            userList.clear()
-            userList.addAll(users)
-            followAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun loadCounts() {
-        lifecycleScope.launch {
-            try {
-                binding.followersCount.text = followViewModel.getFollowersNum().toString()
-                binding.followingCount.text = followViewModel.getFollowingsNum().toString()
-            } catch (e: Exception) {
-                binding.followersCount.text = "0"
-                binding.followingCount.text = "0"
-                Toast.makeText(this@FollowListActivity, "수 불러오기 실패", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 }
