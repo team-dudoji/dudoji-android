@@ -4,10 +4,10 @@ import RetrofitClient
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.dudoji.android.data.remote.FollowApiService
+import com.dudoji.android.domain.model.SortType
 import com.dudoji.android.domain.model.User
+import com.dudoji.android.domain.model.UserType
 import com.dudoji.android.domain.repository.FollowRepository
-import com.dudoji.android.domain.repository.FollowRepository.SortType
-import com.dudoji.android.domain.repository.FollowRepository.UserType
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -38,9 +38,9 @@ class FollowRepositoryImpl @Inject constructor(
         keyword: String
     ): List<User> {
          return when (userType) {
-             FollowRepository.UserType.FOLLOWER -> followApiService.getFollowers().body().orEmpty()
-             FollowRepository.UserType.FOLLOWING -> followApiService.getFollowings().body().orEmpty()
-             FollowRepository.UserType.NONE -> followApiService.getRecommendedUsers(keyword).body().orEmpty()
+             UserType.FOLLOWER -> followApiService.getFollowers().body().orEmpty()
+             UserType.FOLLOWING -> followApiService.getFollowings().body().orEmpty()
+             UserType.NONE -> followApiService.getRecommendedUsers(keyword).body().orEmpty()
          }
     }
 }

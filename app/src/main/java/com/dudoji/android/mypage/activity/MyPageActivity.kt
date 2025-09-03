@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dudoji.android.R
+import com.dudoji.android.domain.model.UserType
 import com.dudoji.android.presentation.follow.FollowListActivity
 import com.dudoji.android.mypage.adapter.AchievementAdapter
 import com.dudoji.android.mypage.adapter.DailyQuestAdapter
@@ -103,14 +104,14 @@ class MyPageActivity : AppCompatActivity() {
 
             followerSection.setOnClickListener {
                 val intent = Intent(this@MyPageActivity, FollowListActivity::class.java)
-                intent.putExtra(FollowListActivity.EXTRA_TYPE, FollowListActivity.FollowListType.FOLLOWER.toString())
+                intent.putExtra(FollowListActivity.EXTRA_TYPE, UserType.FOLLOWER.toString())
                 startActivity(intent)
             }
 
             followingSection.setOnClickListener {
                 Log.d("MyPageDEBUG", "팔로워 섹션 클릭됨")
                 val intent = Intent(this@MyPageActivity, FollowListActivity::class.java)
-                intent.putExtra(FollowListActivity.EXTRA_TYPE, FollowListActivity.FollowListType.FOLLOWING.toString())
+                intent.putExtra(FollowListActivity.EXTRA_TYPE, UserType.FOLLOWING.toString())
                 startActivity(intent)
             }
 
