@@ -103,14 +103,14 @@ class MyPageActivity : AppCompatActivity() {
 
             followerSection.setOnClickListener {
                 val intent = Intent(this@MyPageActivity, FollowListActivity::class.java)
-                intent.putExtra(FollowListActivity.EXTRA_TYPE, FollowListActivity.TYPE_FOLLOWER)
+                intent.putExtra(FollowListActivity.EXTRA_TYPE, FollowListActivity.FollowListType.FOLLOWER.toString())
                 startActivity(intent)
             }
 
             followingSection.setOnClickListener {
                 Log.d("MyPageDEBUG", "팔로워 섹션 클릭됨")
                 val intent = Intent(this@MyPageActivity, FollowListActivity::class.java)
-                intent.putExtra(FollowListActivity.EXTRA_TYPE, FollowListActivity.TYPE_FOLLOWING)
+                intent.putExtra(FollowListActivity.EXTRA_TYPE, FollowListActivity.FollowListType.FOLLOWING.toString())
                 startActivity(intent)
             }
 
