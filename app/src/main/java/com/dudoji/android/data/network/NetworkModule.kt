@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.dudoji.android.BuildConfig
 import com.dudoji.android.data.remote.FollowApiService
+import com.dudoji.android.network.utils.LocalDateAdapter
 import com.dudoji.android.network.utils.LocalDateTimeAdapter
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -15,6 +16,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -29,6 +31,7 @@ object NetworkModule {
 
     val gson = GsonBuilder()
         .setLenient()
+        .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
         .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
         .create()
 
