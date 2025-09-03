@@ -13,8 +13,8 @@ interface FollowApiService {
     @GET("/api/user/follows")
     suspend fun getFollowings(): Response<List<User>>
 
-    @GET("/api/user/follows/follwer")
-    suspend fun getFollowers(): Response<List<User>>
+    @GET("/api/user/follows/follower")
+    suspend fun getFollowers(): Response<List<User>?>
 
     @POST("/api/user/follows/{userId}")
     suspend fun addFriend(@Path("userId") userId: Long): Response<Boolean>

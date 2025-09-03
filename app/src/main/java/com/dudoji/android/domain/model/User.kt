@@ -1,6 +1,6 @@
 package com.dudoji.android.domain.model
 
-import java.util.Date
+import java.time.LocalDate
 
 data class User (
     val id: Long,
@@ -8,10 +8,8 @@ data class User (
     val role: String,
     val name:  String,
     val email: String,
-    val createAt: Date,
+    val createAt: LocalDate,
     val profileImageUrl: String,
-    val followedAt: Date? = null,
-    val followingAt: Date? = null
-){
-
-}
+    val followedAt: LocalDate? = null,
+    val followingAt: LocalDate? = null
+)

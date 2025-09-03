@@ -32,7 +32,7 @@ class FollowAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (users[position].followedAt != null) {
+        if (users[position].followingAt != null) {
             return VIEW_TYPE_FOLLOWED
         }
         return VIEW_TYPE_UNFOLLOWED
@@ -72,29 +72,6 @@ class FollowAdapter(
             notifyItemRangeChanged(position, 1)
         }
     }
-
-//    private fun handleFollowAction(user: User, button: Button) {
-//        val isFollowingNow = user.followingAt != null
-//
-//        val result: Boolean
-//        if (isFollowingNow) {
-//            result = FollowRepository.deleteFollowing(user)
-//            if (result) {
-//                Toast.makeText(activity, "${user.name}님을 언팔로우했습니다.", Toast.LENGTH_SHORT).show()
-//            }
-//        } else {
-//            result = FollowRepository.addFollowing(user)
-//            if (result) {
-//                Toast.makeText(activity, "${user.name}님을 팔로우했습니다.", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//
-//        if (result) {
-//            updateFollowButtonState(button, !isFollowingNow)
-//        } else {
-//            Toast.makeText(activity, "요청에 실패했습니다.", Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
     override fun getItemCount(): Int = users.size
 }
