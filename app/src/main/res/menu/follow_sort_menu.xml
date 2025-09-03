@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+            android:id="@+id/group_sort"
+            android:checkableBehavior="single">
+
+        <item android:id="@+id/sort_name"   android:title="가나다순" android:checkable="true"/>
+        <item android:id="@+id/sort_latest" android:title="최신순"   android:checkable="true"/>
+        <item android:id="@+id/sort_oldest" android:title="오래된순"  android:checkable="true"/>
+    </group>
+</menu>

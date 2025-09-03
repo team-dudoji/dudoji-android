@@ -9,16 +9,16 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class LocalDateTimeAdapter : JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
+class LocalDateAdapter : JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
     @RequiresApi(Build.VERSION_CODES.O)
-    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun serialize(
-        src: LocalDateTime?,
+        src: LocalDate?,
         typeOfSrc: Type?,
         context: JsonSerializationContext?
     ): JsonElement? {
@@ -30,7 +30,7 @@ class LocalDateTimeAdapter : JsonSerializer<LocalDateTime>, JsonDeserializer<Loc
         json: JsonElement?,
         typeOfT: Type?,
         context: JsonDeserializationContext?
-    ): LocalDateTime? {
-        return LocalDateTime.parse(json?.asString, formatter)
+    ): LocalDate? {
+        return LocalDate.parse(json?.asString, formatter)
     }
 }

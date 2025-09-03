@@ -1,5 +1,6 @@
 package com.dudoji.android.pin.util
 
+import RetrofitClient
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
@@ -15,8 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dudoji.android.R
-import com.dudoji.android.follow.domain.User
-import com.dudoji.android.follow.repository.FollowRepository
 import com.dudoji.android.landmark.adapter.HashtagAdapter
 import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.mypage.repository.MyPageRemoteDataSource
@@ -28,8 +27,8 @@ import com.dudoji.android.util.modal.Modal
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.util.Date
 
+@RequiresApi(Build.VERSION_CODES.O)
 object PinModal {
 
     private data class Ui(
@@ -44,7 +43,6 @@ object PinModal {
         val hashtagRv: RecyclerView
     )
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun openPinMemoModal(activity: AppCompatActivity, pin: Pin) {
         Modal.showCustomModal(activity, R.layout.show_pin_memo_modal) { view ->
             val ui = bindViews(view, activity)
@@ -54,7 +52,6 @@ object PinModal {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun openPinMemosModal(activity: AppCompatActivity, pins: List<Pin>) {
         Modal.showCustomModal(activity, R.layout.show_pin_memos_modal) { view ->
             val memos = view.findViewById<RecyclerView>(R.id.memos_recycler_view)
@@ -66,7 +63,6 @@ object PinModal {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun openPinDataModal(activity: MapActivity, lat: Double, lng: Double, onComplete: (PinMakeData) -> Unit) {
         Modal.showCustomModal(activity, PinMemoInputFragment(lat, lng, activity, onComplete))
     }
@@ -93,7 +89,6 @@ object PinModal {
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun bindBasicPinInfo(
         activity: AppCompatActivity,
         ui: Ui,
@@ -150,7 +145,7 @@ object PinModal {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun setupFollowSection(
         activity: AppCompatActivity,
         ui: Ui,
@@ -223,22 +218,10 @@ object PinModal {
             render()
 
             activity.lifecycleScope.launch {
-                val userStub = User(
-                    id = pin.userId,
-                    name = targetName,
-                    email = "",
-                    profileImageUrl = "",
-                    password = "",
-                    role = "",
-                    createAt = Date(),
-                    provider = "",
-                    providerId = ""
-                )
-
                 val ok = if (isFollowing) {
-                    FollowRepository.addFollowing(userStub)
+                    RetrofitClient.followApiService.addFriend(pin.userId).isSuccessful
                 } else {
-                    FollowRepository.deleteFollowing(userStub)
+                    RetrofitClient.followApiService.deleteFriend(pin.userId).isSuccessful
                 }
 
                 if (ok) {
@@ -248,7 +231,6 @@ object PinModal {
                         if (targetName == "사용자") "언팔로우했습니다." else "${targetName}님을 언팔로우했습니다."
                     }
                     Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
-                    FollowRepository.getFollowings()
                 } else {
                     isFollowing = prev
                     render()
@@ -257,7 +239,6 @@ object PinModal {
             }
         }
     }
-
 
     private fun AppCompatActivity.loadAssetDrawable(path: String): Drawable? =
         try {

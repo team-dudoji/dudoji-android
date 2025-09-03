@@ -19,8 +19,7 @@ import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.config.MAX_ZOOM
 import com.dudoji.android.config.MIN_ZOOM
-import com.dudoji.android.follow.activity.FollowListActivity
-import com.dudoji.android.follow.repository.FollowRepository
+import com.dudoji.android.domain.model.UserType
 import com.dudoji.android.landmark.activity.LandmarkSearchActivity
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
@@ -46,6 +45,7 @@ import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinFilter
 import com.dudoji.android.pin.util.PinRenderer
+import com.dudoji.android.presentation.follow.FollowListActivity
 import com.dudoji.android.shop.activity.ShopActivity
 import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.dudoji.android.util.modal.Modal
@@ -120,10 +120,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         locationService = GPSLocationService(this)
 
         setupMyLocationButton()
-
-        lifecycleScope.launch{
-            FollowRepository.loadFollowings() // Load followings
-        }
 
         setupAnimatedNavButtons()
 
@@ -266,7 +262,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             },
             onSocialClick = {
                 val intent = Intent(this, FollowListActivity::class.java)
-                intent.putExtra(FollowListActivity.EXTRA_TYPE, FollowListActivity.TYPE_FOLLOWER) // 기본으로 팔로워 페이지 이동
+                intent.putExtra(FollowListActivity.EXTRA_TYPE, UserType.FOLLOWER.toString()) // 기본으로 팔로워 페이지 이동
                 startActivity(intent)
             },
             onProfileClick = {

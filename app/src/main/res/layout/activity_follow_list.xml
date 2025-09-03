@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F5F5F5"
-        tools:context=".follow.activity.FollowListActivity">
+        tools:context=".presentation.follow.FollowListActivity">
 
     <LinearLayout
             android:id="@+id/toolbar"
@@ -31,7 +31,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="팔로워 목록"
+                android:text="소셜"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -39,8 +39,9 @@
 
         <ImageButton
                 android:id="@+id/sort_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitCenter"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="16dp" />
 
@@ -49,25 +50,26 @@
     <LinearLayout
             android:id="@+id/stats_section"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:orientation="horizontal"
             android:background="@android:color/white"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
             android:gravity="center_vertical"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <LinearLayout
                 android:id="@+id/follower_section"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center">
-
-        <TextView
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1"/>
+            <TextView
                     android:id="@+id/followers_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -76,6 +78,7 @@
                     android:textStyle="bold" />
 
             <TextView
+                    android:id="@+id/follower_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="팔로워"
@@ -83,16 +86,28 @@
                     android:textSize="14sp"
                     android:layout_marginTop="2dp" />
 
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1" />
+            <View
+                    android:id="@+id/follower_under_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="#FF8445"/>
         </LinearLayout>
 
         <LinearLayout
                 android:id="@+id/following_section"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center">
-
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1"/>
             <TextView
                     android:id="@+id/following_count"
                     android:layout_width="wrap_content"
@@ -104,24 +119,37 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/following_text"
                     android:text="팔로잉"
                     android:textColor="#666666"
                     android:textSize="14sp"
                     android:layout_marginTop="2dp" />
-
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1"/>
+            <View
+                    android:id="@+id/following_under_bar"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="#FF8445"/>
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/friend_add_section"
+                android:id="@+id/none_section"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true">
-
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1"/>
             <ImageView
                     android:id="@+id/person_add_icon"
                     android:layout_width="24dp"
@@ -130,11 +158,21 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/none_text"
                     android:text="친구 추가"
                     android:textColor="#666666"
                     android:textSize="14sp"
                     android:layout_marginTop="2dp" />
-
+            <View
+                    android:layout_height="0dp"
+                    android:layout_width="30dp"
+                    android:layout_weight="1"/>
+            <View
+                    android:id="@+id/none_under_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:visibility="invisible"
+                    android:background="#FF8445"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -151,10 +189,21 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@id/divider"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/search_section"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:clipToPadding="false"
-            tools:listitem="@layout/deletable_following_item" />
+            android:layout_marginBottom="20dp"
+            tools:listitem="@layout/follow_followed_user_item" />
+
+    <include
+            android:id="@+id/search_section"
+            layout="@layout/follow_search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
