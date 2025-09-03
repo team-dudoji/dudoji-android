@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.dudoji.android"
-    compileSdk = 35
+    compileSdk = 36
 
     // api key load
     fun getApiKey(propertyKey: String): String{
@@ -73,6 +73,8 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity.ktx)
+    implementation("androidx.fragment:fragment-ktx:1.8.9")
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
@@ -95,7 +97,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.converter.scalars)
 
-    implementation("io.coil-kt:coil:2.4.0")
+    implementation(libs.coil)
 
     implementation(libs.v2.user) // 카카오 로그인 API 모듈
 
@@ -106,6 +108,6 @@ dependencies {
     implementation(libs.androidx.biometric.ktx) // 생체 인식 라이브러리
 
     // DI
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
