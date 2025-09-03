@@ -11,6 +11,15 @@ import retrofit2.http.Query
 interface FollowApiService {
 
     @GET("/api/user/follows")
+    suspend fun getUsers(
+        @Query("type") type: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sort") sort: String,
+        @Query("keyword") keyword: String
+    ): Response<List<User>>
+
+    @GET("/api/user/follows")
     suspend fun getFollowings(): Response<List<User>>
 
     @GET("/api/user/follows/follower")
