@@ -1,4 +1,4 @@
-package com.dudoji.android.map.utils.location
+package com.dudoji.android.data.datasource.location
 
 import android.location.Location
 

@@ -1,30 +1,27 @@
-package com.dudoji.android.map.utils.location
+package com.dudoji.android.data.datasource.location
 
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Handler
 import android.os.Looper
 import androidx.core.content.ContextCompat
-import com.dudoji.android.map.utils.location.LocationService.Companion.LOCATION_CALLBACK_INTERVAL
+import com.dudoji.android.data.datasource.location.LocationService.Companion.LOCATION_CALLBACK_INTERVAL
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-// Location을 지속적으로 받아오는 Class
-class GPSLocationService: LocationService { // 위치 서비스 초기화 때문에 context를 private으로 저장
+class GPSLocationService @Inject constructor(
+    @ApplicationContext private val context: Context
+) : LocationService {
 
-    private var context: Context //외부에서 전달받은 Context를 저장하는 변수
-    private lateinit var fusedLocationClient: FusedLocationProviderClient // 위치 정보 제공
-    private lateinit var locationListener: LocationListener // 위치 업데이트 콜백
-    private val handler: Handler // 메인 스레드에서 작업을 예약하기 위한 Handler 객체
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationListener: LocationListener
 
-
-    constructor(context: Context) { // 생성자 // 초기화 context를 받기 위해 추가
-        this.context = context//conext를 인자로 받아 객체를 생성하는 생성자
-        handler = Handler(Looper.getMainLooper())
+    init {
         setupLocationComponents()
     }
 
@@ -36,7 +33,7 @@ class GPSLocationService: LocationService { // 위치 서비스 초기화 때문
             }
         }
 
-        val locationRequest = LocationRequest.Builder(1000L)
+        val locationRequest = LocationRequest.Builder(LOCATION_CALLBACK_INTERVAL)
             .setWaitForAccurateLocation(false)
             .setMinUpdateIntervalMillis(LOCATION_CALLBACK_INTERVAL / 2)
             .setMaxUpdateDelayMillis(LOCATION_CALLBACK_INTERVAL)
