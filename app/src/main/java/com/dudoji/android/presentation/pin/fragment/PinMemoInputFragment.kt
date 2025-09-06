@@ -70,7 +70,6 @@ class PinMemoInputFragment(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = EditPinMemoModalBinding.inflate(inflater, container, false)
         initViews()
@@ -91,6 +90,7 @@ class PinMemoInputFragment(
             binding.pinColorSelectButton.background = pinButtonBg
         } catch (e: IOException) { e.printStackTrace() }
 
+        initDefaultPinSkin()
         loadAddress()
         updateDateText()
         setupHashtagEditRecyclerView()
@@ -135,7 +135,6 @@ class PinMemoInputFragment(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun loadAddress() {
         Geocoder(requireContext(), Locale.getDefault()).getFromLocation(lat, lng, 1) { addresses ->
             address = addresses.firstOrNull()?.getAddressLine(0) ?: "주소를 가져올 수 없습니다."
@@ -143,7 +142,6 @@ class PinMemoInputFragment(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showDatePicker() {
         DatePickerDialog(
             requireContext(),
@@ -165,6 +163,14 @@ class PinMemoInputFragment(
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         val weekDay = WeekTranslator.translateWeekToKorean(calendar.get(Calendar.DAY_OF_WEEK))
         binding.memoDate.text = "$year.$month.$day ($weekDay)"
+    }
+
+    private fun initDefaultPinSkin() {
+        lifecycleScope.launch {
+            val defaultPinSkin = pinSkinRepository.getPinSkins()[0]
+            selectedPinColor = defaultPinSkin
+            binding.pinColorSelectButton.background = pinSkinRepository.getPinSkinDrawableById(defaultPinSkin.id, requireContext())
+        }
     }
 
     private fun saveMemo() {

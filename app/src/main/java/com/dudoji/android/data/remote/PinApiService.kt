@@ -47,8 +47,8 @@ interface PinApiService {
     @GET("/api/user/pin-skins")
     suspend fun getPinSkins(): Response<List<PinSkinDto>>
 
-//    @GET("/api/user/pin-skins/{pinSkinId}")
-//    suspend fun getPinSkin(
-//        @Path("pinSkinId") pinSkinId: Long
-//    ): Response<PinSkinDto>
+    @GET("/api/user/pin-skins/{pinSkinId}")
+    suspend fun getPinSkin(
+        @Path("pinSkinId") pinSkinId: Long
+    ): Response<PinSkinDto>
 }
