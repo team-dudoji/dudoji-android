@@ -90,8 +90,9 @@ class MapViewModel @Inject constructor(
 
     fun toggleVisibility(who: Who) {
         val current = _visibilityMap.value[who] ?: true
-        _visibilityMap.value[who] = !current
-        _visibilityMap.value = _visibilityMap.value
+        _visibilityMap.value = _visibilityMap.value.toMutableMap().apply {
+            this[who] = !current
+        }
     }
 
     private val _centerLocation = MutableStateFlow<LatLng>(LatLng(0.0, 0.0))
