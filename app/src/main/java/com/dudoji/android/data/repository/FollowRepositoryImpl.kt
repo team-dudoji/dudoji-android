@@ -1,7 +1,7 @@
 package com.dudoji.android.data.repository
 
-import RetrofitClient
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.data.remote.api.FollowApiService
 import com.dudoji.android.domain.model.SortType
@@ -23,7 +23,7 @@ class FollowRepositoryImpl @Inject constructor(
     }
 
     override suspend fun followUser(userId: Long) {
-        RetrofitClient.followApiService.addFriend(userId)
+        followApiService.addFriend(userId)
     }
 
     override suspend fun unfollowUser(userId: Long) {
@@ -37,10 +37,16 @@ class FollowRepositoryImpl @Inject constructor(
         sortType: SortType,
         keyword: String
     ): List<User> {
-         return when (userType) {
+
+        val response = followApiService.getFollowings()
+        Log.d("FollowRepository", "getUsers: ${response.raw()}")
+         val result = when (userType) {
              UserType.FOLLOWER -> followApiService.getFollowers().body().orEmpty()
              UserType.FOLLOWING -> followApiService.getFollowings().body().orEmpty()
              UserType.NONE -> followApiService.getRecommendedUsers(keyword).body().orEmpty()
          }
+        Log.d("FollowRepository", "getUsers: $result")
+
+        return result
     }
 }

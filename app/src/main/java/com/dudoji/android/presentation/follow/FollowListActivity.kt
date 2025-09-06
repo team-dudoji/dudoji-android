@@ -1,13 +1,14 @@
 package com.dudoji.android.presentation.follow
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.toColorInt
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,8 +49,14 @@ class FollowListActivity: AppCompatActivity() {
         binding.sortButton.load("file:///android_asset/follow/ic_sort_up_down.png")
         binding.personAddIcon.load("file:///android_asset/follow/person_add.png")
 
-        binding.followerSection.setOnClickListener { followViewModel.setListType(UserType.FOLLOWER) }
-        binding.followingSection.setOnClickListener { followViewModel.setListType(UserType.FOLLOWING) }
+        binding.followerSection.setOnClickListener {
+            Log.d("FollowListActivity", "Follower section clicked")
+            followViewModel.setListType(UserType.FOLLOWER)
+        }
+        binding.followingSection.setOnClickListener {
+            Log.d("FollowListActivity", "Following section clicked")
+            followViewModel.setListType(UserType.FOLLOWING)
+        }
         binding.noneSection.setOnClickListener { followViewModel.setListType(UserType.NONE) }
 
         binding.backButton.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
@@ -68,6 +75,7 @@ class FollowListActivity: AppCompatActivity() {
 
         lifecycleScope.launch {
             followViewModel.uiState.collect { state ->
+                Log.d("FollowListActivity", "UI State Updated: $state")
                 selectSection(state.currentType)
                 followAdapter.submitList(state.users)
                 binding.followingCount.text = state.followingCount.toString()
@@ -126,7 +134,7 @@ class FollowListActivity: AppCompatActivity() {
 
     private fun setSelectSection(sectionType: UserType, selected: Boolean) {
         val visibility = if (selected) View.VISIBLE else View.INVISIBLE
-        val color = Color.parseColor(if (selected) SELECTED_COLOR else UNSELECTED_COLOR)
+        val color = if (selected) SELECTED_COLOR.toColorInt() else UNSELECTED_COLOR.toColorInt()
 
         when(sectionType) {
             UserType.FOLLOWER -> {
