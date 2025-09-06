@@ -70,6 +70,8 @@ class MapViewModel @Inject constructor(
         }
     }
 
+
+
     fun setSelectedPinSkin(pinSkin: PinSkin?) {
         selectedPinSkin.value = pinSkin
     }

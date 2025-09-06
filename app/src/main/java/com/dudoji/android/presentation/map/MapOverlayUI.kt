@@ -10,7 +10,6 @@ import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.databinding.MapOverlayUiLayoutBinding
 import com.dudoji.android.map.fragment.NpcListFragment
-import com.dudoji.android.pin.util.PinSetterController
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import java.io.IOException

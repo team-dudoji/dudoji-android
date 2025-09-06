@@ -36,11 +36,8 @@ import com.dudoji.android.map.utils.npc.NpcApplier
 import com.dudoji.android.mypage.activity.MyPageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
-import com.dudoji.android.pin.util.PinFilter
-import com.dudoji.android.pin.util.PinModal
-import com.dudoji.android.pin.util.PinModal.openPinDataModal
-import com.dudoji.android.pin.util.PinRenderer
 import com.dudoji.android.presentation.follow.FollowListActivity
+import com.dudoji.android.presentation.map.PinModal.openPinDataModal
 import com.dudoji.android.shop.activity.ShopActivity
 import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.dudoji.android.util.modal.Modal
@@ -134,6 +131,14 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
         lifecycleScope.launch {
             pinSkinSelectBar.init()
+            mapViewModel.selectedPinSkin.collect {
+                pinSkin ->
+                if (pinSkin == null) return@collect
+                pinSkinSelectBar.setSelectedPinSkin(pinSkin)
+
+            }
+        }
+        lifecycleScope.launch {
             mapViewModel.landmarkToShow.collect { landmark ->
                 if (landmark == null) return@collect
                 landmarkBottomSheet.open(landmark)
@@ -360,7 +365,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 return@MapOverlayUI
             }
 
-            openPinDataModal(this, lat, lng) {
+            openPinDataModal(this, lat, lng, mapViewModel.selectedPinSkin.value) {
                 pinMakeData ->
                 mapViewModel.createPin(pinMakeData)
             }

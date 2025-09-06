@@ -1,11 +1,10 @@
-package com.dudoji.android.pin.util
+package com.dudoji.android.presentation.map
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import coil.load
 import com.dudoji.android.databinding.MapOverlayUiLayoutBinding
 import com.dudoji.android.pin.domain.Who
-import com.dudoji.android.presentation.map.MapViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 class PinFilter(

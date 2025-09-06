@@ -1,11 +1,11 @@
 package com.dudoji.android.shop.controller
 
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.core.graphics.toColorInt
 import androidx.core.view.ViewCompat
 import com.dudoji.android.R
 
@@ -38,10 +38,10 @@ class ShopButtonsController(val view: View) {
             button.layoutParams = params
             ViewCompat.setBackgroundTintList(
                 button,
-                ColorStateList.valueOf(if (active) Color.parseColor("#82736C") else Color.parseColor("#FBFBFB"))
+                ColorStateList.valueOf(if (active) "#82736C".toColorInt() else "#FBFBFB".toColorInt())
             )
             button.setTextColor(ColorStateList.valueOf(
-                if (active) Color.parseColor("#FBFBFB") else Color.parseColor("#666560")
+                if (active) "#FBFBFB".toColorInt() else "#666560".toColorInt()
             ))
         }
     }

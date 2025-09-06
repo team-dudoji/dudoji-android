@@ -7,7 +7,7 @@
     <FrameLayout
             android:layout_height="50dp"
             android:layout_width="0dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:id="@+id/pin_list_container"
             app:layout_constraintEnd_toStartOf="@+id/pin_setter"
             app:layout_constraintStart_toStartOf="parent"
@@ -16,10 +16,11 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintVertical_bias="1.0">
         <View
-                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_height="30dp"
                 android:layout_width="match_parent"
                 android:background="@drawable/stroke_rounded_rectangle"
-                android:backgroundTint="#000000"/>
+                android:backgroundTint="#F6F6F6"/>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_height="match_parent"

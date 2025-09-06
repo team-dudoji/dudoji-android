@@ -24,6 +24,7 @@ import com.dudoji.android.domain.model.PinSkin
 import com.dudoji.android.domain.repository.PinSkinRepository
 import com.dudoji.android.landmark.adapter.EditableHashtagAdapter
 import com.dudoji.android.pin.util.PinMakeData
+import com.dudoji.android.presentation.map.MapViewModel
 import com.dudoji.android.util.WeekTranslator
 import com.dudoji.android.util.modal.ModalFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,12 +39,9 @@ import java.util.Locale
 class PinMemoInputFragment(
     private val lat: Double,
     private val lng: Double,
+    private val pinSkin: PinSkin?,
     private val onComplete: (PinMakeData) -> Unit
 ) : ModalFragment() {
-
-    companion object {
-
-    }
 
     private var _binding: EditPinMemoModalBinding? = null
     private val binding get() = _binding!!
@@ -95,11 +93,15 @@ class PinMemoInputFragment(
         updateDateText()
         setupHashtagEditRecyclerView()
     }
+
+    private fun setPinSkin(pinSkin: PinSkin) {
+
+    }
+
     private fun setupHashtagEditRecyclerView() {
         hashtagEditRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         hashtagEditRecyclerView.adapter = EditableHashtagAdapter()
     }
-
 
     private fun setupListeners() {
         binding.pinMemoImage.setOnClickListener {
@@ -167,7 +169,7 @@ class PinMemoInputFragment(
 
     private fun initDefaultPinSkin() {
         lifecycleScope.launch {
-            val defaultPinSkin = pinSkinRepository.getPinSkins()[0]
+            val defaultPinSkin = if (pinSkin != null) pinSkin else pinSkinRepository.getPinSkins()[0]
             selectedPinColor = defaultPinSkin
             binding.pinColorSelectButton.background = pinSkinRepository.getPinSkinDrawableById(defaultPinSkin.id, requireContext())
         }
