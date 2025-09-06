@@ -160,7 +160,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mapViewModel.landmarksToShow.collect { landmarks ->
-                    Log.d("MapActivity", "tlqkf ㅣㅁㅜㅇㅡㅁㄱㅏ")
                     if (!::googleMap.isInitialized) return@collect
                     Log.d("MapActivity", "Received landmarks: ${landmarks.size}")
                     landmarkApplier.add(landmarks)
