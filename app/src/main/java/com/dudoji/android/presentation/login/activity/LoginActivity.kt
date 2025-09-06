@@ -1,9 +1,7 @@
-package com.dudoji.android.presentation.login.activity
+package com.dudoji.android.presentation.login.activity // [병합 결정] 최신 패키지 구조 사용
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -12,16 +10,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
 import com.dudoji.android.R
 import com.dudoji.android.data.oauth.kakao.KakaoLoginUtil
-import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.network.NetworkInitializer
 import com.dudoji.android.network.utils.NoNetWorkUtil
 import com.dudoji.android.presentation.util.MandatoryPermissionHandler
 import com.dudoji.android.presentation.util.RequestPermissionsUtil
-import com.dudoji.android.presentation.util.getEncryptedPrefs
-import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.PermissionResultListener {
 
@@ -51,7 +45,6 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
         }
 
         NoNetWorkUtil(this).checkNetworkAndNavigate()
-
         NetworkInitializer.initNonAuthed(this@LoginActivity)
 
         kakaoLoginButton = findViewById(R.id.btn_kakao_login)
@@ -59,12 +52,8 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
 
         setClickListeners()
 
-        lifecycleScope.launch {
-            tryAutoLogin()
-        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setClickListeners() {
         kakaoLoginButton.setOnClickListener {
             KakaoLoginUtil.tryLoginWithKakao(this)
@@ -72,27 +61,6 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
 
         helpTextView.setOnClickListener {
             Toast.makeText(this, "도움말 기능 준비 중", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun tryAutoLogin() {
-        val prefs = getEncryptedPrefs(this)
-        val jwt = prefs.getString("jwt", null)
-        if (!jwt.isNullOrEmpty()) {
-            try {
-                val response = RetrofitClient.loginApiService.validateJwt("Bearer $jwt")
-                if (response.isSuccessful) {
-                    NetworkInitializer.initAuthed(this)
-                    val intent = Intent(this, MapActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                } else {
-                    Log.e("JWT_LOGIN", "자동 로그인 실패: 유효하지 않은 토큰 (코드: ${response.code()})")
-                }
-            } catch (e: Exception) {
-                Log.e("JWT_LOGIN", "자동 로그인 중 오류 발생: ${e.message}")
-            }
         }
     }
 
