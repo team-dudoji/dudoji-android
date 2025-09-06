@@ -1,11 +1,11 @@
-package com.dudoji.android.login.oauth.kakao
+package com.dudoji.android.data.oauth.kakao
 
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.dudoji.android.login.util.getEncryptedPrefs
+import com.dudoji.android.presentation.util.getEncryptedPrefs
 import com.dudoji.android.map.activity.MapActivity
 import com.dudoji.android.network.NetworkInitializer
 import com.kakao.sdk.auth.model.OAuthToken
