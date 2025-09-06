@@ -43,7 +43,7 @@
 
 
         <activity
-            android:name=".login.activity.SplashActivity"
+            android:name=".presentation.login.activity.SplashActivity"
             android:launchMode="singleTop"
             android:exported="true">
             <intent-filter>
@@ -51,7 +51,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.activity.LoginActivity"/>
+        <activity android:name=".presentation.login.activity.LoginActivity"/>
+        <activity android:name=".presentation.login.activity.AutoLoginActivity" />
         <activity android:name=".map.activity.MapActivity"
                   android:hardwareAccelerated="true"/>
         <activity android:name=".mypage.activity.MyPageActivity" />
