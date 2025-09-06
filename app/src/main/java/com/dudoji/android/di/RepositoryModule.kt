@@ -1,7 +1,11 @@
 package com.dudoji.android.di
 
+import com.dudoji.android.data.datasource.location.GPSLocationService
+import com.dudoji.android.data.datasource.location.LocationService
 import com.dudoji.android.data.repository.FollowRepositoryImpl
+import com.dudoji.android.data.repository.LocationRepositoryImpl
 import com.dudoji.android.domain.repository.FollowRepository
+import com.dudoji.android.domain.repository.LocationRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,4 +19,14 @@ abstract class RepositoryModule {
     abstract fun bindFollowRepository(
         impl: FollowRepositoryImpl
     ): FollowRepository
+
+    @Binds
+    abstract fun bindLocationService(
+        impl: GPSLocationService
+    ): LocationService
+
+    @Binds
+    abstract fun bindLocationRepository(
+        impl: LocationRepositoryImpl
+    ): LocationRepository
 }

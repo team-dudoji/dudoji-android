@@ -166,6 +166,8 @@ class PinMemoInputFragment(
         )
 
         val data = PinMakeData(
+            lat,
+            lng,
             placeName = binding.pinPlaceName.text.toString(),
             content = binding.memoContentInput.text.toString(),
             date = date,

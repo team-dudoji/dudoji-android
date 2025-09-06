@@ -6,7 +6,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.dudoji.android.login.util.getEncryptedPrefs
-import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.presentation.map.MapActivity
 import com.dudoji.android.network.NetworkInitializer
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError

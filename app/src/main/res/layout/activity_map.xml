@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".map.activity.MapActivity">
+        tools:context=".presentation.map.MapActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/mapRoot"
@@ -13,7 +13,6 @@
             android:layout_height="match_parent">
 
         <FrameLayout
-                android:id="@+id/outer_drop_zone"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintTop_toTopOf="parent"
@@ -25,13 +24,8 @@
                     android:id="@+id/mapView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
-            <com.dudoji.android.map.utils.fog.FogTextureView
-                    android:id="@+id/fog_texture_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:focusable="false"/>
-            <com.dudoji.android.map.utils.MapObjectTextureView
+
+            <com.dudoji.android.presentation.map.MapObjectTextureView
                     android:id="@+id/map_object_texture_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -49,6 +43,7 @@
                 android:layout_height="70dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="124dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 

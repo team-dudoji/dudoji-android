@@ -20,7 +20,7 @@ import com.dudoji.android.login.oauth.kakao.KakaoLoginUtil
 import com.dudoji.android.login.util.MandatoryPermissionHandler
 import com.dudoji.android.login.util.RequestPermissionsUtil
 import com.dudoji.android.login.util.getEncryptedPrefs
-import com.dudoji.android.map.activity.MapActivity
+import com.dudoji.android.presentation.map.MapActivity
 import com.dudoji.android.network.NetworkInitializer
 import com.dudoji.android.network.utils.NoNetWorkUtil
 import kotlinx.coroutines.launch
