@@ -50,6 +50,8 @@ class MapViewModel @Inject constructor(
 
     private val _landmarkToShow = MutableStateFlow<Landmark?>(null)
     val landmarkToShow: StateFlow<Landmark?> = _landmarkToShow
+    val pinToShow: MutableStateFlow<Pin?> = MutableStateFlow(null) // Not implemented yet
+    val pinClusterToShow: MutableStateFlow<List<Pin>> = MutableStateFlow(emptyList()) // Not implemented yet
 
     val locationFlow: StateFlow<Location> = mapUseCase.getLocationUpdates()
     val bearingFlow: StateFlow<Float> = mapUseCase.getBearing()
@@ -64,6 +66,14 @@ class MapViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun setPinClusterToShow(pins: List<Pin>) {
+        pinClusterToShow.value = pins
+    }
+
+    fun setPinToShow(pin: Pin?) {
+        pinToShow.value = pin
     }
 
     fun setLandmarkToShow(landmark: Landmark?) {

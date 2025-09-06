@@ -1,4 +1,4 @@
-package com.dudoji.android.pin.api.service
+package com.dudoji.android.data.remote
 
 import com.dudoji.android.pin.api.dto.PinRequestDto
 import com.dudoji.android.pin.api.dto.PinResponseDto
@@ -26,8 +26,8 @@ interface PinApiService {
     @GET("/api/user/pins")
     suspend fun getRangeSearchResults(
         @Query("radius") radius: Int,
-         @Query("lat") lat: Double,
-         @Query("lng") lng: Double): Response<List<PinResponseDto>>
+        @Query("lat") lat: Double,
+        @Query("lng") lng: Double): Response<List<PinResponseDto>>
 
     @POST("/api/user/pins/{pinId}/like")
     suspend fun likePin(@Path("pinId") pinId: Long): Response<String>
@@ -46,4 +46,9 @@ interface PinApiService {
 
     @GET("/api/user/pin-skins")
     suspend fun getPinSkins(): Response<List<PinSkinDto>>
+
+//    @GET("/api/user/pin-skins/{pinSkinId}")
+//    suspend fun getPinSkin(
+//        @Path("pinSkinId") pinSkinId: Long
+//    ): Response<PinSkinDto>
 }

@@ -22,7 +22,7 @@ import com.dudoji.android.mypage.repository.MyPageRemoteDataSource
 import com.dudoji.android.pin.adapter.PinMemoAdapter
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
-import com.dudoji.android.pin.fragment.PinMemoInputFragment
+import com.dudoji.android.presentation.pin.fragment.PinMemoInputFragment
 import com.dudoji.android.util.modal.Modal
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.launch
@@ -64,7 +64,7 @@ object PinModal {
     }
 
     fun openPinDataModal(activity: MapActivity, lat: Double, lng: Double, onComplete: (PinMakeData) -> Unit) {
-        Modal.showCustomModal(activity, PinMemoInputFragment(lat, lng, activity, onComplete))
+        Modal.showCustomModal(activity, PinMemoInputFragment(lat, lng, onComplete))
     }
 
 

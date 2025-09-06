@@ -26,6 +26,7 @@ import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.databinding.ActivityMapBinding
 import com.dudoji.android.domain.model.ActivityMapObject
 import com.dudoji.android.domain.model.UserType
+import com.dudoji.android.domain.repository.PinSkinRepository
 import com.dudoji.android.landmark.activity.LandmarkSearchActivity
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
@@ -36,6 +37,7 @@ import com.dudoji.android.mypage.activity.MyPageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.util.PinFilter
+import com.dudoji.android.pin.util.PinModal
 import com.dudoji.android.pin.util.PinModal.openPinDataModal
 import com.dudoji.android.pin.util.PinRenderer
 import com.dudoji.android.presentation.follow.FollowListActivity
@@ -53,6 +55,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.collections.MarkerManager
 import dagger.hilt.android.AndroidEntryPoint
+import jakarta.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -62,6 +65,9 @@ import java.io.IOException
 class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
     private val mapViewModel: MapViewModel by viewModels()
+
+    @Inject
+    lateinit var pinSkinRepository: PinSkinRepository
 
     private lateinit var binding: ActivityMapBinding
 
@@ -184,6 +190,24 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+        lifecycleScope.launch {
+            mapViewModel.pinToShow.collect { pin ->
+                if (pin == null) return@collect
+                PinModal.openPinMemoModal(
+                    this@MapActivity,
+                    pin,
+                )
+            }
+        }
+        lifecycleScope.launch {
+            mapViewModel.pinClusterToShow.collect { pins ->
+                if (pins.isEmpty()) return@collect
+                PinModal.openPinMemosModal(
+                    this@MapActivity,
+                    pins
+                )
+            }
+        }
     }
 
     fun setupMyLocationButton() {
@@ -261,7 +285,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             clusterManager.renderer = PinRenderer(
                 this@MapActivity,
                 googleMap,
-                clusterManager
+                clusterManager,
+                pinSkinRepository
             )
 
             googleMap.setOnCameraIdleListener {
@@ -274,6 +299,19 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 updateLocationToViewModel()
                 updateMapObjects()
             }
+
+            clusterManager.setOnClusterClickListener {
+                cluster ->
+                true
+            }
+
+            clusterManager.setOnClusterItemClickListener { pin ->
+                lifecycleScope.launch {
+                    mapViewModel.setPinToShow(pin)
+                }
+                true
+            }
+
 
             normalMarkerCollection.setOnMarkerClickListener { marker ->
                 Log.d("MapActivity", "Marker clicked: ${marker.id}, ${marker.title}")
