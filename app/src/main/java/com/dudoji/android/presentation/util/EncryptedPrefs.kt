@@ -1,4 +1,4 @@
-package com.dudoji.android.login.util
+package com.dudoji.android.presentation.util
 
 import android.content.Context
 import android.content.SharedPreferences
