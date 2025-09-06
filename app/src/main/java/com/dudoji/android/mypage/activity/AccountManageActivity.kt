@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.dudoji.android.R
-import com.dudoji.android.login.util.RequestPermissionsUtil
+import com.dudoji.android.presentation.util.RequestPermissionsUtil
 import com.dudoji.android.mypage.repository.MyPageRemoteDataSource
 import kotlinx.coroutines.launch
 

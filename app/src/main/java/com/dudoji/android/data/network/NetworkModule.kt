@@ -4,7 +4,7 @@ import RetrofitClient
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.dudoji.android.BuildConfig
-import com.dudoji.android.data.remote.FollowApiService
+import com.dudoji.android.data.remote.api.FollowApiService
 import com.dudoji.android.network.utils.LocalDateAdapter
 import com.dudoji.android.network.utils.LocalDateTimeAdapter
 import com.google.gson.GsonBuilder
