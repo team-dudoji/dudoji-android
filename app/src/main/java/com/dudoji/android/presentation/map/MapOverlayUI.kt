@@ -8,18 +8,20 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import coil.load
 import com.dudoji.android.R
-import com.dudoji.android.databinding.ActivityMapBinding
+import com.dudoji.android.databinding.MapOverlayUiLayoutBinding
 import com.dudoji.android.map.fragment.NpcListFragment
-import com.dudoji.android.pin.domain.Pin
-import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinSetterController
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
-import com.google.maps.android.clustering.ClusterManager
 import java.io.IOException
 
 @RequiresApi(Build.VERSION_CODES.O)
-class MapOverlayUI(val binding: ActivityMapBinding, val activity: MapActivity, val assets: AssetManager, val googleMap: GoogleMap, val pinApplier: PinApplier, val clusterManager: ClusterManager<Pin>) {
+class MapOverlayUI(
+    val binding: MapOverlayUiLayoutBinding,
+    val activity: MapActivity,
+    val assets: AssetManager,
+    val googleMap: GoogleMap,
+    val onPinDrop: (Double, Double) -> Unit) {
 
     var pinSetterController: PinSetterController? = null
 
@@ -27,7 +29,7 @@ class MapOverlayUI(val binding: ActivityMapBinding, val activity: MapActivity, v
         setPinSetterController()
         setupFilterBarToggle()
 
-        binding.mapOverlayUiLayout.questModalButton.setOnClickListener {
+        binding.questModalButton.setOnClickListener {
             Modal.showCustomModal(
                 activity,
                 NpcListFragment(activity),
@@ -35,10 +37,10 @@ class MapOverlayUI(val binding: ActivityMapBinding, val activity: MapActivity, v
             )}
 
         val naviAssetPath = "file:///android_asset/navi/"
-        binding.mapOverlayUiLayout.btnItem.load(naviAssetPath + "ic_item.png")
+        binding.btnItem.load(naviAssetPath + "ic_item.png")
 
-        binding.mapOverlayUiLayout.btnItem.setOnClickListener {
-            binding.mapOverlayUiLayout.itemModal.visibility = if (binding.mapOverlayUiLayout.itemModal.isVisible) View.GONE else View.VISIBLE
+        binding.btnItem.setOnClickListener {
+            binding.itemModal.visibility = if (binding.itemModal.isVisible) View.GONE else View.VISIBLE
         }
     }
 
@@ -49,32 +51,30 @@ class MapOverlayUI(val binding: ActivityMapBinding, val activity: MapActivity, v
             val pinSetterBg = assets.open("pin/pin_button.png").use { inputStream ->
                 Drawable.createFromStream(inputStream, null)
             }
-            binding.mapOverlayUiLayout.pinSetter.background = pinSetterBg
+            binding.pinSetter.background = pinSetterBg
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
         pinSetterController = PinSetterController(
-            binding.mapOverlayUiLayout.pinSetter,
+            binding.pinSetter,
             binding.outerDropZone,
-            pinApplier,
             googleMap,
-            activity,
-            clusterManager
+            onPinDrop
         )
     }
 
     private fun setupFilterBarToggle() {
         var isFilterBarVisible = false
 
-        binding.mapOverlayUiLayout.btnFilter.setOnClickListener {
+        binding.btnFilter.setOnClickListener {
             isFilterBarVisible = !isFilterBarVisible
             if (isFilterBarVisible) {
-                binding.mapOverlayUiLayout.filterBarWrapper.visibility = View.VISIBLE
-                binding.mapOverlayUiLayout.filterBarAnim.progress = 0f
-                binding.mapOverlayUiLayout.filterBarAnim.playAnimation()
+                binding.filterBarWrapper.visibility = View.VISIBLE
+                binding.filterBarAnim.progress = 0f
+                binding.filterBarAnim.playAnimation()
             } else {
-                binding.mapOverlayUiLayout.filterBarWrapper.visibility = View.GONE
+                binding.filterBarWrapper.visibility = View.GONE
             }
         }
     }

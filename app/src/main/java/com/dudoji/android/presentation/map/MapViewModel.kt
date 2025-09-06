@@ -6,15 +6,20 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
 import com.dudoji.android.domain.usecase.MapUseCase
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.map.domain.Npc
-import com.dudoji.android.pin.repository.PinRepository
+import com.dudoji.android.pin.domain.Pin
+import com.dudoji.android.pin.domain.Who
+import com.dudoji.android.pin.util.PinMakeData
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
@@ -22,11 +27,22 @@ import kotlin.math.abs
 @HiltViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 class MapViewModel @Inject constructor(
-    mapUseCase: MapUseCase
+    val mapUseCase: MapUseCase
 ) : ViewModel(), GoogleMap.OnCameraIdleListener {
 
     private val _mapUiState = MutableStateFlow(MapUiState())
     val mapUiState = _mapUiState
+
+    private val _visibilityMap: MutableStateFlow<MutableMap<Who, Boolean>> = MutableStateFlow(mutableMapOf(
+        Who.MINE to true,
+        Who.FOLLOWING to true,
+        Who.UNKNOWN to true
+    ))
+    val visibilityMap: StateFlow<MutableMap<Who, Boolean>> = _visibilityMap
+
+    val pinsToShow: Flow<List<Pin>> = mapUiState.map { it.pins }
+    val npcsToShow: Flow<List<Npc>> = mapUiState.map { it.npcs }
+    val landmarksToShow: Flow<List<Landmark>> = mapUiState.map { it.landmarks }
 
     private val _landmarkToShow = MutableStateFlow<Landmark?>(null)
     val landmarkToShow: StateFlow<Landmark?> = _landmarkToShow
@@ -46,8 +62,20 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun toggleVisibility(who: Who) {
+        val current = _visibilityMap.value[who] ?: true
+        _visibilityMap.value[who] = !current
+        _visibilityMap.value = _visibilityMap.value
+    }
+
     private val _centerLocation = MutableStateFlow<LatLng>(LatLng(0.0, 0.0))
     val centerLocation: StateFlow<LatLng> = _centerLocation
+
+    fun createPin(pinMakeData: PinMakeData) {
+        viewModelScope.launch {
+            mapUseCase.createPin(pinMakeData)
+        }
+    }
 
     fun updateCenterLocation(latLng: LatLng) {
         _centerLocation.value = latLng
@@ -60,6 +88,15 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun canCreatePin(lat: Double, lng: Double): Boolean {
+        val distance = locationFlow.value.distanceTo(
+            Location("manual").apply {
+                latitude = lat
+                longitude = lng }
+        )
+        return distance <= REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
+    }
+
     fun setAttach(isAttached: Boolean) {
         Log.d("MapViewModel", "setAttach: $isAttached")
         _mapUiState.value = _mapUiState.value.copy(
@@ -68,8 +105,7 @@ class MapViewModel @Inject constructor(
     }
 
     fun loadPin() {
-//        PinRepository.load()
-        PinRepository.getPins()
+
     }
 
     fun loadLandmark() {
@@ -89,7 +125,7 @@ data class MapUiState (
     var isLoading: Boolean = false,
     var errorMessage: String? = null,
     var isAttached: Boolean = true,
-    var pins: List<Npc> = emptyList(),
-    var landmarks: List<Npc> = emptyList(),
+    var pins: List<Pin> = emptyList(),
+    var landmarks: List<Landmark> = emptyList(),
     var npcs: List<Npc> = emptyList()
 )

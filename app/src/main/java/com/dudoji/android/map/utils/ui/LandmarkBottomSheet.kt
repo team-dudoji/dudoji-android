@@ -1,8 +1,8 @@
 package com.dudoji.android.map.utils.ui
 
+import RetrofitClient
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
 import android.view.View
@@ -21,8 +21,8 @@ import com.dudoji.android.pin.adapter.SortType
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.repository.PinRepository
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import java.io.IOException
 
+@RequiresApi(Build.VERSION_CODES.O)
 class LandmarkBottomSheet(val landmarkBottomSheet: LinearLayout,
                           private val context: Context) {
 
@@ -40,7 +40,6 @@ class LandmarkBottomSheet(val landmarkBottomSheet: LinearLayout,
         bottomSheetBehavior.skipCollapsed = false
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun open(landmark: Landmark) {
         landmarkTitleTextView.text = landmark.placeName
         landmarkDescriptionTextView.text = landmark.content

@@ -28,7 +28,6 @@ class LocationRepositoryImpl @Inject constructor(
         locationService.setLocationCallback {
             location ->
             Log.d("LocationRepositoryImpl", "New location: $location")
-            LocationService.lastLocation = location
             CoroutineScope(Dispatchers.Default).launch {
                 _locationFlow.emit(location)
             }

@@ -1,6 +1,7 @@
 package com.dudoji.android.presentation.map
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -36,8 +38,8 @@ import com.dudoji.android.map.utils.ui.LandmarkBottomSheet
 import com.dudoji.android.mypage.activity.MyPageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
-import com.dudoji.android.pin.util.PinApplier
 import com.dudoji.android.pin.util.PinFilter
+import com.dudoji.android.pin.util.PinModal.openPinDataModal
 import com.dudoji.android.pin.util.PinRenderer
 import com.dudoji.android.presentation.follow.FollowListActivity
 import com.dudoji.android.shop.activity.ShopActivity
@@ -66,14 +68,20 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var binding: ActivityMapBinding
 
-    private val pinApplier: PinApplier by lazy {
-        PinApplier(clusterManager, googleMap, this@MapActivity, pinFilter)
-    }
     private val landmarkApplier: LandmarkApplier by lazy {
-        LandmarkApplier(normalMarkerCollection, googleMap, this@MapActivity)
+        LandmarkApplier(normalMarkerCollection, this)
     }
     private val npcApplier: NpcApplier by lazy {
-        NpcApplier(normalMarkerCollection, googleMap, this@MapActivity)
+        NpcApplier(normalMarkerCollection, this) {
+            npc ->
+            if (npc.hasQuest) {
+                val initialBitmap = BitmapFactory.decodeResource(resources, R.mipmap.quest_bubble)
+                val activityMapObject =
+                    ActivityMapObject(LatLng(npc.lat, npc.lng), initialBitmap, 70f, -150f, 170, -100)
+                npc.activityMapObject = activityMapObject
+                activityObjects.add(activityMapObject)
+            }
+        }
     }
 
     var mapOverlayUI: MapOverlayUI? = null
@@ -92,7 +100,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     }
 
     private val pinFilter: PinFilter by lazy {
-        PinFilter(binding, this@MapActivity)
+        PinFilter(binding.mapOverlayUiLayout, mapViewModel)
     }
 
     private lateinit var landmarkBottomSheet: LandmarkBottomSheet
@@ -143,6 +151,39 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 Log.d("MapActivity", "Map UI State changed: isAttached=${mapUiState.isAttached}")
                 binding.myLocationButton.visibility =
                     if (mapUiState.isAttached) View.GONE else View.VISIBLE
+            }
+        }
+        lifecycleScope.launch {
+            mapViewModel.visibilityMap.collect { visibilityMap ->
+                for ((who, isVisible) in visibilityMap) {
+                    pinFilter.updateFilterButton(who, isVisible)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mapViewModel.landmarksToShow.collect { landmarks ->
+                    if (!::googleMap.isInitialized) return@collect
+                    landmarkApplier.add(landmarks)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mapViewModel.npcsToShow.collect { npcs ->
+                    if (!::googleMap.isInitialized) return@collect
+                    npcApplier.add(npcs)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mapViewModel.pinsToShow.collect { pins ->
+                    if (!::googleMap.isInitialized) return@collect
+                    clusterManager.clearItems()
+                    clusterManager.addItems(pins)
+                    clusterManager.cluster()
+                }
             }
         }
     }
@@ -230,17 +271,12 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 updateLocationToViewModel()
                 mapViewModel.onCameraIdle()
                 clusterManager.onCameraIdle()
-                pinApplier.onCameraIdle()
-                landmarkApplier.onCameraIdle()
-                npcApplier.onCameraIdle()
             }
 
             googleMap.setOnCameraMoveListener {
                 updateLocationToViewModel()
                 updateMapObjects()
             }
-
-            pinFilter.setupFilterButtons()
 
             normalMarkerCollection.setOnMarkerClickListener { marker ->
                 Log.d("MapActivity", "Marker clicked: ${marker.id}, ${marker.title}")
@@ -263,8 +299,32 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        mapOverlayUI = MapOverlayUI(binding, this, assets, googleMap, pinApplier, clusterManager)
+        mapOverlayUI = MapOverlayUI(
+            binding.mapOverlayUiLayout,
+            this,
+            assets,
+            googleMap
+        ) {
+            lat, lng ->
+            if (!::googleMap.isInitialized) return@MapOverlayUI
+
+            if (!mapViewModel.canCreatePin(lat, lng)) {
+                Toast.makeText(
+                    this@MapActivity,
+                    "핀을 드롭할 수 있는 위치가 아닙니다.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@MapOverlayUI
+            }
+
+            openPinDataModal(this, lat, lng) {
+                pinMakeData ->
+                mapViewModel.createPin(pinMakeData)
+            }
+        }
     }
+
+
 
     private fun updateMapObjects() {
        if (!::googleMap.isInitialized) return

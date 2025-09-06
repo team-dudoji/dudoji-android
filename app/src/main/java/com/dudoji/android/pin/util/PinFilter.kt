@@ -1,70 +1,44 @@
 package com.dudoji.android.pin.util
 
 import android.os.Build
-import android.widget.ImageButton
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import coil.load
-import com.dudoji.android.R
-import com.dudoji.android.pin.domain.Pin
+import com.dudoji.android.databinding.MapOverlayUiLayoutBinding
 import com.dudoji.android.pin.domain.Who
-import com.dudoji.android.presentation.map.MapActivity
+import com.dudoji.android.presentation.map.MapViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 class PinFilter(
-    private val activity: AppCompatActivity,
+    private val binding: MapOverlayUiLayoutBinding,
+    private val mapViewModel: MapViewModel
 ) {
-    private lateinit var btnMine: ImageButton
-    private lateinit var btnFriend: ImageButton
-    private lateinit var btnStranger: ImageButton
 
-    private val visibilityMap = mutableMapOf(
-        Who.MINE to true,
-        Who.FOLLOWING to true,
-        Who.UNKNOWN to true
-    )
-
-    fun filterPins(pins: List<Pin>): List<Pin> {
-        return pins.filter { pin ->
-            visibilityMap[pin.master] == true
-        }
+    init {
+        setupFilterButtons()
     }
 
     fun setupFilterButtons() {
-        btnMine = activity.findViewById(R.id.btnFilterMine)
-        btnFriend = activity.findViewById(R.id.btnFilterFriend)
-        btnStranger = activity.findViewById(R.id.btnFilterStranger)
-        val btnFilter = activity.findViewById<ImageButton>(R.id.btnFilter)
-
-
         val naviAssetPath = "file:///android_asset/navi/"
-        btnStranger.load(naviAssetPath + "ic_stranger_enabled.png")
-        btnFriend.load(naviAssetPath + "ic_friend_enabled.png")
-        btnMine.load(naviAssetPath + "ic_mypin_enabled.png")
-        btnFilter.load(naviAssetPath + "ic_filter.png")
+        binding.btnFilterStranger.load(naviAssetPath + "ic_stranger_enabled.png")
+        binding.btnFilterFriend.load(naviAssetPath + "ic_friend_enabled.png")
+        binding.btnFilterMine.load(naviAssetPath + "ic_mypin_enabled.png")
+        binding.btnFilter.load(naviAssetPath + "ic_filter.png")
 
-        btnMine.setOnClickListener {
-            toggle(Who.MINE)
-            (activity as MapActivity).mapOverlayUI?.pinSetterController?.pinApplier?.markForReload()
+        binding.btnFilterMine.setOnClickListener {
+            mapViewModel.toggleVisibility(Who.MINE)
         }
 
-        btnFriend.setOnClickListener {
-            toggle(Who.FOLLOWING)
-            (activity as MapActivity).mapOverlayUI?.pinSetterController?.pinApplier?.markForReload()
+        binding.btnFilterFriend.setOnClickListener {
+            mapViewModel.toggleVisibility(Who.FOLLOWING)
         }
 
-        btnStranger.setOnClickListener {
-            toggle(Who.UNKNOWN)
-            (activity as MapActivity).mapOverlayUI?.pinSetterController?.pinApplier?.markForReload()
+        binding.btnFilterStranger.setOnClickListener {
+            mapViewModel.toggleVisibility(Who.UNKNOWN)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun toggle(who: Who) {
-        val newState = !(visibilityMap[who] ?: true)
-        visibilityMap[who] = newState
-
-        val iconFileName = if (newState) {
+    fun updateFilterButton(who: Who, isVisible: Boolean) {
+        val iconFileName = if (isVisible) {
             when (who) {
                 Who.MINE -> "ic_mypin_enabled.png"
                 Who.FOLLOWING -> "ic_friend_enabled.png"
@@ -81,9 +55,9 @@ class PinFilter(
         val assetPath = "file:///android_asset/navi/$iconFileName"
 
         when (who) {
-            Who.MINE -> btnMine.load(assetPath)
-            Who.FOLLOWING -> btnFriend.load(assetPath)
-            Who.UNKNOWN -> btnStranger.load(assetPath)
+            Who.MINE -> binding.btnFilterMine.load(assetPath)
+            Who.FOLLOWING -> binding.btnFilterFriend.load(assetPath)
+            Who.UNKNOWN -> binding.btnFilterStranger.load(assetPath)
         }
     }
 }
