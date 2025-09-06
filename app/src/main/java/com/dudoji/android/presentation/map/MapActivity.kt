@@ -105,6 +105,12 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private val pinFilter: PinFilter by lazy {
         PinFilter(binding.mapOverlayUiLayout, mapViewModel)
     }
+    private val pinSkinSelectBar: PinSelectBar by lazy {
+        PinSelectBar(binding.mapOverlayUiLayout.pinSelectBar, pinSkinRepository) {
+            selectedPinSkin ->
+            mapViewModel.setSelectedPinSkin(selectedPinSkin)
+        }
+    }
 
     private lateinit var landmarkBottomSheet: LandmarkBottomSheet
 
@@ -127,6 +133,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         setupSearchLandmark()
 
         lifecycleScope.launch {
+            pinSkinSelectBar.init()
             mapViewModel.landmarkToShow.collect { landmark ->
                 if (landmark == null) return@collect
                 landmarkBottomSheet.open(landmark)
@@ -302,16 +309,14 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
             clusterManager.setOnClusterClickListener {
                 cluster ->
+                mapViewModel.setPinClusterToShow(cluster.items.toList())
                 true
             }
 
             clusterManager.setOnClusterItemClickListener { pin ->
-                lifecycleScope.launch {
-                    mapViewModel.setPinToShow(pin)
-                }
+                mapViewModel.setPinToShow(pin)
                 true
             }
-
 
             normalMarkerCollection.setOnMarkerClickListener { marker ->
                 Log.d("MapActivity", "Marker clicked: ${marker.id}, ${marker.title}")
