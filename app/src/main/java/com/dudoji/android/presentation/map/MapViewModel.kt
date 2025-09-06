@@ -155,10 +155,10 @@ class MapViewModel @Inject constructor(
 }
 
 data class MapUiState (
-    var isLoading: Boolean = false,
-    var errorMessage: String? = null,
-    var isAttached: Boolean = true,
-    var pins: List<Pin> = emptyList(),
-    var landmarks: List<Landmark> = emptyList(),
-    var npcs: List<Npc> = emptyList()
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null,
+    val isAttached: Boolean = true,
+    val pins: List<Pin> = emptyList(),
+    val landmarks: List<Landmark> = emptyList(),
+    val npcs: List<Npc> = emptyList()
 )
