@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dudoji.android.config.LANDMARK_PIN_RADIUS
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
+import com.dudoji.android.domain.model.PinSkin
 import com.dudoji.android.domain.usecase.MapUseCase
 import com.dudoji.android.landmark.datasource.LandmarkDataSource
 import com.dudoji.android.landmark.domain.Landmark
@@ -50,9 +51,12 @@ class MapViewModel @Inject constructor(
 
     private val _landmarkToShow = MutableStateFlow<Landmark?>(null)
     val landmarkToShow: StateFlow<Landmark?> = _landmarkToShow
+    val pinToShow: MutableStateFlow<Pin?> = MutableStateFlow(null) // Not implemented yet
+    val pinClusterToShow: MutableStateFlow<List<Pin>> = MutableStateFlow(emptyList()) // Not implemented yet
 
     val locationFlow: StateFlow<Location> = mapUseCase.getLocationUpdates()
     val bearingFlow: StateFlow<Float> = mapUseCase.getBearing()
+    val selectedPinSkin: MutableStateFlow<PinSkin?> = MutableStateFlow(null)
 
     init {
         viewModelScope.launch {
@@ -66,14 +70,29 @@ class MapViewModel @Inject constructor(
         }
     }
 
+
+
+    fun setSelectedPinSkin(pinSkin: PinSkin?) {
+        selectedPinSkin.value = pinSkin
+    }
+
+    fun setPinClusterToShow(pins: List<Pin>) {
+        pinClusterToShow.value = pins
+    }
+
+    fun setPinToShow(pin: Pin?) {
+        pinToShow.value = pin
+    }
+
     fun setLandmarkToShow(landmark: Landmark?) {
         _landmarkToShow.value = landmark
     }
 
     fun toggleVisibility(who: Who) {
         val current = _visibilityMap.value[who] ?: true
-        _visibilityMap.value[who] = !current
-        _visibilityMap.value = _visibilityMap.value
+        _visibilityMap.value = _visibilityMap.value.toMutableMap().apply {
+            this[who] = !current
+        }
     }
 
     private val _centerLocation = MutableStateFlow<LatLng>(LatLng(0.0, 0.0))

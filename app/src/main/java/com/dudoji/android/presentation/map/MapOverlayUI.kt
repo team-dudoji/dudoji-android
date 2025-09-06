@@ -10,7 +10,6 @@ import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.databinding.MapOverlayUiLayoutBinding
 import com.dudoji.android.map.fragment.NpcListFragment
-import com.dudoji.android.pin.util.PinSetterController
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.GoogleMap
 import java.io.IOException
@@ -44,20 +43,19 @@ class MapOverlayUI(
         }
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun setPinSetterController() {
         try {
             val pinSetterBg = assets.open("pin/pin_button.png").use { inputStream ->
                 Drawable.createFromStream(inputStream, null)
             }
-            binding.pinSetter.background = pinSetterBg
+            binding.pinSelectBar.pinSetter.background = pinSetterBg
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
         pinSetterController = PinSetterController(
-            binding.pinSetter,
+            binding.pinSelectBar.pinSetter,
             binding.outerDropZone,
             googleMap,
             onPinDrop

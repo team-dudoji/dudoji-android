@@ -10,15 +10,17 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dudoji.android.R
-import com.dudoji.android.pin.domain.PinSkin
-import com.dudoji.android.pin.repository.PinSkinRepository
+import com.dudoji.android.domain.model.PinSkin
+import com.dudoji.android.domain.repository.PinSkinRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@RequiresApi(Build.VERSION_CODES.O)
 class PinSkinAdapter(
     private val pinSkins: List<PinSkin>,
+    private val pinSkinRepository: PinSkinRepository,
     private val onItemClick: (PinSkin) -> Unit,
 ) : RecyclerView.Adapter<PinSkinAdapter.PinSkinViewHolder>() {
 
@@ -27,10 +29,9 @@ class PinSkinAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PinSkinViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.pin_color_item, parent, false)
-        return PinSkinViewHolder(view)
+        return PinSkinViewHolder(view, pinSkinRepository)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: PinSkinViewHolder, position: Int) {
         val pinSkin = pinSkins[position]
         holder.bind(pinSkin)
@@ -40,7 +41,7 @@ class PinSkinAdapter(
             if (selectedPosition != RecyclerView.NO_POSITION) {
                 notifyItemChanged(selectedPosition)
             }
-            selectedPosition = holder.adapterPosition
+            selectedPosition = holder.bindingAdapterPosition
             notifyItemChanged(selectedPosition)
             onItemClick(pinSkin)
         }
@@ -48,14 +49,17 @@ class PinSkinAdapter(
 
     override fun getItemCount(): Int = pinSkins.size
 
-    class PinSkinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class PinSkinViewHolder(
+        itemView: View,
+        private val pinSkinRepository: PinSkinRepository
+    ) : RecyclerView.ViewHolder(itemView) {
+
         private val pinSkinImage: ImageView = itemView.findViewById(R.id.pin_color_image)
         private val pinSkinName: TextView = itemView.findViewById(R.id.pin_color_name)
 
-        @RequiresApi(Build.VERSION_CODES.O)
         fun bind(pinSkin: PinSkin) {
             CoroutineScope(Dispatchers.IO).launch {
-                val bitmap = PinSkinRepository.getPinSkinBitmapById(pinSkin.id, itemView.context)
+                val bitmap = pinSkinRepository.getPinSkinBitmapById(pinSkin.id, itemView.context)
                 withContext(Dispatchers.Main) {
                     if (bitmap != null) {
                         pinSkinImage.setImageBitmap(bitmap)

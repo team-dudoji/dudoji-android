@@ -1,5 +1,6 @@
 package com.dudoji.android.network
 
+import RetrofitClient
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -8,18 +9,18 @@ import com.dudoji.android.presentation.util.getEncryptedPrefs
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
+@Deprecated("Use Hilt for dependency injection instead", ReplaceWith("Hilt"))
+@RequiresApi(Build.VERSION_CODES.O)
 object NetworkInitializer {
     const val USER_AGENT = "User-Agent"
     const val AUTHORIZATION = "Authorization"
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun initNonAuthed(context: Context) {
         val client = provideNonAuthedOkHttpClient(context)
 
         RetrofitClient.initNonAuthed(client)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun initAuthed(context: Context) {
 
         val client = provideAuthedOkHttpClient(context)

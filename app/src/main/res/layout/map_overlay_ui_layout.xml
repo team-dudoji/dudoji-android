@@ -64,15 +64,17 @@
 
     </LinearLayout>
 
-    <ImageView
-            android:id="@+id/pinSetter"
-            android:layout_width="50dp"
+    <include
+            android:id="@+id/pin_select_bar"
+            layout="@layout/map_pin_select_bar"
+            android:layout_width="300dp"
             android:layout_height="50dp"
+            android:visibility="visible"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="250dp"
-            android:visibility="visible"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
     <FrameLayout
             android:id="@+id/filterBarWrapper"

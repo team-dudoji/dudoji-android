@@ -26,6 +26,7 @@ import com.dudoji.android.config.MIN_ZOOM
 import com.dudoji.android.databinding.ActivityMapBinding
 import com.dudoji.android.domain.model.ActivityMapObject
 import com.dudoji.android.domain.model.UserType
+import com.dudoji.android.domain.repository.PinSkinRepository
 import com.dudoji.android.landmark.activity.LandmarkSearchActivity
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
@@ -35,10 +36,8 @@ import com.dudoji.android.map.utils.npc.NpcApplier
 import com.dudoji.android.mypage.activity.MyPageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
-import com.dudoji.android.pin.util.PinFilter
-import com.dudoji.android.pin.util.PinModal.openPinDataModal
-import com.dudoji.android.pin.util.PinRenderer
 import com.dudoji.android.presentation.follow.FollowListActivity
+import com.dudoji.android.presentation.map.PinModal.openPinDataModal
 import com.dudoji.android.shop.activity.ShopActivity
 import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.dudoji.android.util.modal.Modal
@@ -53,6 +52,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.collections.MarkerManager
 import dagger.hilt.android.AndroidEntryPoint
+import jakarta.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -62,6 +62,9 @@ import java.io.IOException
 class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
     private val mapViewModel: MapViewModel by viewModels()
+
+    @Inject
+    lateinit var pinSkinRepository: PinSkinRepository
 
     private lateinit var binding: ActivityMapBinding
 
@@ -99,6 +102,12 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private val pinFilter: PinFilter by lazy {
         PinFilter(binding.mapOverlayUiLayout, mapViewModel)
     }
+    private val pinSkinSelectBar: PinSelectBar by lazy {
+        PinSelectBar(binding.mapOverlayUiLayout.pinSelectBar, pinSkinRepository) {
+            selectedPinSkin ->
+            mapViewModel.setSelectedPinSkin(selectedPinSkin)
+        }
+    }
 
     private lateinit var landmarkBottomSheet: LandmarkBottomSheet
 
@@ -120,6 +129,15 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
 
         setupSearchLandmark()
 
+        lifecycleScope.launch {
+            pinSkinSelectBar.init()
+            mapViewModel.selectedPinSkin.collect {
+                pinSkin ->
+                if (pinSkin == null) return@collect
+                pinSkinSelectBar.setSelectedPinSkin(pinSkin)
+
+            }
+        }
         lifecycleScope.launch {
             mapViewModel.landmarkToShow.collect { landmark ->
                 if (landmark == null) return@collect
@@ -182,6 +200,24 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                     clusterManager.addItems(pins)
                     clusterManager.cluster()
                 }
+            }
+        }
+        lifecycleScope.launch {
+            mapViewModel.pinToShow.collect { pin ->
+                if (pin == null) return@collect
+                PinModal.openPinMemoModal(
+                    this@MapActivity,
+                    pin,
+                )
+            }
+        }
+        lifecycleScope.launch {
+            mapViewModel.pinClusterToShow.collect { pins ->
+                if (pins.isEmpty()) return@collect
+                PinModal.openPinMemosModal(
+                    this@MapActivity,
+                    pins
+                )
             }
         }
     }
@@ -261,7 +297,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             clusterManager.renderer = PinRenderer(
                 this@MapActivity,
                 googleMap,
-                clusterManager
+                clusterManager,
+                pinSkinRepository
             )
 
             googleMap.setOnCameraIdleListener {
@@ -273,6 +310,17 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             googleMap.setOnCameraMoveListener {
                 updateLocationToViewModel()
                 updateMapObjects()
+            }
+
+            clusterManager.setOnClusterClickListener {
+                cluster ->
+                mapViewModel.setPinClusterToShow(cluster.items.toList())
+                true
+            }
+
+            clusterManager.setOnClusterItemClickListener { pin ->
+                mapViewModel.setPinToShow(pin)
+                true
             }
 
             normalMarkerCollection.setOnMarkerClickListener { marker ->
@@ -317,7 +365,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 return@MapOverlayUI
             }
 
-            openPinDataModal(this, lat, lng) {
+            openPinDataModal(this, lat, lng, mapViewModel.selectedPinSkin.value) {
                 pinMakeData ->
                 mapViewModel.createPin(pinMakeData)
             }

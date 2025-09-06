@@ -1,4 +1,4 @@
-package com.dudoji.android.pin.util
+package com.dudoji.android.presentation.map
 
 import RetrofitClient
 import android.graphics.drawable.Drawable
@@ -16,13 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dudoji.android.R
+import com.dudoji.android.domain.model.PinSkin
 import com.dudoji.android.landmark.adapter.HashtagAdapter
-import com.dudoji.android.presentation.map.MapActivity
 import com.dudoji.android.mypage.repository.MyPageRemoteDataSource
 import com.dudoji.android.pin.adapter.PinMemoAdapter
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
-import com.dudoji.android.pin.fragment.PinMemoInputFragment
+import com.dudoji.android.pin.util.PinMakeData
+import com.dudoji.android.presentation.pin.fragment.PinMemoInputFragment
 import com.dudoji.android.util.modal.Modal
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.launch
@@ -63,8 +64,8 @@ object PinModal {
         }
     }
 
-    fun openPinDataModal(activity: MapActivity, lat: Double, lng: Double, onComplete: (PinMakeData) -> Unit) {
-        Modal.showCustomModal(activity, PinMemoInputFragment(lat, lng, activity, onComplete))
+    fun openPinDataModal(activity: MapActivity, lat: Double, lng: Double, pinSkin: PinSkin?, onComplete: (PinMakeData) -> Unit) {
+        Modal.showCustomModal(activity, PinMemoInputFragment(lat, lng, pinSkin, onComplete))
     }
 
 

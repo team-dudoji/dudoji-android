@@ -1,13 +1,13 @@
-package com.dudoji.android.pin.util
+package com.dudoji.android.presentation.map
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.scale
+import com.dudoji.android.domain.repository.PinSkinRepository
 import com.dudoji.android.pin.domain.Pin
-import com.dudoji.android.pin.repository.PinSkinRepository
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
@@ -22,14 +22,15 @@ import kotlinx.coroutines.withContext
 class PinRenderer(
     val context: Context,
     map: GoogleMap,
-    clusterManager: ClusterManager<Pin>
+    clusterManager: ClusterManager<Pin>,
+    val pinSkinRepository: PinSkinRepository
 ) : DefaultClusterRenderer<Pin>(context, map, clusterManager) {
 
     override fun onBeforeClusterItemRendered(item: Pin, markerOptions: MarkerOptions) {
         val assetManager = context.assets
         val inputStream = assetManager.open("pin/pin_button.png")
         val bitmap = BitmapFactory.decodeStream(inputStream)
-        val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 96, 96, true)
+        val resizedBitmap = bitmap.scale(96, 96)
         val descriptor = BitmapDescriptorFactory.fromBitmap(resizedBitmap)
         markerOptions.icon(descriptor)
     }
@@ -40,9 +41,9 @@ class PinRenderer(
 
         CoroutineScope(Dispatchers.IO).launch {
             // Load the pin skin asynchronously if needed
-            val bitmap = PinSkinRepository.getPinSkinBitmapById(clusterItem.pinSkinId, context) ?: return@launch
+            val bitmap = pinSkinRepository.getPinSkinBitmapById(clusterItem.pinSkinId, context) ?: return@launch
 
-            val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 96, 96, true)
+            val resizedBitmap = bitmap.scale(96, 96)
 
             val bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(resizedBitmap)
 

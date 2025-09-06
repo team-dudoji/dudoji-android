@@ -5,6 +5,7 @@ import coil.Coil
 import coil.ImageLoader
 import okhttp3.OkHttpClient
 
+@Deprecated("Use CoilModule with Hilt instead", ReplaceWith("CoilModule"))
 object Coil {
 
     lateinit var imageLoader: ImageLoader

@@ -1,4 +1,4 @@
-package com.dudoji.android.pin.fragment
+package com.dudoji.android.presentation.pin.fragment
 
 import android.app.DatePickerDialog
 import android.graphics.drawable.Drawable
@@ -7,6 +7,7 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,32 +15,39 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dudoji.android.databinding.EditPinMemoModalBinding
+import com.dudoji.android.domain.model.PinSkin
+import com.dudoji.android.domain.repository.PinSkinRepository
 import com.dudoji.android.landmark.adapter.EditableHashtagAdapter
-import com.dudoji.android.pin.domain.PinSkin
-import com.dudoji.android.pin.repository.PinSkinRepository
 import com.dudoji.android.pin.util.PinMakeData
+import com.dudoji.android.presentation.map.MapViewModel
 import com.dudoji.android.util.WeekTranslator
 import com.dudoji.android.util.modal.ModalFragment
+import dagger.hilt.android.AndroidEntryPoint
+import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.time.LocalDate
 import java.util.Locale
 
+@AndroidEntryPoint
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 class PinMemoInputFragment(
     private val lat: Double,
     private val lng: Double,
-    private val activity: AppCompatActivity,
+    private val pinSkin: PinSkin?,
     private val onComplete: (PinMakeData) -> Unit
 ) : ModalFragment() {
 
     private var _binding: EditPinMemoModalBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var pinSkinRepository: PinSkinRepository
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
     private var selectedImageUri: Uri? = null
@@ -60,7 +68,6 @@ class PinMemoInputFragment(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = EditPinMemoModalBinding.inflate(inflater, container, false)
         initViews()
@@ -73,7 +80,6 @@ class PinMemoInputFragment(
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun initViews() {
         binding.memoDateEditButton.load("file:///android_asset/pin/calendar_today.png")
         binding.locationIconEdit.load("file:///android_asset/pin/location_on.png")
@@ -82,16 +88,21 @@ class PinMemoInputFragment(
             binding.pinColorSelectButton.background = pinButtonBg
         } catch (e: IOException) { e.printStackTrace() }
 
+        initDefaultPinSkin()
         loadAddress()
         updateDateText()
         setupHashtagEditRecyclerView()
     }
+
+    private fun setPinSkin(pinSkin: PinSkin) {
+
+    }
+
     private fun setupHashtagEditRecyclerView() {
         hashtagEditRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         hashtagEditRecyclerView.adapter = EditableHashtagAdapter()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupListeners() {
         binding.pinMemoImage.setOnClickListener {
             imagePickerLauncher.launch("image/*")
@@ -102,17 +113,23 @@ class PinMemoInputFragment(
         }
 
         binding.pinColorSelectButton.setOnClickListener {
-            val dialog = PinSkinChoiceDialogFragment(
-                PinSkinRepository.pinSkinList?.values?.toList() ?: emptyList()
-            ) { selectedSkin ->
-                selectedPinColor = selectedSkin
-                lifecycleScope.launch {
-                    binding.pinColorSelectButton.background =
-                        PinSkinRepository.getPinSkinDrawableById(selectedSkin.id, requireContext())
-                }
-                Toast.makeText(requireContext(), "${selectedSkin.name} 핀이 선택되었습니다.", Toast.LENGTH_SHORT).show()
+            val dialog = PinSkinChoiceDialogFragment()
+            dialog.show(childFragmentManager, "PinSkinDialog")
+        }
+
+        childFragmentManager.setFragmentResultListener(
+            PinSkinChoiceDialogFragment.REQUEST_KEY,
+            viewLifecycleOwner) {
+                _, bundle ->
+            Log.d("PinMemoInputFragment", "Received pin skin selection result")
+            val selected = bundle.getParcelable(PinSkinChoiceDialogFragment.BUNDLE_KEY, PinSkin::class.java)
+                ?: return@setFragmentResultListener
+            Log.d("PinMemoInputFragment", "Selected pin skin: $selected")
+            selectedPinColor = selected
+            lifecycleScope.launch {
+                binding.pinColorSelectButton.background = pinSkinRepository.getPinSkinDrawableById(selected.id, requireContext())
             }
-            dialog.show(parentFragmentManager, "PinSkinDialog")
+            Toast.makeText(requireContext(), "${selected.name} 핀이 선택되었습니다.", Toast.LENGTH_SHORT).show()
         }
 
         binding.memoSaveButton.setOnClickListener {
@@ -120,7 +137,6 @@ class PinMemoInputFragment(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun loadAddress() {
         Geocoder(requireContext(), Locale.getDefault()).getFromLocation(lat, lng, 1) { addresses ->
             address = addresses.firstOrNull()?.getAddressLine(0) ?: "주소를 가져올 수 없습니다."
@@ -128,7 +144,6 @@ class PinMemoInputFragment(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showDatePicker() {
         DatePickerDialog(
             requireContext(),
@@ -152,7 +167,14 @@ class PinMemoInputFragment(
         binding.memoDate.text = "$year.$month.$day ($weekDay)"
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initDefaultPinSkin() {
+        lifecycleScope.launch {
+            val defaultPinSkin = if (pinSkin != null) pinSkin else pinSkinRepository.getPinSkins()[0]
+            selectedPinColor = defaultPinSkin
+            binding.pinColorSelectButton.background = pinSkinRepository.getPinSkinDrawableById(defaultPinSkin.id, requireContext())
+        }
+    }
+
     private fun saveMemo() {
         if (selectedImageUri == null) {
             Toast.makeText(requireContext(), "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()

@@ -9,7 +9,7 @@ import com.dudoji.android.mypage.api.service.MissionApiService
 import com.dudoji.android.mypage.api.service.NpcQuestApiService
 import com.dudoji.android.mypage.api.service.UserApiService
 import com.dudoji.android.network.utils.LocalDateTimeAdapter
-import com.dudoji.android.pin.api.service.PinApiService
+import com.dudoji.android.data.remote.PinApiService
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -19,6 +19,7 @@ import java.time.LocalDateTime
 
 // REST API client
 @RequiresApi(Build.VERSION_CODES.O)
+@Deprecated("Use Hilt for dependency injection instead", ReplaceWith("Hilt"))
 object RetrofitClient {
     const val BASE_URL = "https://${BuildConfig.HOST_IP_ADDRESS}:${BuildConfig.HOST_PORT}"
 

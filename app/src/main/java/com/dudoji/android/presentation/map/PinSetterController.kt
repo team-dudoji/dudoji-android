@@ -1,4 +1,4 @@
-package com.dudoji.android.pin.util
+package com.dudoji.android.presentation.map
 
 import android.content.ClipData
 import android.os.Build
