@@ -1,5 +1,4 @@
-package com.dudoji.android.map.utils
-
+package com.dudoji.android.data.datasource.location
 
 import android.content.Context
 import android.hardware.Sensor
@@ -7,24 +6,31 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
-class MapDirectionController(
-    context: Context,
-    private val mapCameraController: MapCameraPositionController,
+class BearingDataSource @Inject constructor(
+    @ApplicationContext context: Context,
 ) : SensorEventListener {
 
     private val sensorManager =
         context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-    fun start() {
+    init {
         val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
         if (sensor == null) {
             Log.w("MapDirectionController", "Rotation vector sensor not available on this device.")
-            return
+
+        } else {
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI)
         }
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI)
     }
+
+    private val _bearing = MutableStateFlow(0f)
+
+    val bearing = _bearing
 
     fun stop() {
         sensorManager.unregisterListener(this)
@@ -42,8 +48,7 @@ class MapDirectionController(
 
         val azimuth = Math.toDegrees(orientationAngles[0].toDouble()).toFloat()
         val bearing = (azimuth + 360) % 360
-
-        mapCameraController.setBearing(bearing)
+        _bearing.value = bearing
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}

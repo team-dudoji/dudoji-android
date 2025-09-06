@@ -1,4 +1,4 @@
-package com.dudoji.android.map.utils
+package com.dudoji.android.presentation.map
 
 import EGLHelper
 import android.content.Context

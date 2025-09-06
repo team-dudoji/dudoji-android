@@ -1,8 +1,7 @@
-package com.dudoji.android.map.utils.ui
+package com.dudoji.android.presentation.map
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
 import android.view.View
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dudoji.android.R
+import com.dudoji.android.databinding.LandmarkBottomSheetBinding
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.pin.activity.PinDetailActivity
 import com.dudoji.android.pin.adapter.PinMemoAdapter
@@ -21,31 +21,29 @@ import com.dudoji.android.pin.adapter.SortType
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.repository.PinRepository
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import java.io.IOException
 
-class LandmarkBottomSheet(val landmarkBottomSheet: LinearLayout,
-                          private val context: Context) {
+@RequiresApi(Build.VERSION_CODES.O)
+class LandmarkBottomSheet(
+    val binding: LandmarkBottomSheetBinding,
+    private val context: Context
+) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
-    private val landmarkDetailImageView: ImageView by lazy {landmarkBottomSheet.findViewById<ImageView>(R.id.landmark_detail_image)}
-    private val landmarkTitleTextView: TextView by lazy {landmarkBottomSheet.findViewById<TextView>(R.id.landmark_name)}
-    private val landmarkDescriptionTextView: TextView by lazy {landmarkBottomSheet.findViewById<TextView>(R.id.landmark_description)}
-    private val landmarkRecyclerView: RecyclerView by lazy {landmarkBottomSheet.findViewById<RecyclerView>(R.id.landmark_recycler_view)}
     private val pinMemoAdapter: PinMemoAdapter by lazy {
         PinMemoAdapter(emptyList(), ::openPinDetailPage)
     }
+
     init {
         initializePersistentBottomSheet()
         initializeRecyclerView()
         bottomSheetBehavior.skipCollapsed = false
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun open(landmark: Landmark) {
-        landmarkTitleTextView.text = landmark.placeName
-        landmarkDescriptionTextView.text = landmark.content
-
-        landmarkDetailImageView.load("${RetrofitClient.BASE_URL}/${landmark.detailImageUrl}") {
+        binding.landmarkName.text = landmark.placeName
+        binding.landmarkDescription.text = landmark.content
+        
+        binding.landmarkDetailImage.load("${RetrofitClient.BASE_URL}/${landmark.detailImageUrl}") {
             crossfade(true)
             error(R.mipmap.photo_placeholder)
             placeholder(R.mipmap.photo_placeholder)
@@ -75,8 +73,8 @@ class LandmarkBottomSheet(val landmarkBottomSheet: LinearLayout,
     }
 
     private fun initializeRecyclerView() {
-        landmarkRecyclerView.adapter = pinMemoAdapter
-        landmarkRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.landmarkRecyclerView.adapter = pinMemoAdapter
+        binding.landmarkRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 
     private fun openPinDetailPage(pin: Pin) {
@@ -93,7 +91,7 @@ class LandmarkBottomSheet(val landmarkBottomSheet: LinearLayout,
 
     private fun initializePersistentBottomSheet() {
 
-        bottomSheetBehavior = BottomSheetBehavior.from(landmarkBottomSheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.landmarkBottomSheet)
 
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {

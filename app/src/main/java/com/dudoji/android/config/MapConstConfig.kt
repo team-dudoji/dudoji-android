@@ -6,6 +6,9 @@ import android.graphics.Color
 const val LOCATION_UPDATE_THRESHOLD = 10 // meter
 const val GRADIENT_RADIUS_RATE = 0.8f // rate of gradient radius to tile size
 
+const val TILE_SIZE = 512
+const val EARTH_RADIUS = 6378137.0
+
 const val PIN_UPDATE_THRESHOLD = 10.0 // meter
 
 const val LANDMARK_PIN_RADIUS = 3000 // meter

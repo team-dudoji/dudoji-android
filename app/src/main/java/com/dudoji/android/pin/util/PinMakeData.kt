@@ -4,6 +4,8 @@ import android.net.Uri
 import java.time.LocalDate
 
 data class PinMakeData(
+    val lat: Double,
+    val lng: Double,
     val placeName: String,
     val content: String,
     val date: LocalDate,
