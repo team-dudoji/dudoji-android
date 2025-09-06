@@ -69,10 +69,6 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
         }
 
         setKakaoLoginButton()
-
-        lifecycleScope.launch{
-            tryLogin()
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -95,24 +91,5 @@ class LoginActivity : AppCompatActivity(), MandatoryPermissionHandler.Permission
         finish()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun tryLogin() {
-        val prefs = getEncryptedPrefs(this)
-        val jwt = prefs.getString("jwt", null)
-        if (jwt != null) {
-            try {
-                val response = RetrofitClient.loginApiService.validateJwt("Bearer $jwt")
-                if (response.isSuccessful) {
-                    NetworkInitializer.initAuthed(this)
-                    val intent = Intent(this, MapActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                } else {
-                    Log.e("JWT", "Invalid JWT: ${response.code()}")
-                }
-            } catch (e: Exception) {
-                Log.e("JWT", "Network error: ${e.message}")
-            }
-        }
-    }
+    
 }

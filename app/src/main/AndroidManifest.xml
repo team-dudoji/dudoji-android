@@ -51,6 +51,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".login.activity.AutoLoginActivity" />
         <activity android:name=".login.activity.LoginActivity"/>
         <activity android:name=".map.activity.MapActivity"
                   android:hardwareAccelerated="true"/>

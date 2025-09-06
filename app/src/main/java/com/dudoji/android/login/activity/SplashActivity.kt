@@ -21,7 +21,7 @@ class SplashActivity : AppCompatActivity() {
         dudojiImage.load("file:///android_asset/splash/dudoji.png")
 
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, LoginActivity::class.java))
+            startActivity(Intent(this, AutoLoginActivity::class.java))
             finish()
         }, 2000)
     }
