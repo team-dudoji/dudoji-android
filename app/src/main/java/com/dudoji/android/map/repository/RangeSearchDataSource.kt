@@ -28,14 +28,17 @@ abstract class RangeSearchDataSource<T:BaseDto<D>, D> {
     
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun load(latLng: LatLng, radius: Double): Boolean{
+        Log.d(this.javaClass.name, "try load: $latLng, last: $lastUpdatedLatLng")
         if (lastUpdatedLatLng == null ||
             distanceBetween(lastUpdatedLatLng!!, latLng) > PIN_UPDATE_THRESHOLD) {
+            Log.d(this.javaClass.name, "load: $latLng, last: $lastUpdatedLatLng")
             val response = fetchFromApi(
                 latLng.latitude,
                 latLng.longitude,
                 radius)
             if (response.isSuccessful) {
                 val datas = response.body()
+                Log.d(this.javaClass.name, "datas: $datas")
                 dataList.clear()
                 dataList.addAll(datas?.map {
                         it.toDomain()

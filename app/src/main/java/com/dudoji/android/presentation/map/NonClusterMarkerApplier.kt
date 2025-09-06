@@ -1,8 +1,7 @@
-package com.dudoji.android.map.utils
+package com.dudoji.android.presentation.map
 
 import RetrofitClient
 import android.content.Context
-import android.graphics.Bitmap
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
@@ -25,6 +24,7 @@ abstract class NonClusterMarkerApplier<T : NonClusterMarker> (
 ) {
 
     protected var isIncludedBaseUrl = false
+    private val appliedMarkers = hashSetOf<NonClusterMarker>()
 
     companion object {
         const val TAG = "NonClusterMarkerApplier"
@@ -32,6 +32,8 @@ abstract class NonClusterMarkerApplier<T : NonClusterMarker> (
 
     fun applyMarker(markerBases: List<T>) {
         markerBases.forEach { markerBase ->
+            if (appliedMarkers.contains(markerBase)) return@forEach
+            appliedMarkers.add(markerBase)
             val marker = normalMarkerCollection.addMarker(markerBase.toMarkerOptions())
             marker?.tag = markerBase
             applyMarkerIcon(marker, markerBase)
@@ -52,7 +54,7 @@ abstract class NonClusterMarkerApplier<T : NonClusterMarker> (
 
             val result = loader.execute(request)
             if (result is SuccessResult) {
-                val resizedBitmap = Bitmap.createScaledBitmap(result.drawable.toBitmap(), 150, 150, true)
+                val resizedBitmap = result.drawable.toBitmap()
                 withContext(Dispatchers.Main) {
                     marker.setIcon(
                         BitmapDescriptorFactory.fromBitmap(resizedBitmap)
@@ -67,6 +69,6 @@ abstract class NonClusterMarkerApplier<T : NonClusterMarker> (
     }
 
     fun add(markers: List<T>) {
-
+        applyMarker(markers)
     }
 }

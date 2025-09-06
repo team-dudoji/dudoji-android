@@ -1,10 +1,16 @@
-package com.dudoji.android.map.utils
+package com.dudoji.android.presentation.map
 
 import com.dudoji.android.R
 import com.dudoji.android.config.SPEED_THRESHOLD
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MarkerIconToggler(private val marker: Marker) {
 

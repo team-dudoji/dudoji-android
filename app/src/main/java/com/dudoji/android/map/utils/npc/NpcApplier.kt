@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.dudoji.android.map.domain.Npc
-import com.dudoji.android.map.utils.NonClusterMarkerApplier
+import com.dudoji.android.presentation.map.NonClusterMarkerApplier
 import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.collections.MarkerManager
 
@@ -16,7 +16,7 @@ class NpcApplier(
     ): NonClusterMarkerApplier<Npc>(normalMarkerCollection, context) {
 
     init {
-        isIncludedBaseUrl = true
+//        isIncludedBaseUrl = true
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

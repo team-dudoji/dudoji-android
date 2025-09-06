@@ -25,7 +25,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
-            <com.dudoji.android.map.utils.MapObjectTextureView
+            <com.dudoji.android.presentation.map.MapObjectTextureView
                     android:id="@+id/map_object_texture_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

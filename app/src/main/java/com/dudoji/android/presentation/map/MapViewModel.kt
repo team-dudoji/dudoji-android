@@ -6,12 +6,16 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dudoji.android.config.LANDMARK_PIN_RADIUS
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
 import com.dudoji.android.domain.usecase.MapUseCase
+import com.dudoji.android.landmark.datasource.LandmarkDataSource
 import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.map.domain.Npc
+import com.dudoji.android.map.repository.NpcDataSource
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.pin.domain.Who
+import com.dudoji.android.pin.repository.PinRepository
 import com.dudoji.android.pin.util.PinMakeData
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -62,6 +66,10 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun setLandmarkToShow(landmark: Landmark?) {
+        _landmarkToShow.value = landmark
+    }
+
     fun toggleVisibility(who: Who) {
         val current = _visibilityMap.value[who] ?: true
         _visibilityMap.value[who] = !current
@@ -105,19 +113,44 @@ class MapViewModel @Inject constructor(
     }
 
     fun loadPin() {
-
+        viewModelScope.launch {
+            PinRepository.load(
+                LatLng(centerLocation.value.latitude, centerLocation.value.longitude),
+                LANDMARK_PIN_RADIUS.toDouble())
+            _mapUiState.value = _mapUiState.value.copy(
+                pins = PinRepository.getPins().filter { pin ->
+                    _visibilityMap.value[pin.master] == true
+                }
+            )
+        }
     }
 
     fun loadLandmark() {
-
+        viewModelScope.launch {
+            LandmarkDataSource.load(
+                LatLng(centerLocation.value.latitude, centerLocation.value.longitude),
+                LANDMARK_PIN_RADIUS.toDouble())
+            _mapUiState.value = _mapUiState.value.copy(
+                landmarks = LandmarkDataSource.getLandmarks()
+            )
+        }
     }
 
     fun loadNpc() {
-
+        viewModelScope.launch {
+            NpcDataSource.load(
+                LatLng(centerLocation.value.latitude, centerLocation.value.longitude),
+                LANDMARK_PIN_RADIUS.toDouble())
+            _mapUiState.value = _mapUiState.value.copy(
+                npcs = NpcDataSource.getNpcs()
+            )
+        }
     }
 
     override fun onCameraIdle() {
-
+        loadPin()
+        loadLandmark()
+        loadNpc()
     }
 }
 

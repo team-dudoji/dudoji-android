@@ -31,10 +31,7 @@ import com.dudoji.android.landmark.domain.Landmark
 import com.dudoji.android.landmark.util.LandmarkApplier
 import com.dudoji.android.map.domain.Npc
 import com.dudoji.android.map.fragment.QuestFragment
-import com.dudoji.android.map.utils.MapObject
-import com.dudoji.android.map.utils.MarkerIconToggler
 import com.dudoji.android.map.utils.npc.NpcApplier
-import com.dudoji.android.map.utils.ui.LandmarkBottomSheet
 import com.dudoji.android.mypage.activity.MyPageActivity
 import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
@@ -119,7 +116,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         setupMyLocationButton()
         setupAnimatedNavButtons()
 
-        landmarkBottomSheet = LandmarkBottomSheet(findViewById(R.id.landmark_bottom_sheet), this)
+        landmarkBottomSheet = LandmarkBottomSheet(binding.landmarkBottomSheet, this)
 
         setupSearchLandmark()
 
@@ -163,7 +160,9 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mapViewModel.landmarksToShow.collect { landmarks ->
+                    Log.d("MapActivity", "tlqkf ㅣㅁㅜㅇㅡㅁㄱㅏ")
                     if (!::googleMap.isInitialized) return@collect
+                    Log.d("MapActivity", "Received landmarks: ${landmarks.size}")
                     landmarkApplier.add(landmarks)
                 }
             }
@@ -235,7 +234,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun updateLocationToViewModel() {
-        Log.d("MapActivity", "Updating location to ViewModel")
         val centerLatLng = googleMap.cameraPosition.target
         mapViewModel.updateCenterLocation(centerLatLng)
     }
@@ -282,20 +280,23 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 Log.d("MapActivity", "Marker clicked: ${marker.id}, ${marker.title}")
 
                 val tag = marker.tag
-                if (tag is Landmark) {
-                    lifecycleScope.launch {
-
+                when (tag) {
+                    is Landmark -> {
+                        lifecycleScope.launch {
+                            mapViewModel.setLandmarkToShow(tag)
+                        }
+                        true
                     }
-                    true
-                } else if (tag is Npc) {
-                    Modal.showCustomModal(
-                        this@MapActivity,
-                        QuestFragment(tag.npcId),
-                        R.layout.template_quest_modal
-                    )
-                    true
+                    is Npc -> {
+                        Modal.showCustomModal(
+                            this@MapActivity,
+                            QuestFragment(tag.npcId),
+                            R.layout.template_quest_modal
+                        )
+                        true
+                    }
+                    else -> false
                 }
-                false
             }
         }
 
