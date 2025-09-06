@@ -1,7 +1,6 @@
-package com.dudoji.android.login.api.service
+package com.dudoji.android.data.remote.api
 
-
-import com.dudoji.android.login.api.dto.TokenResponseDto
+import com.dudoji.android.data.remote.dto.TokenResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

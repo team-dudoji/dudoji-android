@@ -2,7 +2,7 @@ package com.dudoji.android.data.network
 
 import android.content.Context
 import android.util.Log
-import com.dudoji.android.login.util.getEncryptedPrefs
+import com.dudoji.android.presentation.util.getEncryptedPrefs
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Response
 import javax.inject.Inject

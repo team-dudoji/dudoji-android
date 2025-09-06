@@ -3,7 +3,7 @@ package com.dudoji.android.data.repository
 import RetrofitClient
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.dudoji.android.data.remote.FollowApiService
+import com.dudoji.android.data.remote.api.FollowApiService
 import com.dudoji.android.domain.model.SortType
 import com.dudoji.android.domain.model.User
 import com.dudoji.android.domain.model.UserType
