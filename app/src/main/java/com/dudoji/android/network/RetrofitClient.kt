@@ -2,9 +2,9 @@
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.dudoji.android.BuildConfig
-import com.dudoji.android.data.remote.FollowApiService
+import com.dudoji.android.data.remote.api.FollowApiService
 import com.dudoji.android.landmark.api.service.LandmarkApiService
-import com.dudoji.android.login.api.service.LoginApiService
+import com.dudoji.android.data.remote.api.LoginApiService
 import com.dudoji.android.mypage.api.service.MissionApiService
 import com.dudoji.android.mypage.api.service.NpcQuestApiService
 import com.dudoji.android.mypage.api.service.UserApiService

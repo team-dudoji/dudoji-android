@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.dudoji.android.login.util.getEncryptedPrefs
+import com.dudoji.android.presentation.util.getEncryptedPrefs
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 

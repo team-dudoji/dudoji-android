@@ -1,4 +1,4 @@
-package com.dudoji.android.login.api.dto
+package com.dudoji.android.data.remote.dto
 
 data class TokenResponseDto (
     val token: TokenDto

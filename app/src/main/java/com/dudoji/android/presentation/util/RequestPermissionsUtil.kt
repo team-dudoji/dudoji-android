@@ -1,4 +1,4 @@
-package com.dudoji.android.login.util
+package com.dudoji.android.presentation.util
 
 import android.Manifest
 import android.app.Activity
