@@ -1,4 +1,4 @@
-package com.dudoji.android.presentation.login.activity // [병합 결정] 최신 패키지 구조 사용
+package com.dudoji.android.presentation.login.activity
 
 import android.os.Build
 import android.os.Bundle
