@@ -47,6 +47,68 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/profileBarLottie"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_marginBottom="0dp"
+                app:lottie_fileName="profile_bar.json"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false"
+                android:scaleType="fitXY"
+                android:visibility="gone"
+                android:elevation="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_max="400dp" />
+
+        <LinearLayout
+                android:id="@+id/profileSelectorBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center" android:paddingVertical="16dp" android:paddingHorizontal="24dp" android:visibility="gone"
+                android:elevation="12dp" app:layout_constraintBottom_toBottomOf="@id/profileBarLottie"
+                app:layout_constraintTop_toTopOf="@id/profileBarLottie"
+                app:layout_constraintStart_toStartOf="@id/profileBarLottie"
+                app:layout_constraintEnd_toEndOf="@id/profileBarLottie"
+                tools:visibility="visible"
+                >
+
+            <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profileOption1"
+                    style="@style/ProfileOptionImage"
+                    android:src="@drawable/profile_image1" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profileOption2"
+                    style="@style/ProfileOptionImage"
+                    android:src="@drawable/profile_image2" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profileOption3"
+                    style="@style/ProfileOptionImage"
+                    android:src="@drawable/profile_image3" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profileOption4"
+                    style="@style/ProfileOptionImage"
+                    android:src="@drawable/profile_image4" />
+        </LinearLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profileButton"
+                android:layout_width="120dp" android:layout_height="120dp" android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile_image1"
+                android:elevation="2dp" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                app:strokeColor="@color/white"
+                app:strokeWidth="2dp"/>
+
         <include
                 android:id="@+id/navigation_layout"
                 layout="@layout/map_navigation_layout" />

@@ -7,4 +7,18 @@
     <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
         <item name="cornerSize">10%</item>
     </style>
+
+        <style name="Theme.Dudoji" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        </style>
+
+        <style name="ProfileOptionImage">
+            <item name="android:layout_width">80dp</item>
+            <item name="android:layout_height">80dp</item>
+            <item name="android:layout_marginEnd">8dp</item>
+            <item name="android:scaleType">centerCrop</item>
+            <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Material3.Corner.Full</item>
+        </style>
+
+
 </resources>
+
