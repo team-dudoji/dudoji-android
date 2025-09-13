@@ -9,7 +9,7 @@ import com.dudoji.android.mypage.api.service.MissionApiService
 import com.dudoji.android.mypage.api.service.NpcQuestApiService
 import com.dudoji.android.mypage.api.service.UserApiService
 import com.dudoji.android.network.utils.LocalDateTimeAdapter
-import com.dudoji.android.data.remote.PinApiService
+import com.dudoji.android.data.remote.api.PinApiService
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

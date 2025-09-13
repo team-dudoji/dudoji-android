@@ -2,6 +2,7 @@ package com.dudoji.android.map.fragment
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +56,8 @@ class QuestFragment(val npcId: Long): ModalFragment() {
         }
 
         (binding.root.parent.parent as ViewGroup).findViewById<TextView>(R.id.npc_speech_text).text = npcQuestDto.npcScript
-        binding.questImage.load(npcQuestDto.imageUrl) {
+        Log.d("QuestFragment", "npcQuestDto: $npcQuestDto ${npcQuestDto.imageUrl}")
+        binding.questImage.load("${RetrofitClient.BASE_URL}/${npcQuestDto.imageUrl}") {
             crossfade(true)
             placeholder(R.mipmap.photo_placeholder)
             error(R.mipmap.photo_placeholder)

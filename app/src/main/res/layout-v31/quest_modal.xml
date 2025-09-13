@@ -15,7 +15,7 @@
                 android:clipToOutline="true"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:src="@drawable/pnu_image"
+                android:src="@mipmap/photo_placeholder"
                 android:id="@+id/quest_image"
                 android:scaleType="centerCrop"/>
         <LinearLayout
@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:id="@+id/quest_title"
-                    android:text="&lt;광안대교&gt;"
+                    android:text="&lt;---&gt;"
                     android:textFontWeight="600"
                     android:textColor="#F6F6F6"
                     android:fontFamily="@font/pretendard"
@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="여기는 바나나가 굉장히 유명해 이순신 장군이 12척의 배로 적을 물리친 아아아와 두도지가 이곳의 명소야"
+                android:text="---"
                 android:textSize="12sp"
                 android:textColor="#323232"
                 android:fontFamily="@font/pretendard"

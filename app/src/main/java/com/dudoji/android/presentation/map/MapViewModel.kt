@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dudoji.android.R
 import com.dudoji.android.config.LANDMARK_PIN_RADIUS
-import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
 import com.dudoji.android.domain.model.PinSkin
 import com.dudoji.android.domain.usecase.MapUseCase
 import com.dudoji.android.landmark.datasource.LandmarkDataSource
@@ -122,12 +121,13 @@ class MapViewModel @Inject constructor(
     }
 
     fun canCreatePin(lat: Double, lng: Double): Boolean {
-        val distance = locationFlow.value.distanceTo(
-            Location("manual").apply {
-                latitude = lat
-                longitude = lng }
-        )
-        return distance <= REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
+//        val distance = locationFlow.value.distanceTo(
+//            Location("manual").apply {
+//                latitude = lat
+//                longitude = lng }
+//        )
+//        return distance <= REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
+        return true
     }
 
     fun setAttach(isAttached: Boolean) {
@@ -169,6 +169,20 @@ class MapViewModel @Inject constructor(
             _mapUiState.value = _mapUiState.value.copy(
                 npcs = NpcDataSource.getNpcs()
             )
+        }
+    }
+
+    fun acceptQuest(questId: Long, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val result = mapUseCase.acceptQuest(questId)
+            onResult(result)
+        }
+    }
+
+    fun completeQuest(questId: Long, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val result = mapUseCase.completeQuest(questId)
+            onResult(result)
         }
     }
 

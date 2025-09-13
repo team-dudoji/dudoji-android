@@ -1,5 +1,6 @@
 package com.dudoji.android.presentation.map
 
+import RetrofitClient
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
@@ -38,7 +39,7 @@ import com.dudoji.android.pin.activity.MyPinActivity
 import com.dudoji.android.pin.domain.Pin
 import com.dudoji.android.presentation.follow.FollowListActivity
 import com.dudoji.android.presentation.map.PinModal.openPinDataModal
-import com.dudoji.android.shop.activity.ShopActivity
+import com.dudoji.android.presentation.shop.activity.ShopActivity
 import com.dudoji.android.ui.AnimatedNavButtonHelper
 import com.dudoji.android.util.modal.Modal
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -72,7 +73,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         LandmarkApplier(normalMarkerCollection, this)
     }
     private val npcApplier: NpcApplier by lazy {
-        NpcApplier(normalMarkerCollection, this) {
+        NpcApplier(normalMarkerCollection, this, {
                 npc ->
             if (npc.hasQuest) {
                 val initialBitmap = BitmapFactory.decodeResource(resources, R.mipmap.quest_bubble)
@@ -81,6 +82,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 npc.activityMapObject = activityMapObject
                 activityObjects.add(activityMapObject)
             }
+        }) {
+            activityObjects.clear()
         }
     }
 
@@ -350,6 +353,55 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                         true
                     }
                     is Npc -> {
+                        if (tag.hasQuest) {
+                            lifecycleScope.launch {
+                                val response = RetrofitClient.npcQuestApiService.getNpcQuest(tag.npcId)
+                                if (response.isSuccessful) {
+                                    val npcQuestDto = response.body() ?: throw IllegalStateException("NPC Quest data is null")
+                                    if (npcQuestDto.quests.isEmpty()) {
+                                        Toast.makeText(
+                                            this@MapActivity,
+                                            "진행 가능한 퀘스트가 없습니다.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        return@launch
+                                    }
+                                    val quest = npcQuestDto.quests[0]
+                                    mapViewModel.acceptQuest(quest.id) {
+                                        isSuccess ->
+                                        if (isSuccess) {
+                                            Toast.makeText(
+                                                this@MapActivity,
+                                                "퀘스트를 수락했습니다.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            tag.hasQuest = false
+                                            npcApplier.reload()
+                                            lifecycleScope.launch {
+                                                binding.dialogLayout.root.visibility = View.VISIBLE
+                                                delay(5000)
+                                                binding.dialogLayout.root.visibility = View.GONE
+                                            }
+                                        } else {
+                                            Toast.makeText(
+                                                this@MapActivity,
+                                                "퀘스트 수락에 실패했습니다.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+
+                                } else {
+                                    Toast.makeText(
+                                        this@MapActivity,
+                                        "퀘스트 정보를 불러오지 못했습니다.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    return@launch
+                                }
+                            }
+                            return@setOnMarkerClickListener true
+                        }
                         Modal.showCustomModal(
                             this@MapActivity,
                             QuestFragment(tag.npcId),

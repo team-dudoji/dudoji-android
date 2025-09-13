@@ -1,4 +1,4 @@
-package com.dudoji.android.data.remote
+package com.dudoji.android.data.remote.api
 
 import com.dudoji.android.pin.api.dto.PinRequestDto
 import com.dudoji.android.pin.api.dto.PinResponseDto

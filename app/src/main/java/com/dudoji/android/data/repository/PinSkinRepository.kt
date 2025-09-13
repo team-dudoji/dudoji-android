@@ -11,7 +11,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.dudoji.android.data.network.NetworkModule
-import com.dudoji.android.data.remote.PinApiService
+import com.dudoji.android.data.remote.api.PinApiService
 import com.dudoji.android.domain.model.PinSkin
 import com.dudoji.android.domain.repository.PinSkinRepository
 import com.dudoji.android.pin.api.dto.PinSkinDto

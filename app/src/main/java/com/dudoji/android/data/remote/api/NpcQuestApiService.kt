@@ -1,0 +1,30 @@
+package com.dudoji.android.data.remote.api
+
+import com.dudoji.android.map.api.dto.NpcMetaDto
+import com.dudoji.android.mypage.api.dto.NpcDto
+import com.dudoji.android.mypage.api.dto.NpcQuestDto
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
+
+interface NpcQuestApiService {
+    @GET("/api/user/npcs")
+    suspend fun getNpcs(@Query("radius") radius: Int,
+                        @Query("lat") lat: Double,
+                        @Query("lng") lng: Double): Response<List<NpcDto>>
+
+    @GET("/api/user/npcs/{npcId}/quests")
+    suspend fun getNpcQuest(@Path("npcId") npcId: Long): Response<NpcQuestDto>
+
+    @GET("/api/user/npcs/meta")
+    fun getQuestMetaData(): Call<List<NpcMetaDto>>
+
+    @POST("/api/user/npcs/accept/{questId}")
+    suspend fun acceptQuest(@Path("questId") questId: Long): Response<Boolean>
+
+    @POST("/api/user/npcs/complete/{questId}")
+    suspend fun completeQuest(@Path("questId") questId: Long): Response<Boolean>
+}

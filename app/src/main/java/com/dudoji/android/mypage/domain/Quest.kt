@@ -1,6 +1,7 @@
 package com.dudoji.android.mypage.domain
 
 data class Quest(
+    val id: Long,
     val title: String,
     val currentValue: Int,
     val goalValue: Int,

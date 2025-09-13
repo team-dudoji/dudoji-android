@@ -8,6 +8,7 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.dudoji.android.data.remote.api.NpcQuestApiService
 import com.dudoji.android.domain.repository.LocationRepository
 import com.dudoji.android.pin.api.dto.PinRequestDto
 import com.dudoji.android.pin.repository.PinRepository
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @RequiresApi(Build.VERSION_CODES.O)
 class MapUseCase @Inject constructor(
     val locationRepository: LocationRepository,
+    val npcQuestApiService: NpcQuestApiService,
     @ApplicationContext val context: Context
 ) {
     fun getLocationUpdates(): StateFlow<Location> {
@@ -81,5 +83,33 @@ class MapUseCase @Inject constructor(
             return ""
         }
         return imageResponse.body()!!
+    }
+
+    suspend fun acceptQuest(questId: Long): Boolean {
+        val response = npcQuestApiService.acceptQuest(questId)
+        if (!response.isSuccessful) {
+            Log.e("MapUseCase", "Failed to accept quest: ${response.errorBody()?.string()}")
+            Toast.makeText(
+                context,
+                "퀘스트 수락에 실패했습니다.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+        return true
+    }
+
+    suspend fun completeQuest(questId: Long): Boolean {
+        val response = npcQuestApiService.completeQuest(questId)
+        if (!response.isSuccessful) {
+            Log.e("MapUseCase", "Failed to complete quest: ${response.errorBody()?.string()}")
+            Toast.makeText(
+                context,
+                "퀘스트 완료에 실패했습니다.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+        return true
     }
 }
