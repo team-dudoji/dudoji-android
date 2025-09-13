@@ -73,7 +73,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     }
     private val npcApplier: NpcApplier by lazy {
         NpcApplier(normalMarkerCollection, this) {
-            npc ->
+                npc ->
             if (npc.hasQuest) {
                 val initialBitmap = BitmapFactory.decodeResource(resources, R.mipmap.quest_bubble)
                 val activityMapObject =
@@ -104,9 +104,24 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     }
     private val pinSkinSelectBar: PinSelectBar by lazy {
         PinSelectBar(binding.mapOverlayUiLayout.pinSelectBar, pinSkinRepository) {
-            selectedPinSkin ->
+                selectedPinSkin ->
             mapViewModel.setSelectedPinSkin(selectedPinSkin)
         }
+    }
+
+    private val profileButtonManager: ProfileButtonManager by lazy {
+        ProfileButtonManager(
+            context = this,
+            profileButton = binding.profileButton,
+            profileSelectorBar = binding.profileSelectorBar,
+            lottieView = binding.profileBarLottie,
+            option1 = binding.profileOption1,
+            option2 = binding.profileOption2,
+            option3 = binding.profileOption3,
+            option4 = binding.profileOption4,
+            viewModel = mapViewModel,
+            scope = lifecycleScope
+        )
     }
 
     private lateinit var landmarkBottomSheet: LandmarkBottomSheet
@@ -125,6 +140,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         setupMyLocationButton()
         setupAnimatedNavButtons()
 
+        profileButtonManager.init()
+
         landmarkBottomSheet = LandmarkBottomSheet(binding.landmarkBottomSheet, this)
 
         setupSearchLandmark()
@@ -132,7 +149,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         lifecycleScope.launch {
             pinSkinSelectBar.init()
             mapViewModel.selectedPinSkin.collect {
-                pinSkin ->
+                    pinSkin ->
                 if (pinSkin == null) return@collect
                 pinSkinSelectBar.setSelectedPinSkin(pinSkin)
 
@@ -237,7 +254,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    // location updating routine
     private fun startLocationUpdates() {
         lifecycleScope.launch {
             while (true) {
@@ -293,7 +309,6 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         lifecycleScope.launch {
             startLocationUpdates()
 
-            //맵 액티비티에 스킨 씌우기
             clusterManager.renderer = PinRenderer(
                 this@MapActivity,
                 googleMap,
@@ -313,7 +328,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             }
 
             clusterManager.setOnClusterClickListener {
-                cluster ->
+                    cluster ->
                 mapViewModel.setPinClusterToShow(cluster.items.toList())
                 true
             }
@@ -353,7 +368,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             assets,
             googleMap
         ) {
-            lat, lng ->
+                lat, lng ->
             if (!::googleMap.isInitialized) return@MapOverlayUI
 
             if (!mapViewModel.canCreatePin(lat, lng)) {
@@ -366,16 +381,14 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             }
 
             openPinDataModal(this, lat, lng, mapViewModel.selectedPinSkin.value) {
-                pinMakeData ->
+                    pinMakeData ->
                 mapViewModel.createPin(pinMakeData)
             }
         }
     }
 
-
-
     private fun updateMapObjects() {
-       if (!::googleMap.isInitialized) return
+        if (!::googleMap.isInitialized) return
 
         val viewObjects = activityObjects.map { obj ->
             val screenPoint = googleMap.projection.toScreenLocation(obj.latLng)
@@ -387,6 +400,9 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
     private fun setupAnimatedNavButtons() {
         AnimatedNavButtonHelper.setup(
             activity = this,
+            onStateChanged = { isExpanded ->
+                profileButtonManager.updateVisibility(isExpanded)
+            },
             onStoreClick = {
                 startActivity(Intent(this, ShopActivity::class.java))
             },
@@ -395,7 +411,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
             },
             onSocialClick = {
                 val intent = Intent(this, FollowListActivity::class.java)
-                intent.putExtra(FollowListActivity.EXTRA_TYPE, UserType.FOLLOWER.toString()) // 기본으로 팔로워 페이지 이동
+                intent.putExtra(FollowListActivity.EXTRA_TYPE, UserType.FOLLOWER.toString())
                 startActivity(intent)
             },
             onProfileClick = {
