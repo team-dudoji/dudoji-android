@@ -73,7 +73,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
         LandmarkApplier(normalMarkerCollection, this)
     }
     private val npcApplier: NpcApplier by lazy {
-        NpcApplier(normalMarkerCollection, this) {
+        NpcApplier(normalMarkerCollection, this, {
                 npc ->
             if (npc.hasQuest) {
                 val initialBitmap = BitmapFactory.decodeResource(resources, R.mipmap.quest_bubble)
@@ -82,6 +82,8 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                 npc.activityMapObject = activityMapObject
                 activityObjects.add(activityMapObject)
             }
+        }) {
+            activityObjects.clear()
         }
     }
 
@@ -374,10 +376,11 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                             tag.hasQuest = false
+                                            npcApplier.reload()
                                             lifecycleScope.launch {
-                                                binding.dialogLayout.linearLayout.visibility = View.VISIBLE
-                                                delay(1000)
-                                                binding.dialogLayout.linearLayout.visibility = View.GONE
+                                                binding.dialogLayout.root.visibility = View.VISIBLE
+                                                delay(5000)
+                                                binding.dialogLayout.root.visibility = View.GONE
                                             }
                                         } else {
                                             Toast.makeText(
@@ -387,6 +390,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                                             ).show()
                                         }
                                     }
+
                                 } else {
                                     Toast.makeText(
                                         this@MapActivity,
@@ -396,6 +400,7 @@ class MapActivity :  AppCompatActivity(), OnMapReadyCallback {
                                     return@launch
                                 }
                             }
+                            return@setOnMarkerClickListener true
                         }
                         Modal.showCustomModal(
                             this@MapActivity,

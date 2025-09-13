@@ -13,10 +13,19 @@ class NpcApplier(
     normalMarkerCollection: MarkerManager.Collection,
     context: Context,
     val onNpcLoaded: (Npc) -> Unit,
+    val reset: () -> Unit
     ): NonClusterMarkerApplier<Npc>(normalMarkerCollection, context) {
 
     init {
 //        isIncludedBaseUrl = true
+    }
+
+    fun reload() {
+        reset()
+//        val npcs = NpcDataSource.getNpcs()
+//        npcs.forEach { npc ->
+//            onNpcLoaded(npc)
+//        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
