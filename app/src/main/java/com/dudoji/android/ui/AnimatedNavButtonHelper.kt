@@ -14,6 +14,7 @@ object AnimatedNavButtonHelper {
 
     fun setup(
         activity: MapActivity,
+        onStateChanged: (isExpanded: Boolean) -> Unit,
         onCenterClick: (() -> Unit)? = null,
         onStoreClick: () -> Unit,
         onMyPinClick: () -> Unit,
