@@ -50,14 +50,15 @@
         <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/profileBarLottie"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="70dp"
                 android:layout_marginBottom="0dp"
                 app:lottie_fileName="profile_bar.json"
                 app:lottie_autoPlay="false"
                 app:lottie_loop="false"
                 android:scaleType="fitXY"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:elevation="10dp"
+                android:layout_marginVertical="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintWidth_max="400dp" />
@@ -65,41 +66,54 @@
         <LinearLayout
                 android:id="@+id/profileSelectorBar"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:orientation="horizontal"
-                android:gravity="center" android:paddingVertical="16dp" android:paddingHorizontal="24dp" android:visibility="gone"
-                android:elevation="12dp" app:layout_constraintBottom_toBottomOf="@id/profileBarLottie"
+                android:gravity="center"
+                android:paddingVertical="0dp"
+                android:paddingHorizontal="0dp"
+                android:visibility="gone"
+                android:elevation="10dp"
+                app:layout_constraintBottom_toBottomOf="@id/profileBarLottie"
                 app:layout_constraintTop_toTopOf="@id/profileBarLottie"
                 app:layout_constraintStart_toStartOf="@id/profileBarLottie"
                 app:layout_constraintEnd_toEndOf="@id/profileBarLottie"
-                tools:visibility="visible"
-                >
+                tools:visibility="visible">
 
-            <com.google.android.material.imageview.ShapeableImageView
+        <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profileOption1"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     style="@style/ProfileOptionImage"
                     android:src="@drawable/profile_image1" />
 
             <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profileOption2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     style="@style/ProfileOptionImage"
                     android:src="@drawable/profile_image2" />
 
             <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profileOption3"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     style="@style/ProfileOptionImage"
                     android:src="@drawable/profile_image3" />
 
             <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profileOption4"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
                     style="@style/ProfileOptionImage"
                     android:src="@drawable/profile_image4" />
         </LinearLayout>
 
         <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/profileButton"
-                android:layout_width="120dp" android:layout_height="120dp" android:layout_marginStart="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="50dp"
                 android:padding="2dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/profile_image1"
@@ -110,9 +124,9 @@
                 app:strokeWidth="2dp"/>
 
         <include
+                android:elevation="11dp"
                 android:id="@+id/navigation_layout"
                 layout="@layout/map_navigation_layout" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
