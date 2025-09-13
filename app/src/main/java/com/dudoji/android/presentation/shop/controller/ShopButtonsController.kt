@@ -1,4 +1,4 @@
-package com.dudoji.android.shop.controller
+package com.dudoji.android.presentation.shop.controller
 
 import android.content.res.ColorStateList
 import android.view.Gravity

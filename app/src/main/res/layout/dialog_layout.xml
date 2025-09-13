@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="#BA000000">
+
+    <ImageView
+            android:layout_width="300dp"
+            android:layout_height="500dp"
+            android:src="@mipmap/buggi"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.702"
+            app:layout_constraintVertical_bias="0.817" />
+
+    <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="200dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/linearLayout">
+
+        <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="30dp"
+                app:strokeWidth="5dp"
+                app:strokeColor="#D9CDC1">
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="50dp"
+                    android:paddingHorizontal="20dp"
+                    android:text="안녕! 나는 부도지라고 해. 만나서 반가워!\n\n광안리에 놀러온 걸 환영해! 관안리를 돌아다니면서 퀘스트도 해결해보는 건 어때?\n\n자, 그럼 즐거운 시간 보내!"
+                    android:textColor="#3E2723"
+                    android:fontFamily="@font/pretendard"
+                    android:textStyle="normal"
+                    android:textFontWeight="400"
+                    android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+            android:layout_height="40dp"
+            android:layout_width="100dp"
+            app:cardBackgroundColor="#998675"
+            app:strokeWidth="3dp"
+            app:strokeColor="#D9CDC1"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            android:layout_marginBottom="-24dp"
+            android:layout_marginStart="10dp">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="부도지"
+                android:textColor="#F6F6F6"
+                android:fontFamily="@font/pretendard"
+                android:textStyle="bold"
+                android:textFontWeight="600"
+                android:textSize="14sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

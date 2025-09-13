@@ -61,4 +61,9 @@
             android:id="@+id/landmark_bottom_sheet"
             layout="@layout/landmark_bottom_sheet" />
 
+    <include
+            android:id="@+id/dialog_layout"
+            layout="@layout/dialog_layout"
+            android:visibility="gone"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

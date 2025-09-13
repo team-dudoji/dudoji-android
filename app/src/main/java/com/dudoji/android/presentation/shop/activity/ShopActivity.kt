@@ -1,4 +1,4 @@
-package com.dudoji.android.shop.activity
+package com.dudoji.android.presentation.shop.activity
 
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -14,7 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import coil.load
 import com.dudoji.android.R
 import com.dudoji.android.mypage.repository.MyPageRemoteDataSource
-import com.dudoji.android.shop.controller.ShopButtonsController
+import com.dudoji.android.presentation.shop.controller.ShopButtonsController
 import java.io.IOException
 
 class ShopActivity : AppCompatActivity() {

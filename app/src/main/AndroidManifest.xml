@@ -57,7 +57,7 @@
         <activity android:name=".presentation.map.MapActivity"
                 android:hardwareAccelerated="true"/>
         <activity android:name=".mypage.activity.MyPageActivity" />
-        <activity android:name=".shop.activity.ShopActivity" />
+        <activity android:name=".presentation.shop.activity.ShopActivity" />
         <activity android:name=".pin.activity.MyPinActivity" />
         <activity android:name=".pin.activity.PinDetailActivity" />
         <activity android:name=".presentation.follow.FollowListActivity" />

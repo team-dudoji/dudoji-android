@@ -34,6 +34,7 @@ val NPC_QUEST_DTO_MOCK: NpcQuestDto = NpcQuestDto (
     description = "This is a quest description for NPC One.",
     quests = listOf(
         QuestDto(
+            1,
             title = "First Quest",
             currentValue = 0,
             goalValue = 10,
@@ -41,6 +42,7 @@ val NPC_QUEST_DTO_MOCK: NpcQuestDto = NpcQuestDto (
             type = QuestType.NPC,
         ),
         QuestDto(
+            2,
             title = "Second Quest",
             currentValue = 0,
             goalValue = 10,

@@ -5,6 +5,7 @@ import com.dudoji.android.mypage.domain.Quest
 import com.dudoji.android.mypage.domain.QuestType
 
 data class QuestDto (
+    val id: Long,
     val title: String,
     val currentValue: Int,
     val goalValue: Int,
@@ -15,6 +16,7 @@ data class QuestDto (
         val isCompleted = this.currentValue >= this.goalValue
 
         return Quest(
+            id = this.id,
             title = this.title,
             currentValue = this.currentValue,
             goalValue = this.goalValue,

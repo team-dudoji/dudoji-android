@@ -5,9 +5,10 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.dudoji.android.BuildConfig
 import com.dudoji.android.data.remote.api.FollowApiService
+import com.dudoji.android.data.remote.api.NpcQuestApiService
+import com.dudoji.android.data.remote.api.PinApiService
 import com.dudoji.android.network.utils.LocalDateAdapter
 import com.dudoji.android.network.utils.LocalDateTimeAdapter
-import com.dudoji.android.data.remote.PinApiService
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -108,5 +109,13 @@ object NetworkModule {
         @Named("Authed") retrofit: Retrofit
     ): PinApiService {
         return retrofit.create(PinApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNpcQuestApiService(
+        @Named("Authed") retrofit: Retrofit
+    ): NpcQuestApiService {
+        return retrofit.create(NpcQuestApiService::class.java)
     }
 }
