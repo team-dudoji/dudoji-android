@@ -1,7 +1,7 @@
 package com.dudoji.android.landmark.adapter
 
 import RetrofitClient
-import android.graphics.drawable.Drawable // import 추가
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +12,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.dudoji.android.R
 import com.dudoji.android.landmark.domain.Landmark
-import java.lang.Exception // import 추가
+import java.lang.Exception
 
 class LandmarkSearchAdapter(
     private var fullList: List<Landmark>,
@@ -22,8 +22,10 @@ class LandmarkSearchAdapter(
     private var filteredList: List<Landmark> = fullList
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val festivalBorder: View = itemView.findViewById(R.id.festival_border)
         val profileImage: ImageView = itemView.findViewById(R.id.profile_image)
         val nameText: TextView = itemView.findViewById(R.id.title_text)
+        val festivalTag: ImageView = itemView.findViewById(R.id.festival_tag)
         val hashtagText: TextView = itemView.findViewById(R.id.hashtag_text)
 
         fun bind(landmark: Landmark) {
@@ -46,6 +48,11 @@ class LandmarkSearchAdapter(
                 transformations(CircleCropTransformation())
             }
 
+            val visibility = if (landmark.isFestival) View.VISIBLE else View.GONE
+            festivalBorder.visibility = visibility
+            festivalTag.visibility = visibility
+
+            // 아이템 클릭 리스너 설정
             itemView.setOnClickListener {
                 onItemClick(landmark)
             }

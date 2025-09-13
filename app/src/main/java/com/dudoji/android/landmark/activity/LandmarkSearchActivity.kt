@@ -1,20 +1,21 @@
 package com.dudoji.android.landmark.activity
 
+import RetrofitClient
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dudoji.android.R
 import com.dudoji.android.landmark.adapter.LandmarkSearchAdapter
 import kotlinx.coroutines.launch
-import android.content.Context
-import android.content.Intent
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 
 class LandmarkSearchActivity : AppCompatActivity() {
 
@@ -27,7 +28,6 @@ class LandmarkSearchActivity : AppCompatActivity() {
         val searchEditText = findViewById<EditText>(R.id.landmark_search_edit_text)
         val recyclerView = findViewById<RecyclerView>(R.id.friend_recommend_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
 
         val initialQuery = intent.getStringExtra("query") ?: ""
         searchEditText.setText(initialQuery)
@@ -44,11 +44,9 @@ class LandmarkSearchActivity : AppCompatActivity() {
             val keyword = it.toString()
             if (keyword.isNotBlank()) {
                 searchLandmarksFromServer(keyword)
+            } else {
+                getRecommendedLandmarksFromServer()
             }
-        }
-
-        if (initialQuery.isNotBlank()) {
-            searchLandmarksFromServer(initialQuery)
         }
 
         adapter = LandmarkSearchAdapter(emptyList()) { selectedLandmark ->
@@ -58,12 +56,33 @@ class LandmarkSearchActivity : AppCompatActivity() {
         }
         recyclerView.adapter = adapter
 
+        if (initialQuery.isNotBlank()) {
+            searchLandmarksFromServer(initialQuery)
+        } else {
+            getRecommendedLandmarksFromServer()
+        }
     }
 
     private fun searchLandmarksFromServer(keyword: String) {
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.landmarkApiService.searchLandmarks(keyword)
+                if (response.isSuccessful) {
+                    val dtoList = response.body() ?: emptyList()
+                    val landmarkList = dtoList.map { it.toDomain() }
+                    adapter.updateData(landmarkList)
+                } else {
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@LandmarkSearchActivity, "오류: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun getRecommendedLandmarksFromServer() {
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.landmarkApiService.getRecommendedLandmarks()
                 if (response.isSuccessful) {
                     val dtoList = response.body() ?: emptyList()
                     val landmarkList = dtoList.map { it.toDomain() }

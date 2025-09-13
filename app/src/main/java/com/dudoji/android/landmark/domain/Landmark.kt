@@ -19,5 +19,6 @@ data class Landmark(
     val detailImageUrl: String,
     val radius: Double,
     var isDetected: Boolean,
-    val hashtags: List<String>
+    val hashtags: List<String>,
+    val isFestival: Boolean
 ) : NonClusterMarker(lat, lng, mapImageUrl), Parcelable
