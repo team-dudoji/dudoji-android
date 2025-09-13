@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dudoji.android.R
 import com.dudoji.android.config.LANDMARK_PIN_RADIUS
 import com.dudoji.android.config.REVEAL_CIRCLE_RADIUS_BY_WALK
 import com.dudoji.android.domain.model.PinSkin
@@ -24,6 +25,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,7 +38,7 @@ class MapViewModel @Inject constructor(
 ) : ViewModel(), GoogleMap.OnCameraIdleListener {
 
     private val _mapUiState = MutableStateFlow(MapUiState())
-    val mapUiState = _mapUiState
+    val mapUiState: StateFlow<MapUiState> = _mapUiState.asStateFlow()
 
     private val _visibilityMap: MutableStateFlow<MutableMap<Who, Boolean>> = MutableStateFlow(mutableMapOf(
         Who.MINE to true,
@@ -51,26 +53,30 @@ class MapViewModel @Inject constructor(
 
     private val _landmarkToShow = MutableStateFlow<Landmark?>(null)
     val landmarkToShow: StateFlow<Landmark?> = _landmarkToShow
-    val pinToShow: MutableStateFlow<Pin?> = MutableStateFlow(null) // Not implemented yet
-    val pinClusterToShow: MutableStateFlow<List<Pin>> = MutableStateFlow(emptyList()) // Not implemented yet
+    val pinToShow: MutableStateFlow<Pin?> = MutableStateFlow(null)
+    val pinClusterToShow: MutableStateFlow<List<Pin>> = MutableStateFlow(emptyList())
 
     val locationFlow: StateFlow<Location> = mapUseCase.getLocationUpdates()
     val bearingFlow: StateFlow<Float> = mapUseCase.getBearing()
     val selectedPinSkin: MutableStateFlow<PinSkin?> = MutableStateFlow(null)
 
+    private val _selectedProfileImageResId = MutableStateFlow(R.drawable.profile_image1)
+    val selectedProfileImageResId: StateFlow<Int> = _selectedProfileImageResId.asStateFlow()
+
+    fun setSelectedProfileImage(resId: Int) {
+        _selectedProfileImageResId.value = resId
+    }
+
     init {
         viewModelScope.launch {
-            locationFlow.collect {
-                    location ->
+            locationFlow.collect { location ->
                 Log.d("MapViewModel", "New location: $location")
                 if (_mapUiState.value.isAttached) {
-
+                    // Do something when attached
                 }
             }
         }
     }
-
-
 
     fun setSelectedPinSkin(pinSkin: PinSkin?) {
         selectedPinSkin.value = pinSkin
