@@ -17,8 +17,7 @@ data class LandmarkResponseDto(
     val detailImageUrl: String,
     val radius: Double,
     val isDetected: Boolean,
-    val hashtags: List<String>?,
-    val festivalInfo: FestivalInfoDto?
+    val hashtags: List<String>?
 ): BaseDto<Landmark> {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun toDomain(): Landmark {
@@ -34,8 +33,7 @@ data class LandmarkResponseDto(
             detailImageUrl = detailImageUrl,
             radius = radius,
             isDetected = isDetected,
-            hashtags ?: emptyList(),
-            isFestival = (festivalInfo != null)
+            hashtags ?: emptyList()
         )
     }
 }

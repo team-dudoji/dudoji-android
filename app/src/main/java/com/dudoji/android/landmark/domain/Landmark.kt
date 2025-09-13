@@ -5,7 +5,6 @@ import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import com.dudoji.android.map.domain.NonClusterMarker
 import kotlinx.parcelize.Parcelize
-import java.io.Serializable
 
 @Parcelize
 @RequiresApi(Build.VERSION_CODES.O)
@@ -20,6 +19,5 @@ data class Landmark(
     val detailImageUrl: String,
     val radius: Double,
     var isDetected: Boolean,
-    val hashtags: List<String>,
-    val isFestival: Boolean
+    val hashtags: List<String>
 ) : NonClusterMarker(lat, lng, mapImageUrl), Parcelable
