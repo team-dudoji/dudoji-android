@@ -116,12 +116,13 @@ class MapViewModel @Inject constructor(
     }
 
     fun canCreatePin(lat: Double, lng: Double): Boolean {
-        val distance = locationFlow.value.distanceTo(
-            Location("manual").apply {
-                latitude = lat
-                longitude = lng }
-        )
-        return distance <= REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
+//        val distance = locationFlow.value.distanceTo(
+//            Location("manual").apply {
+//                latitude = lat
+//                longitude = lng }
+//        )
+//        return distance <= REVEAL_CIRCLE_RADIUS_BY_WALK.toFloat()
+        return true
     }
 
     fun setAttach(isAttached: Boolean) {

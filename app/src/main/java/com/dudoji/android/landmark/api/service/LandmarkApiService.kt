@@ -13,4 +13,7 @@ interface LandmarkApiService {
 
     @GET("/api/user/landmarks/search")
     suspend fun searchLandmarks(@Query("keyword") keyword: String): Response<List<LandmarkResponseDto>>
+
+    @GET("/api/user/landmarks/recommended")
+    suspend fun getRecommendedLandmarks(): Response<List<LandmarkResponseDto>>
 }
